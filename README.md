@@ -38,4 +38,4 @@ Une vidéo de 10 minutes expliquant l'architecture du projet, les choix de conce
 Commencez par concevoir l'architecture MVC de votre application avant de plonger dans l'implémentation.
 Testez votre jeu rigoureusement pour vous assurer qu'il est jouable et exempt de bugs. Vérifier si vous n'avez pas de fuites de mémoire.
 Bonne chance dans votre projet ! N'hésitez pas à poser des questions si vous en avez.
-```
+
