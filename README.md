@@ -15,12 +15,14 @@ Introduction : Le jeu Tron est un jeu adapté du film du même nom et sorti en 1
 3. Vue (SDL) : Créez une interface utilisateur graphique en utilisant la bibliothèque SDL. La vue SDL doit avoir les mêmes fonctionnalités que la vue ncurses.
 4. Contrôleur : Gérez les entrées utilisateur (clavier) pour faire changer les motos de direction. Assurez-vous que le contrôleur est capable de gérer les événements provenant des deux interfaces.
 
+
 ### Exigences Techniques :
 
 Le jeu doit pouvoir basculer en douceur entre les interfaces ncurses et SDL en fonction de la préférence de l'utilisateur (au lancement du jeu).
 Le modèle doit être indépendant des vues et du contrôleur, conformément au modèle MVC.
 Utilisez des structures de données appropriées pour représenter le plateau de jeu, le score, etc.
 Assurez-vous que le code est modulaire, bien commenté et respecte les bonnes pratiques de programmation en C.
+
 
 ### Bonus (Facultatif) :
 
