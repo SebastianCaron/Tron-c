@@ -4,7 +4,7 @@ An amazing game called Tron using C and libs SDL and ncurses
 
 
 ## 2024 - Développement d'un Jeu Tron avec Interfaces Ncurses et SDL en utilisant le Modèle MVC
-Introduction : Le jeu Tron est un jeu adapté du film du même nom et sorti en 1982. Dans ce projet, vous êtes chargé de développer une version de Tron qui peut être jouée à la fois en utilisant l'interface ncurses et l'interface SDL. En plus de cela, le projet doit respecter le modèle de conception MVC (Modèle-Vue-Contrôleur) pour garantir une séparation claire entre la logique du jeu, l'interface utilisateur et le contrôle des événements.
+Introduction : Le jeu [Tron](https://6jeux.fr/jeux/2355-tron.html) est un jeu adapté du film du même nom et sorti en 1982. Dans ce projet, vous êtes chargé de développer une version de Tron qui peut être jouée à la fois en utilisant l'interface ncurses et l'interface SDL. En plus de cela, le projet doit respecter le modèle de conception MVC (Modèle-Vue-Contrôleur) pour garantir une séparation claire entre la logique du jeu, l'interface utilisateur et le contrôle des événements.
 
 > Objectif : L'objectif principal de ce projet est de concevoir et de développer un jeu Tron fonctionnel avec deux interfaces utilisateur (ncurses et SDL) en utilisant le modèle MVC.
 
