@@ -4,6 +4,8 @@
 #include "model/model.h"
 #include "views/view_ncurse.h"
 #include "views/view_sdl.h"
+#include "controler/controller.h"
+
 
 int main(int argc, char **argv){
     if(argc == 1){

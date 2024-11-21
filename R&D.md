@@ -56,3 +56,35 @@ fonction Jeu ( Modele logique, Vue ui ):
 
 
 \+ Man Pages
+
+### Notes
+
+Création du serveur :  Création du Socket -> SetSockOptions -> Bind -> Listen -> Accept -> Send and Receive
+
+Création du client :  Création du Socket -> Connect -> Send and Receive
+
+Listen(fd, ln_queue);
+
+Accept() -> retourne un fd de connexion
+
+Connect() -> Retourne le status de connexion
+
+send(fd, char *, len, flag) 
+
+read(fd, buffer, size);
+
+write(fd, buffern size);
+
+close(fd);
+
+Bind(fd, sockaddr, socklen) : nomme le socket
+
+Socket(AF_INET, SOCK_STREAM, 0) pour TCP ou Socket(AF_INET, SOCK_DGRM, 0) pour UDP. Retourne un fd
+
+> NB : Send and receive fonctions bloquantes.
+
+Utiliser Select pour plusieurs FileDescriptors, readfds, writefds non bloquants.
+
+
+fork => Retourne le pid_enfant dans le parent et 0 dans le child.
+
