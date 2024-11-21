@@ -41,3 +41,18 @@ fonction Jeu ( Modele logique, Vue ui ):
 
 ```
 
+
+
+## Recherche Serveur/Client TCP
+
+### Liens :
+
+- [rsInfo socket/serv/client](https://ressourcesinformatiques.com/article.php?article=824)
+- [fork](https://www.geeksforgeeks.org/fork-system-call/)
+- [socket](https://www.geeksforgeeks.org/socket-programming-cc/)
+- [socket-clients](https://www.geeksforgeeks.org/socket-programming-in-cc-handling-multiple-clients-on-server-without-multi-threading/)
+- [serveur-client implementation](https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/)
+- [sockets détails](https://broux.developpez.com/articles/c/sockets/#LIV)
+
+
+\+ Man Pages
