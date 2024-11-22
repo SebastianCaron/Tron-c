@@ -31,10 +31,10 @@ int move_player(model *m, int player, direction dir);
 
 // Check if player has collided with something and update
 // dead[player]
-int collision_player(int player);
+int collision_player(model *m, int player);
 
 // Return 1 if the game is over
-int est_fini();
+int est_fini(model *m);
 
 
 

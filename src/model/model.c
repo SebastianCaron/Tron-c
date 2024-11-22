@@ -69,6 +69,8 @@ int move_player(model *m, int player, direction dir){
 
     if(m->dead[player] != 0) return 0;  // Le joueur est mort, on ne le déplace pas.
 
+    // AJOUTER MUR SUR LA GRILLE
+
     switch (dir)
     {
         case UP:
@@ -88,4 +90,27 @@ int move_player(model *m, int player, direction dir){
     }
 
     return 1;
+}
+
+int collision_player(model *m, int player){
+    if(!m){
+        perror("[MODEL] collision joueur sur model NULL");
+        exit(EXIT_FAILURE);
+    }  
+    if(player > m->n_player){
+        perror("[MODEL] collision joueur d'un joueur inexistant.");
+        exit(EXIT_FAILURE);
+    }
+
+    // A ECRIRE
+}
+
+int est_fini(model *m){
+    if(!m){
+        perror("[MODEL] est_fini sur model NULL");
+        exit(EXIT_FAILURE);
+    }  
+
+    // A ECRIRE
+    // IE : si sum(dead) <= 1, Il ne reste qu'un ou aucun joueur en vie.
 }
