@@ -56,3 +56,36 @@ void destroy(model *m){
 
     free(m);
 }
+
+int move_player(model *m, int player, direction dir){
+    if(!m){
+        perror("[MODEL] deplacement joueur sur model NULL");
+        exit(EXIT_FAILURE);
+    }   
+    if(player > m->n_player){
+        perror("[MODEL] deplacement joueur d'un joueur inexistant.");
+        exit(EXIT_FAILURE);
+    }
+
+    if(m->dead[player] != 0) return 0;  // Le joueur est mort, on ne le déplace pas.
+
+    switch (dir)
+    {
+        case UP:
+            m->players[player].y--;
+            break;
+        case DOWN:
+            m->players[player].y++;
+            break;
+        case LEFT:
+            m->players[player].x--;
+            break;
+        case RIGHT:
+            m->players[player].x++;
+            break;
+        default:
+            break;
+    }
+
+    return 1;
+}

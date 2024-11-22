@@ -27,7 +27,7 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid);
 void destroy(model *);
 
 // Move the player to dir only if player is not dead
-int move_player(int player,direction dir);
+int move_player(model *m, int player, direction dir);
 
 // Check if player has collided with something and update
 // dead[player]
