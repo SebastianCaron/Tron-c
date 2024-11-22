@@ -42,3 +42,17 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid){
 
     return game;
 }
+
+void destroy(model *m){
+    if(!m) return;
+
+    free(m->dead);
+    free(m->players);
+
+    for(int i = 0; i < m->nb_lignes_grid; i++){
+        free(m->grid[i]);
+    }
+    free(m->grid);
+
+    free(m);
+}
