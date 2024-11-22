@@ -15,6 +15,8 @@ typedef struct {
 
 typedef enum {UP, DOWN, LEFT, RIGHT} direction;
 
+typedef enum {MUR = -1, VIDE = 0, PLAYER = 1} cases;
+
 
 // Initialize the model with the correct amount of player
 model *init_game(int nb_player);
