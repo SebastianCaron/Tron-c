@@ -95,7 +95,10 @@ int move_player(model *m, int player, direction dir){
             break;
     }
 
-    if(m->grid[player_position->y][player_position->x] == EMPTY) m->grid[player_position->y][player_position->x] = (player+1); // Deplace le joueur si la case ou il doit être déplacé est vide
+    if(m->grid[player_position->y][player_position->x] == EMPTY){
+        m->grid[player_position->y][player_position->x] = (player+1); // Deplace le joueur si la case ou il doit être déplacé est vide
+        m->scores[player] += SCORE_INCREMENT;
+    }
 
 
     return 1;
