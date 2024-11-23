@@ -23,6 +23,7 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid){
     }
 
     game->n_player= nb_player;
+    game->n_player_alive = nb_player;
 
 
     game->grid = calloc(nb_lignes_grid, sizeof(int *));
@@ -67,7 +68,8 @@ int move_player(model *m, int player, direction dir){
 
     if(m->dead[player] != 0) return 0;  // Le joueur est mort, on ne le déplace pas.
 
-    // AJOUTER MUR SUR LA GRILLE
+    position *player_position = m->players[player];
+    m->grid[player_position->y][player_position->x] = -(player+1); // Mur representé par -(joueur+1) 
 
     switch (dir)
     {
@@ -87,6 +89,9 @@ int move_player(model *m, int player, direction dir){
             break;
     }
 
+    if(m->grid[player_position->y][player_position->x] == EMPTY) m->grid[player_position->y][player_position->x] = (player+1); // Deplace le joueur si la case ou il doit être déplacé est vide
+
+
     return 1;
 }
 
@@ -102,14 +107,13 @@ int collision_player(model *m, int indexPlayer){
 
     if(!m->dead[indexPlayer]){
         position *player = m->players[indexPlayer];
-        if(m->grid[player->x][player->y]!=0){
-            m->dead[indexPlayer]==1;
-            m->n_player--;
+        if(m->grid[player->x][player->y] != (indexPlayer+1)){
+            m->dead[indexPlayer] = 1;
+            m->n_player_alive--;
             return 1;
         }
     }
     return 0;
-    // A VERIFIER
 }
 
 int est_fini(model *m){
@@ -117,11 +121,5 @@ int est_fini(model *m){
         perror("[MODEL] est_fini sur model NULL");
         exit(EXIT_FAILURE);
     }  
-    int sum;
-    for(int i = 0; i<m->n_player;i++){
-        if(!m->dead[i]){
-            sum++;
-        }
-    }
-    return sum == 1 ? 1:  0;
+    return (m->n_player_alive <= 1) ? 1 : 0;
 }

@@ -10,6 +10,9 @@ typedef struct {
     char *dead;
     int n_player;
 
+    int n_player_alive;
+
+
     int **grid;
     unsigned nb_lignes_grid;
     unsigned nb_colonnes_grid;
@@ -17,7 +20,7 @@ typedef struct {
 
 typedef enum {UP, DOWN, LEFT, RIGHT} direction;
 
-typedef enum {MUR = -1, VIDE = 0, PLAYER = 1} cases;
+typedef enum { WALL = 100, EMPTY = 0 } cases;
 
 
 // Initialize the model with the correct amount of player
