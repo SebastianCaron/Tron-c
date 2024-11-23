@@ -20,7 +20,7 @@ typedef struct {
     int *scores;
 } model;
 
-typedef enum {UP, DOWN, LEFT, RIGHT} direction;
+typedef enum {UP, DOWN, LEFT, RIGHT, NODIRECTION} direction;
 
 typedef enum { WALL = 100, EMPTY = 0 } cases;
 
