@@ -110,6 +110,14 @@ int est_fini(model *m){
         perror("[MODEL] est_fini sur model NULL");
         exit(EXIT_FAILURE);
     }  
+    int sum;
+    for(int i = 0; i<m->n_player;i++){
+        if(!m->dead[i]){
+            sum++;
+        }
+    }
+    return sum == 1 ? 1:  0;
+
 
     // A ECRIRE
     // IE : si sum(dead) <= 1, Il ne reste qu'un ou aucun joueur en vie.
