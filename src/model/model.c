@@ -102,7 +102,7 @@ int collision_player(model *m, int indexPlayer){
 
     if(!m->dead[indexPlayer]){
         position *player = m->players[indexPlayer];
-        if(m->grid[player->x][player->y]<0){
+        if(m->grid[player->x][player->y]!=0){
             m->dead[indexPlayer]==1;
             m->n_player--;
             return 1;
