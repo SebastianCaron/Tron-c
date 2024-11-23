@@ -39,6 +39,12 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid){
         }
     }
 
+    game->scores = (int *) calloc(nb_player, sizeof(int));
+    if(!game->scores){
+        perror("[MODEL] erreur allocation d'une colonne de la grille de jeu.");
+        exit(EXIT_FAILURE);
+    }
+
     return game;
 }
 

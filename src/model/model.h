@@ -16,6 +16,8 @@ typedef struct {
     int **grid;
     unsigned nb_lignes_grid;
     unsigned nb_colonnes_grid;
+
+    int *scores;
 } model;
 
 typedef enum {UP, DOWN, LEFT, RIGHT} direction;
