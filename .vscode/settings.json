@@ -1,6 +1,6 @@
 {
     "files.associations": {
         "view_sdl.h": "c",
-        "view_ncurse.C": "cpp"
+        "view_ncurse.c": "c"
     }
 }

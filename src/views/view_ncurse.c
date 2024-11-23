@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 #include "view_ncurse.h"
 
@@ -18,4 +18,5 @@ view *init_view_ncurse(){
 
 
 void destroy_view_ncurse(view *v){
+    
 }
