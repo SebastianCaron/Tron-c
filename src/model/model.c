@@ -10,19 +10,17 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid){
         exit(EXIT_FAILURE);
     }
 
-    position *players = (position *) malloc(sizeof(position) * nb_player);
-    if(!players){
+    game->players = (position**) malloc(sizeof(position*) * nb_player);
+    if(!game->players){
         perror("[MODEL] erreur allocation des positions pour les joueurs.");
         exit(EXIT_FAILURE);
     }
-    game->players = players;
 
-    char *dead = (char *) calloc(nb_player, sizeof(char));
-    if(!dead){
+    game->dead= (char *) calloc(nb_player, sizeof(char));
+    if(!game->dead){
         perror("[MODEL] erreur allocation des etats de vie des joueurs.");
         exit(EXIT_FAILURE);
     }
-    game->dead = dead;
 
     game->n_player= nb_player;
 
@@ -74,16 +72,16 @@ int move_player(model *m, int player, direction dir){
     switch (dir)
     {
         case UP:
-            m->players[player].y--;
+            m->players[player]->y--;
             break;
         case DOWN:
-            m->players[player].y++;
+            m->players[player]->y++;
             break;
         case LEFT:
-            m->players[player].x--;
+            m->players[player]->x--;
             break;
         case RIGHT:
-            m->players[player].x++;
+            m->players[player]->x++;
             break;
         default:
             break;
@@ -92,17 +90,26 @@ int move_player(model *m, int player, direction dir){
     return 1;
 }
 
-int collision_player(model *m, int player){
+int collision_player(model *m, int indexPlayer){
     if(!m){
         perror("[MODEL] collision joueur sur model NULL");
         exit(EXIT_FAILURE);
     }  
-    if(player > m->n_player){
+    if(indexPlayer > m->n_player){
         perror("[MODEL] collision joueur d'un joueur inexistant.");
         exit(EXIT_FAILURE);
     }
 
-    // A ECRIRE
+    if(!m->dead[indexPlayer]){
+        position *player = m->players[indexPlayer];
+        if(m->grid[player->x][player->y]<0){
+            m->dead[indexPlayer]==1;
+            m->n_player--;
+            return 1;
+        }
+    }
+    return 0;
+    // A VERIFIER
 }
 
 int est_fini(model *m){
@@ -117,8 +124,4 @@ int est_fini(model *m){
         }
     }
     return sum == 1 ? 1:  0;
-
-
-    // A ECRIRE
-    // IE : si sum(dead) <= 1, Il ne reste qu'un ou aucun joueur en vie.
 }

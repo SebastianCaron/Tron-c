@@ -6,7 +6,7 @@ typedef struct {
 } position;
 
 typedef struct {
-    position *players;
+    position **players;
     char *dead;
     int n_player;
 
