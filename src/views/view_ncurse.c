@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdio.h>
 
-#include <view_ncurse.h>
+#include "view_ncurse.h"
 
 view *init_view_ncurse(){
     view *v = (view *)malloc(sizeof(view));

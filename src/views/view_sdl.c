@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <view_sdl.h>
+#include "view_sdl.h"
 
 view *init_view_sdl(){
     view *v = (view *)malloc(sizeof(view));
