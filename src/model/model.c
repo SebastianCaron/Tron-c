@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <model/model.h>
+#include "model.h"
 
 model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid){
     model *game = (model *) malloc(sizeof(model));

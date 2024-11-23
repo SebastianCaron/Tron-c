@@ -4,14 +4,16 @@
 #include "model/model.h"
 #include "views/view.h"
 #include "views/view_ncurse.h"
-#include "views/view_sdl.h"
-#include "controler/controler.h"
+// #include "views/view_sdl.h"
+// #include "controler/controler.h"
 
 
 int main(int argc, char **argv){
+    view *vncr;
+    view *vsdl;
     if(argc == 1){
-        // INIT LE JEU AVEC SDL
-
+        // INIT LE JEU AVEC NCURSE
+        vncr = init_view_ncurse();
         return EXIT_SUCCESS;
     }
 
@@ -36,11 +38,12 @@ int main(int argc, char **argv){
     }
 
 
+
     if(with_sdl){
 
     }
     if(with_ncurse){
-
+        vncr = init_view_ncurse();
     }
 
 
