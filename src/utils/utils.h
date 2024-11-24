@@ -1,6 +1,7 @@
 #pragma once
 
 #define PORT 7604
+#define BUFFER_SIZE 1024
 
 typedef struct{
     int nb_colonnes;
