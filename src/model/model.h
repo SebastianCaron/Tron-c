@@ -27,7 +27,7 @@ typedef enum { WALL = 100, EMPTY = 0 } cases;
 #define SCORE_INCREMENT 10
 
 // Initialize the model with the correct amount of player
-model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid);
+model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **grid);
 
 // Free the model
 void destroy(model *);

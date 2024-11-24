@@ -13,6 +13,7 @@ int main(int argc, char **argv){
     view *vsdl;
     if(argc == 1){
         // INIT LE JEU AVEC NCURSE
+        // system("printf '\\e[8;40;100t'"); // CHANGE SIZE TO 40L, 100C
         vncr = init_view_ncurse();
         vncr->destroy_self(vncr);
         return EXIT_SUCCESS;

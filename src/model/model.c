@@ -100,7 +100,6 @@ int move_player(model *m, int player, direction dir){
         && player_position->x >= 0 && player_position->x < m->nb_colonnes_grid
         && m->grid[player_position->y][player_position->x] == EMPTY){
 
-            
         m->grid[player_position->y][player_position->x] = (player+1); // Deplace le joueur si la case ou il doit être déplacé est vide
         m->scores[player] += SCORE_INCREMENT;
     }
@@ -109,6 +108,7 @@ int move_player(model *m, int player, direction dir){
     return 1;
 }
 
+// AJOUTER UN TEST AVEC LA COLLISION SUR LES BORDS DE LA FENETRE IE : y >= 0 && y < nb_lignes && x >= 0 && x < nb_colonnes
 int collision_player(model *m, int indexPlayer){
     if(!m){
         perror("[MODEL] collision joueur sur model NULL");

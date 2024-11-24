@@ -38,7 +38,6 @@ view *init_view_ncurse(){
     // v->update_change_screen = ;
     v->update_screen = update_screen_ncurse;
     refresh();
-    // endwin();
 
     return v;
 }
@@ -47,6 +46,7 @@ view *init_view_ncurse(){
 
 void destroy_view_ncurse(view *v){
     timeout(5000);
+    getch();
     endwin();
     clear();
     echo();
