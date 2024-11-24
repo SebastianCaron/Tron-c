@@ -21,6 +21,7 @@ view *init_view_ncurse(){
     v->type = 'n';
     v->ncurse = vn;
     initscr();
+    clear();
     timeout(-1);
     noecho();
     cbreak();
@@ -37,14 +38,19 @@ view *init_view_ncurse(){
     // v->update_change_screen = ;
     v->update_screen = update_screen_ncurse;
     refresh();
-    getch();
     // endwin();
+
+    return v;
 }
 
 
 
 void destroy_view_ncurse(view *v){
+    timeout(5000);
     endwin();
+    clear();
+    echo();
+    free(v->ncurse);
     free(v);
 }
 

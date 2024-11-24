@@ -3,7 +3,7 @@
 
 #include "model.h"
 
-model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid){
+model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **grid){
     model *game = (model *) malloc(sizeof(model));
     if(!game){
         perror("[MODEL] erreur allocation de la structure model.");
@@ -26,18 +26,19 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid){
     game->n_player_alive = nb_player;
 
 
-    game->grid = calloc(nb_lignes_grid, sizeof(int *));
-    if(!game->grid){
-        perror("[MODEL] erreur allocation des lignes de la grille de jeu.");
-        exit(EXIT_FAILURE);
-    }
-    for(int i = 0; i < nb_lignes_grid; i++){
-        game->grid[i] = (int *) calloc(nb_colonnes_grid, sizeof(int));
-        if(!game->grid[i]){
-            perror("[MODEL] erreur allocation d'une colonne de la grille de jeu.");
-            exit(EXIT_FAILURE);
-        }
-    }
+    // game->grid = calloc(nb_lignes_grid, sizeof(int *));
+    // if(!game->grid){
+    //     perror("[MODEL] erreur allocation des lignes de la grille de jeu.");
+    //     exit(EXIT_FAILURE);
+    // }
+    // for(int i = 0; i < nb_lignes_grid; i++){
+    //     game->grid[i] = (int *) calloc(nb_colonnes_grid, sizeof(int));
+    //     if(!game->grid[i]){
+    //         perror("[MODEL] erreur allocation d'une colonne de la grille de jeu.");
+    //         exit(EXIT_FAILURE);
+    //     }
+    // }
+    game->grid = grid;
 
     game->scores = (int *) calloc(nb_player, sizeof(int));
     if(!game->scores){
@@ -95,7 +96,11 @@ int move_player(model *m, int player, direction dir){
             break;
     }
 
-    if(m->grid[player_position->y][player_position->x] == EMPTY){
+    if(player_position->y >= 0 && player_position->y < m->nb_lignes_grid
+        && player_position->x >= 0 && player_position->x < m->nb_colonnes_grid
+        && m->grid[player_position->y][player_position->x] == EMPTY){
+
+            
         m->grid[player_position->y][player_position->x] = (player+1); // Deplace le joueur si la case ou il doit être déplacé est vide
         m->scores[player] += SCORE_INCREMENT;
     }

@@ -14,6 +14,7 @@ int main(int argc, char **argv){
     if(argc == 1){
         // INIT LE JEU AVEC NCURSE
         vncr = init_view_ncurse();
+        vncr->destroy_self(vncr);
         return EXIT_SUCCESS;
     }
 
