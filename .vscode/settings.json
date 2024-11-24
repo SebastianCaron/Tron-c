@@ -3,6 +3,7 @@
         "view_sdl.h": "c",
         "view_ncurse.c": "c",
         "model.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "view_ncurse.h": "c"
     }
 }
