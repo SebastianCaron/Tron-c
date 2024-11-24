@@ -34,7 +34,7 @@ direction get_direction_sdl(){
 
 void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes, SDL_Renderer *renderer){
     if(!renderer){
-        perror("[VIEW SDL] Renderer invalide.")
+        perror("[VIEW SDL] Renderer invalide.");
         exit(EXIT_FAILURE);
     }
 
