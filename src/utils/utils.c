@@ -37,9 +37,8 @@ grid *load_grid_as_it_is(char *path, int nb_lignes, int nb_colonnes){
     g->nb_colonnes = nb_colonnes;
     g->nb_lignes = nb_lignes;
 
-    g->grid = calloc(g->nb_lignes, sizeof(int *));
+    g->grid = allocate_grid(nb_lignes, nb_colonnes);
     if(g->grid == NULL){
-        perror("[UTILS] ERREUR ALLOCATION GRID LINES");
         destroy_grid(g);
         fclose(f);
         return NULL;
@@ -47,7 +46,6 @@ grid *load_grid_as_it_is(char *path, int nb_lignes, int nb_colonnes){
 
     char buffer[BUFFER_SIZE];
     int len = 0;
-    int *line;
     int i = 0;
     int k = 0;
     while(k < g->nb_lignes){
@@ -58,31 +56,24 @@ grid *load_grid_as_it_is(char *path, int nb_lignes, int nb_colonnes){
             return NULL;
         }
         len = strlen(buffer);
-        line = malloc(sizeof(int)*g->nb_colonnes);
-        if(line == NULL){
-            perror("[UTILS] ERREUR ALLOCATION GRID LINE");
-            destroy_grid(g);
-            fclose(f);
-            return NULL;
-        }
 
         for(i = 0; i < len; i++){
             switch (buffer[i])
             {
             case '#':
-                line[i] = WALL;
+                g->grid[k][i] = WALL;
                 break;
             case ' ':
-                line[i] = EMPTY;
+                g->grid[k][i] = EMPTY;
                 break;
             default:
                 break;
             }
         }
         for(i = len; i < g->nb_colonnes; i++){
-            line[i] = WALL;
+            g->grid[k][i] = WALL;
         }
-        g->grid[k++] = line;
+        k++;
     }
 
     fclose(f);
@@ -118,7 +109,27 @@ grid *upscale_grid(grid *g, int nb_lignes, int nb_colonnes){
         perror("[UTILS] ERREUR ALLOCATION GRID");
         return NULL;
     }
+    ng->nb_colonnes = nb_colonnes;
+    ng->nb_lignes = nb_lignes;
 
+    int scale_x =  nb_colonnes / g->nb_colonnes;
+    int scale_y = nb_lignes / g->nb_lignes;
+}
+
+int **allocate_grid(int nb_lignes, int nb_colonnes){
+    int **res = calloc(nb_lignes, sizeof(int *));
+    if(res == NULL){
+        perror("[UTILS] ERREUR ALLOCATION GRID LINES");
+        return NULL;
+    }
+    for(int i = 0; i < nb_lignes; i++){
+        res[i] = calloc(nb_colonnes, sizeof(int));
+        if(res[i] == NULL){
+            perror("[UTILS] ERREUR ALLOCATION GRID LINE");
+            return NULL;
+        }
+    }
+    return res;
 }
 
 // LIBERE LA GRILLE
