@@ -14,6 +14,7 @@ typedef struct{
 typedef struct v{
     char type;
     view_ncurse *ncurse;
+    view_sdl *sdl;
 
     void (*update_screen)(int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes);
     void (*update_change_screen)(int **grid, int nb_lignes, int nb_colonnes);
