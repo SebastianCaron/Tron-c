@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ncurses.h>
+#include <SDL2/SDL.h>
 #include "../model/model.h"
 
 typedef struct{
@@ -8,7 +9,8 @@ typedef struct{
 } view_ncurse;
 
 typedef struct{
-
+    SDL_Window *window;
+    SDL_Renderer *renderer;
 } view_sdl;
 
 typedef struct v{

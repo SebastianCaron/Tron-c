@@ -4,10 +4,11 @@
 
 #include "view_sdl.h"
 
+
 view *init_view_sdl(){
     view *v = (view *)malloc(sizeof(view));
     if(!v){
-        perror("[VIEW SDL] erreur allocation de la structure view sdl.");
+        perror("[VIEW SDL] erreur allocation de la structure view.");
         exit(EXIT_FAILURE);
     }
 
@@ -17,6 +18,12 @@ view *init_view_sdl(){
     // v->update_change_screen = ;
     v->update_screen = update_screen_sdl;
 
+    view_sdl *viewSdl =(view_sdl *)malloc(sizeof(view_sdl));
+    if(!viewSdl){
+        perror("[VIEW SDL] erreur allocation de la structure view_Sdl.");
+        exit(EXIT_FAILURE);
+    }
+    v->sdl = viewSdl; 
     return v;
 }
 
