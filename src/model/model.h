@@ -12,7 +12,6 @@ typedef struct {
 
     int n_player_alive;
 
-
     int **grid;
     unsigned nb_lignes_grid;
     unsigned nb_colonnes_grid;

@@ -32,7 +32,7 @@ view *init_view_sdl(){
     v->sdl->renderer=NULL;
     v->sdl->window= NULL;
 
-    v->sdl->window = SDL_CreateWindow("TRONC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
+    v->sdl->window = SDL_CreateWindow("TRONC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 45, 19, SDL_WINDOW_SHOWN);
     if (NULL == v->sdl->window ) {
         fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
         quitter(v->sdl->window , v->sdl->renderer);
@@ -43,6 +43,7 @@ view *init_view_sdl(){
         fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
         quitter(v->sdl->window, v->sdl->renderer);
     }
+
 
     return v;
 }

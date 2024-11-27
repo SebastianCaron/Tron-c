@@ -4,8 +4,8 @@
 #include "model/model.h"
 #include "views/view.h"
 #include "views/view_ncurse.h"
-// #include "views/view_sdl.h"
-// #include "controler/controler.h"
+#include "views/view_sdl.h"
+#include "controler/controler.h"
 
 
 int main(int argc, char **argv){
@@ -42,11 +42,15 @@ int main(int argc, char **argv){
 
 
     if(with_sdl){
-
+        vsdl = init_view_sdl();
+        init_controller(vsdl);
     }
     if(with_ncurse){
         vncr = init_view_ncurse();
+        init_controller(vncr);
     }
+
+
 
 
     return EXIT_SUCCESS;
