@@ -121,7 +121,7 @@ int collision_player(model *m, int indexPlayer){
 
     if(!m->dead[indexPlayer]){
         position *player = m->players[indexPlayer];
-        if(m->grid[player->x][player->y] != (indexPlayer+1)){
+        if(player->y < 0 || player->y >= m->nb_lignes_grid || player->x < 0 || player->x >= m->nb_colonnes_grid || m->grid[player->x][player->y] != (indexPlayer+1)){
             m->dead[indexPlayer] = 1;
             m->n_player_alive--;
             return 1;
