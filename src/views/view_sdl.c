@@ -4,6 +4,10 @@
 
 #include "view_sdl.h"
 
+SDL_Color tabColors[10] = { {0,0,0,255}, {255,255,0,255}, {255,0,255,255}, //Sol, J1, J2
+                            {0,255,255,255}, {255,0,0,255}, {0,255,0,255}, //J3, J4, J5
+                            {0,0,255,255}, {0,140,140,255}, {140,0,0,255}, //J6, J7, J8
+                            {255,255,255,255}}; // Mur de la map
 
 view *init_view_sdl(){
     view *v = (view *)malloc(sizeof(view));
@@ -11,7 +15,6 @@ view *init_view_sdl(){
         perror("[VIEW SDL] erreur allocation de la structure view.");
         exit(EXIT_FAILURE);
     }
-
 
     v->destroy_self = destroy_view_sdl;
     v->get_direction = get_direction_sdl;
@@ -24,6 +27,23 @@ view *init_view_sdl(){
         exit(EXIT_FAILURE);
     }
     v->sdl = viewSdl; 
+
+
+    v->sdl->renderer=NULL;
+    v->sdl->window= NULL;
+
+    v->sdl->window = SDL_CreateWindow("TRONC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
+    if (NULL == v->sdl->window ) {
+        fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
+        quitter(v->sdl->window , v->sdl->renderer);
+    }
+
+    v->sdl->renderer = SDL_CreateRenderer(v->sdl->window, -1, SDL_RENDERER_ACCELERATED);
+    if (NULL ==  v->sdl->renderer) {
+        fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
+        quitter(v->sdl->window, v->sdl->renderer);
+    }
+
     return v;
 }
 
@@ -35,8 +55,28 @@ void destroy_view_sdl(view *v, SDL_Renderer *renderer, SDL_Window *window){
     free(v);
 }
 
-direction get_direction_sdl(){    
 
+// J'ai mis l'ecoute d'évenement pour quitter ici parce que je sais pas ou le mettre sinon a part dans le main
+direction get_direction_sdl(view *v){    
+    SDL_Event event;
+    while (SDL_WaitEvent(&event) > 0){
+        if (event.type == SDL_QUIT){
+            quitter(v->sdl->window, v->sdl->renderer);
+        }else if(event.type == SDL_KEYDOWN){
+            switch(event.key.keysym.sym){
+                case SDLK_UP :
+                    return UP;
+                case SDLK_DOWN:
+                    return DOWN;
+                case SDLK_LEFT :
+                    return LEFT;
+                case SDLK_RIGHT:
+                    return RIGHT;
+                default:
+                    return NODIRECTION;
+            }
+        }
+    }
 }
 
 void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes, SDL_Renderer *renderer){
@@ -57,48 +97,18 @@ void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, in
             pixel.x = j*pixelH;
             pixel.y = j*pixelW;
 
-            switch (grid[nb_lignes][nb_colonnes])
-            {
-            case 0:
-                // Couleur mur
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-                break;
-            case 1:
-                // Couleur j1
-                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-                break;
-            case -1:
-                // Couleur mur j1
-                SDL_SetRenderDrawColor(renderer, 240, 0, 0, 255);
-                break;
-            case 2:
-                // Couleur j2
-                SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-                break;
-            case -2:
-                // Couleur mur j2
-                SDL_SetRenderDrawColor(renderer, 0, 240, 0, 255);
-                break;
-            case 3:
-                // Couleur j3
-                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-                break;
-            case -3:
-                // Couleur mur j3
-                SDL_SetRenderDrawColor(renderer, 0, 0, 240, 255);
-                break;
-            case 4:
-                // Couleur j4
-                SDL_SetRenderDrawColor(renderer, 125, 125, 125, 255);
-                break;
-            case -4:
-                // Couleur mur j4
-                SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-                break;
-            default:
-                break;
+            if(grid[nb_lignes][nb_colonnes]=='#'){
+                SDL_SetRenderDrawColor(renderer, tabColors[9].r, tabColors[9].g, tabColors[9].b, tabColors[9].a);
             }
 
+            else{
+                int indice = grid[nb_lignes][nb_colonnes];
+                if (indice < 0){
+                    SDL_SetRenderDrawColor(renderer, tabColors[i].r, tabColors[i].g, tabColors[i].b, tabColors[i].a-40);
+                }else{
+                    SDL_SetRenderDrawColor(renderer, tabColors[i].r, tabColors[i].g, tabColors[i].b, tabColors[i].a);
+                }
+            }
             SDL_RenderFillRect(renderer, &pixel);
         }
     }
