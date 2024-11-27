@@ -115,6 +115,9 @@ void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, in
     }
 
     // Afficher les scores 
+    for(int i = 0; i<nb_player; i++){
+        
+    }
 
 
     SDL_RenderPresent(renderer);
