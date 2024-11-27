@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-
 #include "../model/model.h"
 #include "../views/view_sdl.h"
 #include "../views/view_ncurse.h"

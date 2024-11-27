@@ -1,6 +1,5 @@
 #pragma once
 
-// #include <SDL2/SDL.h>
 #include "../model/model.h"
 #include "../views/view_sdl.h"
 #include "../views/view_ncurse.h"
