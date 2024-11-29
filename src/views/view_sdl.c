@@ -114,10 +114,10 @@ void afficheMenuPrincipal(SDL_Renderer *renderer){
     if(event.type==SDL_MOUSEBUTTONDOWN){
             int x, y;
             SDL_GetMouseState(&x, &y);
-            if(x>=multiplayer->x && x<=multiplayer->w && y>=multiplayer->y && y<=multiplayer->h){
+            if(x>=solo->x && x<=solo->w && y>=solo->y && y<=solo->h){
+                // Choix = solo
+            }else if (x>=multiplayer->x && x<=multiplayer->w && y>=multiplayer->y && y<=multiplayer->h){
                 // Choix = multiplayer
-            }else if (x>=solo->x && x<=solo->w && y>=solo->y && y<=solo->h){
-                // Choix = Solo
             }
     }
 
