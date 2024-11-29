@@ -80,6 +80,67 @@ direction get_direction_sdl(view *v){
     }
 }
 
+
+SDL_Rect *createRect(int h, int w, int x, int y){
+
+    SDL_Rect *ret;
+    ret->h = h;
+    ret->w = w;
+    ret->x = x;
+    ret->y =y;
+
+    return &ret;
+}
+
+void afficheMenuPrincipal(SDL_Renderer *renderer){
+    // Affichage Titre
+
+    // Rectangle Solo
+    SDL_Rect *solo = createRect(h, w, x, y);
+    // Le dessiner et mettre le titre dedans
+
+
+
+    // Rectangle Multiplayer
+    SDL_Rect *multiplayer = createRect(h, w, x, y);
+    // Le dessiner et mettre le titre dedans
+
+    // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
+}
+
+
+void afficheMenuSolo(SDL_Renderer *renderer){
+    // Affichage Titre
+
+    // Rectangle Vs algo  
+    SDL_Rect *algo = createRect(h, w, x, y);
+    // Le dessiner et mettre le titre dedans
+
+    // Rectangle Vs Q-learning
+    SDL_Rect q;
+    SDL_Rect *q = createRect(h, w, x, y);
+    // Le dessiner et mettre le titre dedans
+
+    // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
+}
+
+
+void afficheMenuMultiplayer(SDL_Renderer *renderer){
+    // Affichage Titre
+
+    // Rectangle On this machine
+    SDL_Rect machine;
+    SDL_Rect *machine = createRect(h, w, x, y);
+    // Le dessiner et mettre le titre dedans
+    
+    // Rectangle with other
+    SDL_Rect others;
+    SDL_Rect *others = createRect(h, w, x, y);
+    // Le dessiner et mettre le titre dedans
+
+    // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
+}
+
 void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes, SDL_Renderer *renderer){
     if(!renderer){
         perror("[VIEW SDL] Renderer invalide.");
@@ -116,7 +177,7 @@ void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, in
 
     // Afficher les scores 
     for(int i = 0; i<nb_player; i++){
-        
+        scores[i];
     }
 
 
