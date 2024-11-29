@@ -2,6 +2,7 @@
 
 #include "view.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #define HAUTEUR 1400
 #define LARGEUR 1200

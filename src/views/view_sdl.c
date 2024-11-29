@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
+#include "SDL2/SDL_ttf.h"  //Il faut installer libsdl2-ttf-dev   //=>sudo apt-get install libsdl2-ttf-dev
+
 
 #include "view_sdl.h"
 
@@ -29,22 +31,22 @@ view *init_view_sdl(){
     v->sdl = viewSdl; 
 
 
+
+
     v->sdl->renderer=NULL;
     v->sdl->window= NULL;
 
     v->sdl->window = SDL_CreateWindow("TRONC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 45, 19, SDL_WINDOW_SHOWN);
     if (NULL == v->sdl->window ) {
-        fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
+        fprintf(stderr, "Erreur SDL_CreateWindow : %s\n", SDL_GetError());
         quitter(v->sdl->window , v->sdl->renderer);
     }
 
     v->sdl->renderer = SDL_CreateRenderer(v->sdl->window, -1, SDL_RENDERER_ACCELERATED);
     if (NULL ==  v->sdl->renderer) {
-        fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
+        fprintf(stderr, "Erreur SDL_CreateWindow : %s\n", SDL_GetError());
         quitter(v->sdl->window, v->sdl->renderer);
     }
-
-
     return v;
 }
 
@@ -208,9 +210,9 @@ void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, in
             else{
                 int indice = grid[nb_lignes][nb_colonnes];
                 if (indice < 0){
-                    SDL_SetRenderDrawColor(renderer, tabColors[i].r, tabColors[i].g, tabColors[i].b, tabColors[i].a-40);
+                    SDL_SetRenderDrawColor(renderer, tabColors[indice*-1].r, tabColors[indice*-1].g, tabColors[indice*-1].b, tabColors[indice*-1].a-40);
                 }else{
-                    SDL_SetRenderDrawColor(renderer, tabColors[i].r, tabColors[i].g, tabColors[i].b, tabColors[i].a);
+                    SDL_SetRenderDrawColor(renderer, tabColors[indice].r, tabColors[indice].g, tabColors[indice].b, tabColors[indice].a);
                 }
             }
             SDL_RenderFillRect(renderer, &pixel);
@@ -218,10 +220,34 @@ void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, in
     }
 
     // Afficher les scores 
-    for(int i = 0; i<nb_player; i++){
-        scores[i];
+    TTF_Font *font = TTF_OpenFont("arial.ttf", 10);//faut voir la taille
+    SDL_Color color = {255, 255, 255, 255}; 
+
+    int decalageY = 10;
+
+    for (int i = 0; i < nb_player; i++) {
+        char score[20];
+        snprintf(score, sizeof(score), "Player %d: %d", i + 1, scores[i]);
+
+        SDL_Surface *surface = TTF_RenderText_Solid(font, score, color);
+
+        SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_FreeSurface(surface); 
+
+        
+
+        SDL_Rect text_rect;
+        text_rect.h = surface->h;
+        text_rect.w = surface->w;
+        text_rect.x = 10;
+        text_rect.y = decalageY;
+
+        SDL_RenderCopy(renderer, texture, NULL, &text_rect);
+        SDL_DestroyTexture(texture);
+
+        decalageY += 10;
     }
 
-
+    TTF_CloseFont(font);
     SDL_RenderPresent(renderer);
 }
