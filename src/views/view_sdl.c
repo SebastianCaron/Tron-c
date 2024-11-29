@@ -110,6 +110,17 @@ void afficheMenuPrincipal(SDL_Renderer *renderer){
     // Le dessiner et mettre le titre dedans
 
     // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
+    SDL_Event event;
+    if(event.type==SDL_MOUSEBUTTONDOWN){
+            int x, y;
+            SDL_GetMouseState(&x, &y);
+            if(x>=multiplayer->x && x<=multiplayer->w && y>=multiplayer->y && y<=multiplayer->h){
+                // Choix = multiplayer
+            }else if (x>=solo->x && x<=solo->w && y>=solo->y && y<=solo->h){
+                // Choix = Solo
+            }
+    }
+
 }
 
 
@@ -129,6 +140,17 @@ void afficheMenuSolo(SDL_Renderer *renderer){
     // Le dessiner et mettre le titre dedans
 
     // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
+
+    SDL_Event event;
+    if(event.type==SDL_MOUSEBUTTONDOWN){
+            int x, y;
+            SDL_GetMouseState(&x, &y);
+            if(x>=algo->x && x<=algo->w && y>=algo->y && y<=algo->h){
+                // Choix = algo
+            }else if (x>=q->x && x<=q->w && y>=q->y && y<=q->h){
+                // Choix = q
+            }
+    }
 }
 
 
@@ -148,6 +170,17 @@ void afficheMenuMultiplayer(SDL_Renderer *renderer){
     // Le dessiner et mettre le titre dedans
 
     // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
+    SDL_Event event;
+    if(event.type==SDL_MOUSEBUTTONDOWN){
+            int x, y;
+            SDL_GetMouseState(&x, &y);
+            if(x>=machine->x && x<=machine->w && y>=machine->y && y<=machine->h){
+                // Choix = machine
+            }else if (x>=others->x && x<=others->w && y>=others->y && y<=others->h){
+                // Choix = others
+            }
+
+    }
 }
 
 void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes, SDL_Renderer *renderer){
