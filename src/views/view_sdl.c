@@ -234,8 +234,6 @@ void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, in
         SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
         SDL_FreeSurface(surface); 
 
-        
-
         SDL_Rect text_rect;
         text_rect.h = surface->h;
         text_rect.w = surface->w;
