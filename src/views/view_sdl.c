@@ -94,6 +94,22 @@ SDL_Rect *createRect(int h, int w, int x, int y){
     return &ret;
 }
 
+void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y) {
+    TTF_Font *font = TTF_OpenFont("arial.ttf", 10);//faut voir la taille
+    SDL_Color color = {255, 255, 255, 255}; 
+    SDL_Surface *surfaceTexte = TTF_RenderText_Solid(font, texte, color);
+    SDL_Texture *textureTexte = SDL_CreateTextureFromSurface(renderer, surfaceTexte);
+
+    SDL_Rect destRect = {x, y, surfaceTexte->w, surfaceTexte->h};
+    SDL_RenderCopy(renderer, textureTexte, NULL, &destRect);
+
+    SDL_DestroyTexture(textureTexte);
+    SDL_FreeSurface(surfaceTexte);
+    TTF_CloseFont(font);
+
+}
+
+
 void afficheMenuPrincipal(SDL_Renderer *renderer){
     // Affichage Titre
 
@@ -203,12 +219,12 @@ void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, in
             pixel.x = j*pixelH;
             pixel.y = j*pixelW;
 
-            if(grid[nb_lignes][nb_colonnes]=='#'){
+            if(grid[i][j]=='#'){
                 SDL_SetRenderDrawColor(renderer, tabColors[9].r, tabColors[9].g, tabColors[9].b, tabColors[9].a);
             }
 
             else{
-                int indice = grid[nb_lignes][nb_colonnes];
+                int indice = grid[i][j];
                 if (indice < 0){
                     SDL_SetRenderDrawColor(renderer, tabColors[indice*-1].r, tabColors[indice*-1].g, tabColors[indice*-1].b, tabColors[indice*-1].a-40);
                 }else{
@@ -219,6 +235,8 @@ void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, in
         }
     }
 
+
+    
     // Afficher les scores 
     TTF_Font *font = TTF_OpenFont("arial.ttf", 10);//faut voir la taille
     SDL_Color color = {255, 255, 255, 255}; 
@@ -228,24 +246,8 @@ void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, in
     for (int i = 0; i < nb_player; i++) {
         char score[20];
         snprintf(score, sizeof(score), "Player %d: %d", i + 1, scores[i]);
-
-        SDL_Surface *surface = TTF_RenderText_Solid(font, score, color);
-
-        SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-        SDL_FreeSurface(surface); 
-
-        SDL_Rect text_rect;
-        text_rect.h = surface->h;
-        text_rect.w = surface->w;
-        text_rect.x = 10;
-        text_rect.y = decalageY;
-
-        SDL_RenderCopy(renderer, texture, NULL, &text_rect);
-        SDL_DestroyTexture(texture);
-
+        afficheTexte(renderer, score, 10, decalageY);
         decalageY += 10;
     }
-
-    TTF_CloseFont(font);
     SDL_RenderPresent(renderer);
 }
