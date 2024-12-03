@@ -18,8 +18,8 @@ typedef struct v{
     view_ncurse *ncurse;
     view_sdl *sdl;
 
-    void (*update_screen)(int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes);
-    void (*update_change_screen)(int **grid, int nb_lignes, int nb_colonnes);
+    void (*update_screen)(struct v *, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes);
+    void (*update_change_screen)(struct v *, int **grid, int nb_lignes, int nb_colonnes);
 
     direction (*get_direction)();
     void (*destroy_self)(struct v *);

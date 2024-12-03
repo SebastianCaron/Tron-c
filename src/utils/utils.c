@@ -143,3 +143,17 @@ void destroy_grid(grid *g){
 
     free(g);
 }
+
+
+int string_equal(char *a, char *b){
+    if(a == NULL || b == NULL) return 0;
+    int i = 0;
+    while(1){
+        if(a[i] == '\0' && b[i] == '\0') return 1;
+        if(a[i] == '\0' || b[i] == '\0') return 0;
+        if(a[i] != b[i]) return 0;
+
+        i += 1;
+    }
+    return 0;
+}

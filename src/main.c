@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "utils/utils.h"
 #include "model/model.h"
 #include "views/view.h"
 #include "views/view_ncurse.h"
@@ -23,9 +24,9 @@ int main(int argc, char **argv){
     char with_ncurse = 0;
 
     for(int i = 1; i < argc+1; i++){
-        if(argv[i] == "-sdl"){
+        if(string_equal(argv[i],"-sdl")){
             with_sdl = 1;
-        }else if(argv[i] == "-ncurse"){
+        }else if(string_equal(argv[i],"-ncurse")){
             with_ncurse = 1;
         }
         else{

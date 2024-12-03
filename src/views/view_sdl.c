@@ -48,11 +48,21 @@ view *init_view_sdl(){
 }
 
 
-void destroy_view_sdl(view *v, SDL_Renderer *renderer, SDL_Window *window){
-    if (NULL != renderer) SDL_DestroyRenderer(renderer);
-    if (NULL != window) SDL_DestroyWindow(window);
+void destroy_view_sdl(view *v){
+    if(v == NULL) return;
+    if(v->sdl != NULL){
+        SDL_DestroyRenderer(v->sdl->renderer);
+        SDL_DestroyWindow(v->sdl->window);
+    }
     SDL_Quit();
+    free(v->sdl);
     free(v);
+}
+
+void quitter(SDL_Window *window, SDL_Renderer *renderer){
+    if(renderer != NULL) SDL_DestroyRenderer(renderer);
+    if(window != NULL) SDL_DestroyWindow(window);
+    SDL_Quit();
 }
 
 
@@ -77,17 +87,18 @@ direction get_direction_sdl(view *v){
             }
         }
     }
+    return NODIRECTION;
 }
 
 
 SDL_Rect *createRect(int h, int w, int x, int y){
-    SDL_Rect *ret;
+    SDL_Rect *ret = calloc(1, sizeof(SDL_Rect));
     ret->h = h;
     ret->w = w;
     ret->x = x;
     ret->y =y;
 
-    return &ret;
+    return ret;
 }
 
 void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y) {
@@ -126,7 +137,7 @@ void afficheMenuPrincipal(SDL_Renderer *renderer){
 
     // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
     SDL_Event event;
-    if(event.type==SDL_MOUSEBUTTONDOWN){
+    if(event.type == SDL_MOUSEBUTTONDOWN){
         int x, y;
         SDL_GetMouseState(&x, &y);
         if(x>=solo->x && x<=solo->w && y>=solo->y && y<=solo->h){
@@ -204,11 +215,23 @@ void afficheMenuMultiplayer(SDL_Renderer *renderer){
     }
 }
 
-void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes, SDL_Renderer *renderer){
-    if(!renderer){
-        perror("[VIEW SDL] Renderer invalide.");
+void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes){
+    if(v == NULL){
+        perror("[VIEW SDL] V is null.");
         exit(EXIT_FAILURE);
     }
+    
+    if(v->sdl == NULL){
+        perror("[VIEW SDL] V is not SDL.");
+        exit(EXIT_FAILURE);
+    }
+
+    if(v->sdl->renderer == NULL){
+        perror("[VIEW SDL] No renderer available in the view.");
+        exit(EXIT_FAILURE);
+    }
+
+    SDL_Renderer *renderer = v->sdl->renderer;
 
     for(int i = 0; i<nb_lignes;i++){
         for (int j= 0 ;j <nb_colonnes;j++){
@@ -222,7 +245,6 @@ void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, in
             if(grid[i][j]=='#'){
                 SDL_SetRenderDrawColor(renderer, tabColors[9].r, tabColors[9].g, tabColors[9].b, tabColors[9].a);
             }
-
             else{
                 int indice = grid[i][j];
                 if (indice < 0){

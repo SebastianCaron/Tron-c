@@ -12,8 +12,15 @@
 
 view *init_view_sdl();
 
-void destroy_view_sdl(view *, SDL_Renderer *, SDL_Window *);
+void destroy_view_sdl(view *);
 
-direction get_direction_ncurse();
+direction get_direction_sdl();
 
-void update_screen_sdl(int, int *, int **, int , int , SDL_Renderer *);
+void update_screen_sdl(view *, int, int *, int **, int , int);
+
+void quitter(SDL_Window *window, SDL_Renderer *renderer);
+SDL_Rect *createRect(int h, int w, int x, int y);
+void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y);
+void afficheMenuPrincipal(SDL_Renderer *renderer);
+void afficheMenuSolo(SDL_Renderer *renderer);
+void afficheMenuMultiplayer(SDL_Renderer *renderer);

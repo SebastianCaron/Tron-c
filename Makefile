@@ -9,7 +9,7 @@ else
 CFLAGS ?= -Wall -MMD -03 -DNDEBUG
 endif
 
-LDFLAGS =
+LDFLAGS = -lncurses $(sdl2-config --cflags --libs) -lSDL2_ttf
 
 OBJS := $(shell find $(SRC_DIR) -name "*.c" | sed 's/.c$$/.o/g' | sed 's/$(SRC_DIR)/$(BIN_DIR)/g')
 DEPS := $(OBJS:.o=.d)
@@ -20,11 +20,11 @@ all: $(TARGET)
 	@echo "build"
 
 $(TARGET): $(OBJS)
-	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
+	$(COMPILER) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(BIN_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@mkdir -p $(dir $@)
+	$(COMPILER) $(CFLAGS) -c $< -o $@
 
 .PHONY: clean mrpropre
 clean:
