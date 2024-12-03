@@ -30,9 +30,6 @@ view *init_view_sdl(){
     }
     v->sdl = viewSdl; 
 
-
-
-
     v->sdl->renderer=NULL;
     v->sdl->window= NULL;
 
@@ -84,7 +81,6 @@ direction get_direction_sdl(view *v){
 
 
 SDL_Rect *createRect(int h, int w, int x, int y){
-
     SDL_Rect *ret;
     ret->h = h;
     ret->w = w;
@@ -106,98 +102,105 @@ void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y) {
     SDL_DestroyTexture(textureTexte);
     SDL_FreeSurface(surfaceTexte);
     TTF_CloseFont(font);
-
 }
 
 
 void afficheMenuPrincipal(SDL_Renderer *renderer){
     // Affichage Titre
-
+    afficheTexte(renderer, "Tron", x, y);
     // Rectangle Solo
     SDL_Rect *solo = createRect(h, w, x, y);
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, solo);
+    afficheTexte(renderer, "solo", x,y);
     // Le dessiner et mettre le titre dedans
-
-
 
     // Rectangle Multiplayer
     SDL_Rect *multiplayer = createRect(h, w, x, y);
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, multiplayer);
+    afficheTexte(renderer, "multiplayer", x,y);
     // Le dessiner et mettre le titre dedans
+
+    SDL_RenderPresent(renderer);
 
     // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
     SDL_Event event;
     if(event.type==SDL_MOUSEBUTTONDOWN){
-            int x, y;
-            SDL_GetMouseState(&x, &y);
-            if(x>=solo->x && x<=solo->w && y>=solo->y && y<=solo->h){
-                // Choix = solo
-            }else if (x>=multiplayer->x && x<=multiplayer->w && y>=multiplayer->y && y<=multiplayer->h){
-                // Choix = multiplayer
-            }
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+        if(x>=solo->x && x<=solo->w && y>=solo->y && y<=solo->h){
+            afficheMenuSolo(renderer);
+        }else if (x>=multiplayer->x && x<=multiplayer->w && y>=multiplayer->y && y<=multiplayer->h){
+            afficheMenuMultiplayer(renderer);
+        }
     }
 
 }
 
 
 void afficheMenuSolo(SDL_Renderer *renderer){
-    // Affichage Titre
+    afficheTexte(renderer, "Solo", x, y);
 
     // Rectangle Vs algo  
     SDL_Rect *algo = createRect(h, w, x, y);
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, algo);
-    // Le dessiner et mettre le titre dedans
+    afficheTexte(renderer, "vs algo", x,y);
 
     // Rectangle Vs Q-learning
     SDL_Rect *q = createRect(h, w, x, y);
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, q);
-    // Le dessiner et mettre le titre dedans
+    afficheTexte(renderer, "vs q-learning", x,y);
 
+    SDL_RenderPresent(renderer);
     // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
 
     SDL_Event event;
     if(event.type==SDL_MOUSEBUTTONDOWN){
-            int x, y;
-            SDL_GetMouseState(&x, &y);
-            if(x>=algo->x && x<=algo->w && y>=algo->y && y<=algo->h){
-                // Choix = algo
-            }else if (x>=q->x && x<=q->w && y>=q->y && y<=q->h){
-                // Choix = q
-            }
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+        if(x>=algo->x && x<=algo->w && y>=algo->y && y<=algo->h){
+            // Lancer le jeu contre le bot algo
+        }else if (x>=q->x && x<=q->w && y>=q->y && y<=q->h){
+            // Lancer le jeu contre le bot qlearning
+
+        }
     }
 }
 
 
 void afficheMenuMultiplayer(SDL_Renderer *renderer){
     // Affichage Titre
+    afficheTexte(renderer, "Multiplayer", x, y);
 
     // Rectangle On this machine
     SDL_Rect *machine = createRect(h, w, x, y);
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, machine);
+    afficheTexte(renderer, "on this machine (2 players)", x,y);
     // Le dessiner et mettre le titre dedans
 
     // Rectangle with other
     SDL_Rect *others = createRect(h, w, x, y);
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, others);
+    afficheTexte(renderer, "with others", x,y);
     // Le dessiner et mettre le titre dedans
+
+    SDL_RenderPresent(renderer);
 
     // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
     SDL_Event event;
     if(event.type==SDL_MOUSEBUTTONDOWN){
-            int x, y;
-            SDL_GetMouseState(&x, &y);
-            if(x>=machine->x && x<=machine->w && y>=machine->y && y<=machine->h){
-                // Choix = machine
-            }else if (x>=others->x && x<=others->w && y>=others->y && y<=others->h){
-                // Choix = others
-            }
-
+        int xSouris, ySouris;
+        SDL_GetMouseState(&xSouris, &ySouris);
+        if(xSouris>=machine->x && xSouris<=machine->w && ySouris>=machine->y && ySouris<=machine->h){
+            // Lancer le jeu avec 2 joueurs
+        }else if (xSouris>=others->x && xSouris<=others->w && ySouris>=others->y && ySouris<=others->h){
+            // Lancer le jeu en ligne mais jsp comment faire ça.
+        }
     }
 }
 
@@ -235,8 +238,6 @@ void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, in
         }
     }
 
-
-    
     // Afficher les scores 
     TTF_Font *font = TTF_OpenFont("arial.ttf", 10);//faut voir la taille
     SDL_Color color = {255, 255, 255, 255}; 
