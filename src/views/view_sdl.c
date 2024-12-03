@@ -210,17 +210,14 @@ void update_screen_sdl(int nb_player, int *scores, int **grid, int nb_lignes, in
         exit(EXIT_FAILURE);
     }
 
-    int pixelW =  LARGEUR / nb_colonnes;
-    int pixelH= HAUTEUR / nb_lignes;
-
     for(int i = 0; i<nb_lignes;i++){
         for (int j= 0 ;j <nb_colonnes;j++){
 
             SDL_Rect pixel;
-            pixel.h = pixelH;
-            pixel.w= pixelW;
-            pixel.x = j*pixelH;
-            pixel.y = j*pixelW;
+            pixel.h = HPIXEL;
+            pixel.w= WPIXEL;
+            pixel.x = j*WPIXEL;
+            pixel.y = i*HPIXEL;
 
             if(grid[i][j]=='#'){
                 SDL_SetRenderDrawColor(renderer, tabColors[9].r, tabColors[9].g, tabColors[9].b, tabColors[9].a);
