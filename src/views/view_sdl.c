@@ -107,19 +107,19 @@ void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y) {
 
 void afficheMenuPrincipal(SDL_Renderer *renderer){
     // Affichage Titre
-    afficheTexte(renderer, "Tron", x, y);
+    afficheTexte(renderer, "Tron", LARGEUR/2, HAUTEUR/3);
     // Rectangle Solo
-    SDL_Rect *solo = createRect(h, w, x, y);
+    SDL_Rect *solo = createRect(50, 100, LARGEUR/2, 2*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, solo);
-    afficheTexte(renderer, "solo", x,y);
+    afficheTexte(renderer, "solo", LARGEUR/2,HAUTEUR/2);
     // Le dessiner et mettre le titre dedans
 
     // Rectangle Multiplayer
-    SDL_Rect *multiplayer = createRect(h, w, x, y);
+    SDL_Rect *multiplayer = createRect(50, 100, LARGEUR/2,2.5*(HAUTEUR/3));//Les positions x et y c'est du test la pour le coup 
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, multiplayer);
-    afficheTexte(renderer, "multiplayer", x,y);
+    afficheTexte(renderer, "multiplayer", LARGEUR/2,2.5*(HAUTEUR/3));
     // Le dessiner et mettre le titre dedans
 
     SDL_RenderPresent(renderer);
@@ -140,19 +140,19 @@ void afficheMenuPrincipal(SDL_Renderer *renderer){
 
 
 void afficheMenuSolo(SDL_Renderer *renderer){
-    afficheTexte(renderer, "Solo", x, y);
+    afficheTexte(renderer, "Solo",LARGEUR/2,(HAUTEUR/3));
 
     // Rectangle Vs algo  
-    SDL_Rect *algo = createRect(h, w, x, y);
+    SDL_Rect *algo = createRect(50, 100, LARGEUR/2,2*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, algo);
-    afficheTexte(renderer, "vs algo", x,y);
+    afficheTexte(renderer, "vs algo", LARGEUR/2,2*(HAUTEUR/3));
 
     // Rectangle Vs Q-learning
-    SDL_Rect *q = createRect(h, w, x, y);
+    SDL_Rect *q = createRect(50, 100, LARGEUR/2,2.5*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, q);
-    afficheTexte(renderer, "vs q-learning", x,y);
+    afficheTexte(renderer, "vs q-learning",LARGEUR/2,2.5*(HAUTEUR/3));
 
     SDL_RenderPresent(renderer);
     // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
@@ -173,20 +173,20 @@ void afficheMenuSolo(SDL_Renderer *renderer){
 
 void afficheMenuMultiplayer(SDL_Renderer *renderer){
     // Affichage Titre
-    afficheTexte(renderer, "Multiplayer", x, y);
+    afficheTexte(renderer, "Multiplayer", LARGEUR/2,(HAUTEUR/3));
 
     // Rectangle On this machine
-    SDL_Rect *machine = createRect(h, w, x, y);
+    SDL_Rect *machine = createRect(50, 100, LARGEUR/2,2*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, machine);
-    afficheTexte(renderer, "on this machine (2 players)", x,y);
+    afficheTexte(renderer, "on this machine (2 players)", LARGEUR/2,2*(HAUTEUR/3));
     // Le dessiner et mettre le titre dedans
 
     // Rectangle with other
-    SDL_Rect *others = createRect(h, w, x, y);
+    SDL_Rect *others = createRect(50, 100, LARGEUR/2,2.5*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, others);
-    afficheTexte(renderer, "with others", x,y);
+    afficheTexte(renderer, "with others", LARGEUR/2,2.5*(HAUTEUR/3));
     // Le dessiner et mettre le titre dedans
 
     SDL_RenderPresent(renderer);
