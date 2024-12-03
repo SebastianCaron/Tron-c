@@ -8,18 +8,18 @@
 
 void controllerPlay(model *m, view *v){
     while(!est_fini(m)){
-        direction dir = v->get_direction();
+        direction dir = v->get_direction(v);
         move_player(m, m->n_player, dir);
 
-        v->update_change_screen(m->grid, m->nb_lignes_grid, m->nb_colonnes_grid);
+        v->update_change_screen(v, m->grid, m->nb_lignes_grid, m->nb_colonnes_grid);
     }
 }
 
 void init_controller(view *v){
     // Demander tous les paramètres à mettre dans init_game
-    model *game = init_game();
+    //model *game = init_game();
 
-    controllerPlay(game, v);
+    //controllerPlay(game, v);
 }
 
 void controller_destroy(model *m, view *v) {

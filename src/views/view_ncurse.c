@@ -45,6 +45,7 @@ view *init_view_ncurse(){
 
 
 void destroy_view_ncurse(view *v){
+    if(v == NULL) return;
     timeout(5000);
     getch();
     endwin();
@@ -54,7 +55,7 @@ void destroy_view_ncurse(view *v){
     free(v);
 }
 
-direction get_direction_ncurse(){
+direction get_direction_ncurse(view *v){
     int ch = getch();
     switch (ch) {
         case KEY_RIGHT:
@@ -72,7 +73,7 @@ direction get_direction_ncurse(){
     return NODIRECTION;
 }
 
-void update_screen_ncurse(int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes){
+void update_screen_ncurse(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes){
     
 }
 

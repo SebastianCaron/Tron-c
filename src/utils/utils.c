@@ -22,7 +22,7 @@ int **load_map(char *path, int nb_lignes, int nb_colonnes){
 
 // CHARGE LA GRILLE DEPUIS LE FICHIER 
 grid *load_grid_as_it_is(char *path, int nb_lignes, int nb_colonnes){
-    FILE *f = fopen(path, 'r');
+    FILE *f = fopen(path, "r");
     if(f == NULL){
         perror("[UTILS] ERREUR OUVERTURE FICHIER");
         return NULL;
@@ -49,7 +49,7 @@ grid *load_grid_as_it_is(char *path, int nb_lignes, int nb_colonnes){
     int i = 0;
     int k = 0;
     while(k < g->nb_lignes){
-        if(!fscanf(f, "%s", &buffer)){
+        if(!fscanf(f, "%s", buffer)){
             perror("[UTILS] ERREUR LECTURE FICHIER");
             destroy_grid(g);
             fclose(f);
@@ -84,7 +84,7 @@ void count_nb_lignes_colonnes(char *path, int *nb_lignes, int *nb_colonnes){
     if(!nb_lignes || !nb_colonnes){
         return;
     }
-    FILE *f = fopen(path, 'r');
+    FILE *f = fopen(path, "r");
     if(f == NULL){
         perror("[UTILS] ERREUR OUVERTURE FICHIER");
         return;
@@ -93,7 +93,7 @@ void count_nb_lignes_colonnes(char *path, int *nb_lignes, int *nb_colonnes){
     char buffer[BUFFER_SIZE];
     int len = 0;
 
-    while(fscanf(f, "%s", &buffer)){
+    while(fscanf(f, "%s", buffer)){
         len = strlen(buffer);
         (*nb_colonnes) = (*nb_colonnes) > len ? (*nb_colonnes) : len;
         (*nb_lignes)++;
