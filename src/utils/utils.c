@@ -5,11 +5,11 @@
 #include "utils.h"
 #include "../model/model.h"
 
-int **load_map(char *path, int nb_lignes, int nb_colonnes){
+grid *load_map(char *path, int nb_lignes, int nb_colonnes){
     int nbfc = 0;
     int nbfl = 0;
-
     count_nb_lignes_colonnes(path, &nbfl, &nbfc);
+
     grid *g = load_grid_as_it_is(path, nbfl, nbfc);
     if(!g){
         return NULL;
@@ -93,7 +93,7 @@ void count_nb_lignes_colonnes(char *path, int *nb_lignes, int *nb_colonnes){
     char buffer[BUFFER_SIZE];
     int len = 0;
 
-    while(fscanf(f, "%s", buffer)){
+    while((fgets(buffer, BUFFER_SIZE, f)) != '\0'){
         len = strlen(buffer);
         (*nb_colonnes) = (*nb_colonnes) > len ? (*nb_colonnes) : len;
         (*nb_lignes)++;
@@ -112,8 +112,26 @@ grid *upscale_grid(grid *g, int nb_lignes, int nb_colonnes){
     ng->nb_colonnes = nb_colonnes;
     ng->nb_lignes = nb_lignes;
 
-    int scale_x =  nb_colonnes / g->nb_colonnes;
-    int scale_y = nb_lignes / g->nb_lignes;
+    ng->grid = allocate_grid(ng->nb_lignes, ng->nb_colonnes);
+
+    float scale_x =  nb_colonnes / g->nb_colonnes;
+    float scale_y = nb_lignes / g->nb_lignes;
+    if(scale_x == 0) scale_x = 1;
+    if(scale_y == 0) scale_y = 1;
+    printf("X : %f, Y : %f\n", scale_x, scale_y);
+
+
+    for(int i = 0; i < nb_lignes; i++){
+        for(int j = 0; j < nb_colonnes; j++){
+            int i_y = i/scale_y;
+            int i_x = j/scale_x;
+            printf("X : %d, Y : %d\n", i_x, i_y);
+
+            ng->grid[i][j] = g->grid[i_y][i_x];
+        }
+    }
+
+    return ng;
 }
 
 int **allocate_grid(int nb_lignes, int nb_colonnes){
@@ -156,4 +174,16 @@ int string_equal(char *a, char *b){
         i += 1;
     }
     return 0;
+}
+
+
+void display_grid(grid *g){
+    for(int i = 0; i < g->nb_lignes; i++){
+        printf("[");
+        for(int j = 0; j < g->nb_colonnes-1; j++){
+            printf("%d, ", g->grid[i][j]);
+        }
+        if(g->nb_colonnes >= 1)printf("%d", g->grid[i][g->nb_colonnes-1]);
+        printf("]\n");
+    }
 }

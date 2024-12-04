@@ -8,8 +8,27 @@
 #include "views/view_sdl.h"
 #include "controler/controler.h"
 
+#define TEST 1
+
+int test(){
+    printf("DEBUG :\n");
+    grid *g = load_map("./maps/map1.txt", 25, 25);
+    printf("DEBUG 1 OK\n");
+
+    display_grid(g);
+    printf("DEBUG 2 OK\n");
+
+    destroy_grid(g);
+    printf("DEBUG 3 OK\n");
+
+    return EXIT_SUCCESS;
+}
+
 
 int main(int argc, char **argv){
+
+    if(TEST) return test();
+
     view *vncr;
     view *vsdl;
     if(argc == 1){
