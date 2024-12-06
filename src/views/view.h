@@ -18,11 +18,17 @@ typedef struct v{
     view_ncurse *ncurse;
     view_sdl *sdl;
 
+    unsigned width;
+    unsigned height;
+
     void (*update_screen)(struct v *, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes);
     void (*update_change_screen)(struct v *, int **grid, int nb_lignes, int nb_colonnes);
 
     direction (*get_direction)(struct v *);
     void (*destroy_self)(struct v *);
-
 } view;
+
+void affiche_menu_principal(view *v);
+void affiche_menu_solo(view *v);
+void affiche_menu_multijoueur(view *v);
 

@@ -39,6 +39,8 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **
     //     }
     // }
     game->grid = grid;
+    game->nb_lignes_grid = nb_lignes_grid;
+    game->nb_colonnes_grid = nb_colonnes_grid;
 
     game->scores = (int *) calloc(nb_player, sizeof(int));
     if(!game->scores){
@@ -49,7 +51,7 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **
     return game;
 }
 
-void destroy(model *m){
+void destroy_model(model *m){
     if(!m) return;
 
     free(m->dead);

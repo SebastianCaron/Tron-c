@@ -120,17 +120,15 @@ grid *upscale_grid(grid *g, int nb_lignes, int nb_colonnes){
 
     float scale_x =  (float) nb_colonnes / (float) g->nb_colonnes;
     float scale_y = (float) nb_lignes / (float) g->nb_lignes;
-    // printf("X : %f, Y : %f\n", scale_x, scale_y);
+    
     if(scale_x == 0) scale_x = 1;
     if(scale_y == 0) scale_y = 1;
-    // printf("X : %f, Y : %f\n", scale_x, scale_y);
 
 
     for(int i = 0; i < nb_lignes; i++){
         for(int j = 0; j < nb_colonnes; j++){
             int i_y = i/scale_y;
             int i_x = j/scale_x;
-            // printf("X : %d, Y : %d\n", i_x, i_y);
 
             ng->grid[i][j] = g->grid[i_y][i_x];
         }

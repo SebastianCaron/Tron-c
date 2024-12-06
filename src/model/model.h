@@ -29,7 +29,7 @@ typedef enum { WALL = 100, EMPTY = 0 } cases;
 model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **grid);
 
 // Free the model
-void destroy(model *);
+void destroy_model(model *);
 
 // Move the player to dir only if player is not dead
 int move_player(model *m, int player, direction dir);

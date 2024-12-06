@@ -1,4 +1,0 @@
-gcc -c -o model.o model/model.c
-gcc -c -o view_ncurse.o views/view_ncurse.c -lncurses
-gcc -c -o main.o main.c -lncurses
-gcc -o exec main.o model.o view_ncurse.o -lncurses

@@ -6,9 +6,9 @@
 #include "views/view.h"
 #include "views/view_ncurse.h"
 #include "views/view_sdl.h"
-#include "controler/controler.h"
+#include "controller/controller.h"
 
-#define TEST 1
+#define TEST 0
 
 int test(){
     printf("DEBUG :\n");
@@ -29,8 +29,8 @@ int main(int argc, char **argv){
 
     if(TEST) return test();
 
-    view *vncr;
-    view *vsdl;
+    view *vncr = NULL;
+    view *vsdl = NULL;
     if(argc == 1){
         // INIT LE JEU AVEC NCURSE
         // system("printf '\\e[8;40;100t'"); // CHANGE SIZE TO 40L, 100C
@@ -63,13 +63,13 @@ int main(int argc, char **argv){
 
     if(with_sdl){
         vsdl = init_view_sdl();
-        init_controller(vsdl);
     }
     if(with_ncurse){
         vncr = init_view_ncurse();
-        init_controller(vncr);
     }
 
+    controller *c = init_controller(vsdl, vncr);
+    
 
 
 

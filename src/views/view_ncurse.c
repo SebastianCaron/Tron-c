@@ -19,6 +19,9 @@ view *init_view_ncurse(){
 
 
     v->type = 'n';
+    v->width = COLS;
+    v->height = LINES;
+
     v->ncurse = vn;
     initscr();
     clear();
@@ -41,8 +44,6 @@ view *init_view_ncurse(){
 
     return v;
 }
-
-
 
 void destroy_view_ncurse(view *v){
     if(v == NULL) return;
