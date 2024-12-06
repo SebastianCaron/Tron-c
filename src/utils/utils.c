@@ -14,6 +14,7 @@ grid *load_map(char *path, int nb_lignes, int nb_colonnes){
     if(!g){
         return NULL;
     }
+    // display_grid(g);
 
     grid *ng = upscale_grid(g, nb_lignes, nb_colonnes);
     destroy_grid(g);
@@ -49,13 +50,15 @@ grid *load_grid_as_it_is(char *path, int nb_lignes, int nb_colonnes){
     int i = 0;
     int k = 0;
     while(k < g->nb_lignes){
-        if(!fscanf(f, "%s", buffer)){
-            perror("[UTILS] ERREUR LECTURE FICHIER");
-            destroy_grid(g);
-            fclose(f);
-            return NULL;
-        }
-        len = strlen(buffer);
+        // if(!fscanf(f, "%s", buffer)){
+        //     perror("[UTILS] ERREUR LECTURE FICHIER");
+        //     destroy_grid(g);
+        //     fclose(f);
+        //     return NULL;
+        // }
+        fgets(buffer, BUFFER_SIZE, f);
+        len = strlen(buffer)-1;
+        // printf("%s", buffer);
 
         for(i = 0; i < len; i++){
             switch (buffer[i])
@@ -93,7 +96,8 @@ void count_nb_lignes_colonnes(char *path, int *nb_lignes, int *nb_colonnes){
     char buffer[BUFFER_SIZE];
     int len = 0;
 
-    while((fgets(buffer, BUFFER_SIZE, f)) != '\0'){
+    while(!feof(f)){
+        fgets(buffer, BUFFER_SIZE, f);
         len = strlen(buffer);
         (*nb_colonnes) = (*nb_colonnes) > len ? (*nb_colonnes) : len;
         (*nb_lignes)++;
@@ -114,18 +118,19 @@ grid *upscale_grid(grid *g, int nb_lignes, int nb_colonnes){
 
     ng->grid = allocate_grid(ng->nb_lignes, ng->nb_colonnes);
 
-    float scale_x =  nb_colonnes / g->nb_colonnes;
-    float scale_y = nb_lignes / g->nb_lignes;
+    float scale_x =  (float) nb_colonnes / (float) g->nb_colonnes;
+    float scale_y = (float) nb_lignes / (float) g->nb_lignes;
+    // printf("X : %f, Y : %f\n", scale_x, scale_y);
     if(scale_x == 0) scale_x = 1;
     if(scale_y == 0) scale_y = 1;
-    printf("X : %f, Y : %f\n", scale_x, scale_y);
+    // printf("X : %f, Y : %f\n", scale_x, scale_y);
 
 
     for(int i = 0; i < nb_lignes; i++){
         for(int j = 0; j < nb_colonnes; j++){
             int i_y = i/scale_y;
             int i_x = j/scale_x;
-            printf("X : %d, Y : %d\n", i_x, i_y);
+            // printf("X : %d, Y : %d\n", i_x, i_y);
 
             ng->grid[i][j] = g->grid[i_y][i_x];
         }

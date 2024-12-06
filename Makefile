@@ -34,5 +34,9 @@ mrpropre: clean
 	clear
 	rm -f $(TARGET)
 
+fr0: mrpropre all
+	clear
+	./tron
+
 -include $(DEPS)
 
