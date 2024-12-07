@@ -36,10 +36,10 @@ int main(int argc, char **argv){
     char with_sdl = 0;
     char with_ncurse = 0;
 
-    for(int i = 1; i < argc+1; i++){
-        if(string_equal(argv[i],"-sdl")){
+    for(int i = 1; i < argc; i++){
+        if(string_equal(argv[i],"-sdl") == 1){
             with_sdl = 1;
-        }else if(string_equal(argv[i],"-ncurse")){
+        }else if(string_equal(argv[i],"-ncurse") == 1){
             with_ncurse = 1;
         }
         else{
