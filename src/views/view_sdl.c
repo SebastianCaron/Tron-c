@@ -20,10 +20,16 @@ view *init_view_sdl(){
         exit(EXIT_FAILURE);
     }
 
+    if (TTF_Init() == -1) {
+        fprintf(stderr, "[VIEW SDL] ERREUR SDL_ttf - %s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
+    }
+
     v->destroy_self = destroy_view_sdl;
     v->get_direction = get_direction_sdl;
     // v->update_change_screen = ;
     v->update_screen = update_screen_sdl;
+    v->type = 's';
 
     view_sdl *viewSdl =(view_sdl *)malloc(sizeof(view_sdl));
     if(!viewSdl){
@@ -32,17 +38,17 @@ view *init_view_sdl(){
     }
     v->sdl = viewSdl; 
 
-    v->sdl->renderer=NULL;
-    v->sdl->window= NULL;
+    v->sdl->renderer = NULL;
+    v->sdl->window = NULL;
 
-    v->sdl->window = SDL_CreateWindow("TRONC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 45, 19, SDL_WINDOW_SHOWN);
-    if (NULL == v->sdl->window ) {
+    v->sdl->window = SDL_CreateWindow("TRONC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, HAUTEUR, LARGEUR, SDL_WINDOW_SHOWN);
+    if (v->sdl->window == NULL) {
         fprintf(stderr, "Erreur SDL_CreateWindow : %s\n", SDL_GetError());
         quitter(v->sdl->window , v->sdl->renderer);
     }
 
     v->sdl->renderer = SDL_CreateRenderer(v->sdl->window, -1, SDL_RENDERER_ACCELERATED);
-    if (NULL ==  v->sdl->renderer) {
+    if (v->sdl->renderer == NULL) {
         fprintf(stderr, "Erreur SDL_CreateWindow : %s\n", SDL_GetError());
         quitter(v->sdl->window, v->sdl->renderer);
     }
@@ -56,6 +62,7 @@ void destroy_view_sdl(view *v){
         SDL_DestroyRenderer(v->sdl->renderer);
         SDL_DestroyWindow(v->sdl->window);
     }
+    TTF_Quit();
     SDL_Quit();
     free(v->sdl);
     free(v);
@@ -64,6 +71,7 @@ void destroy_view_sdl(view *v){
 void quitter(SDL_Window *window, SDL_Renderer *renderer){
     if(renderer != NULL) SDL_DestroyRenderer(renderer);
     if(window != NULL) SDL_DestroyWindow(window);
+    TTF_Quit();
     SDL_Quit();
 }
 
@@ -104,12 +112,15 @@ SDL_Rect *createRect(int h, int w, int x, int y){
 }
 
 void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y) {
-    TTF_Font *font = TTF_OpenFont("arial.ttf", 10);//faut voir la taille
+    TTF_Font *font = TTF_OpenFont("./res/arial.ttf", 24);//faut voir la taille
+    if (font == NULL) {
+        fprintf(stderr, "Erreur lors du chargement de la police : %s\n", TTF_GetError());
+    }
     SDL_Color color = {255, 255, 255, 255}; 
     SDL_Surface *surfaceTexte = TTF_RenderText_Solid(font, texte, color);
     SDL_Texture *textureTexte = SDL_CreateTextureFromSurface(renderer, surfaceTexte);
 
-    SDL_Rect destRect = {x, y, surfaceTexte->w, surfaceTexte->h};
+    SDL_Rect destRect = (SDL_Rect) {x, y, surfaceTexte->w, surfaceTexte->h};
     SDL_RenderCopy(renderer, textureTexte, NULL, &destRect);
 
     SDL_DestroyTexture(textureTexte);
@@ -139,6 +150,7 @@ void afficheMenuPrincipalSDL(SDL_Renderer *renderer, actions *act){
 
     // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
     SDL_Event event;
+    SDL_WaitEvent(&event);
     if(event.type == SDL_MOUSEBUTTONDOWN){
         int x, y;
         SDL_GetMouseState(&x, &y);
@@ -149,6 +161,8 @@ void afficheMenuPrincipalSDL(SDL_Renderer *renderer, actions *act){
             // afficheMenuMultiplayerSDL(renderer);
             (*act) = MENU_MULTI;
         }
+    }else{
+        (*act) = NO_ACTION;
     }
 
 }
