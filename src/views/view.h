@@ -2,7 +2,10 @@
 
 #include <ncurses.h>
 #include <SDL2/SDL.h>
+
 #include "../model/model.h"
+#include "../utils/utils.h"
+
 
 typedef struct{
     WINDOW *grid_w;
@@ -28,7 +31,7 @@ typedef struct v{
     void (*destroy_self)(struct v *);
 } view;
 
-void affiche_menu_principal(view *v);
-void affiche_menu_solo(view *v);
-void affiche_menu_multijoueur(view *v);
+void affiche_menu_principal(view *v, actions *act);
+void affiche_menu_solo(view *v, actions *act);
+void affiche_menu_multijoueur(view *v, actions *act);
 

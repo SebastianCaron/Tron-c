@@ -4,6 +4,8 @@
 
 #include "view_ncurse.h"
 #include "view.h"
+#include "../controller/controller.h"
+
 
 view *init_view_ncurse(){
     view *v = (view *)malloc(sizeof(view));
@@ -76,6 +78,17 @@ direction get_direction_ncurse(view *v){
 
 void update_screen_ncurse(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes){
     
+}
+
+// TODO
+void afficheMenuPrincipalNC(view *v, actions *act){
+
+}
+void afficheMenuSoloNC(view *v, actions *act){
+
+}
+void afficheMenuMultiplayerNC(view *v, actions *act){
+
 }
 
 

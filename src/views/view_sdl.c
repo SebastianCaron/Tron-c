@@ -4,6 +4,8 @@
 #include "SDL2/SDL_ttf.h"  //Il faut installer libsdl2-ttf-dev   //=>sudo apt-get install libsdl2-ttf-dev
 
 
+#include "../controller/controller.h"
+#include "view.h"
 #include "view_sdl.h"
 
 SDL_Color tabColors[10] = { {0,0,0,255}, {255,255,0,255}, {255,0,255,255}, //Sol, J1, J2
@@ -116,7 +118,7 @@ void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y) {
 }
 
 
-void afficheMenuPrincipal(SDL_Renderer *renderer){
+void afficheMenuPrincipalSDL(SDL_Renderer *renderer, actions *act){
     // Affichage Titre
     afficheTexte(renderer, "Tron", LARGEUR/2, HAUTEUR/3);
     // Rectangle Solo
@@ -141,16 +143,18 @@ void afficheMenuPrincipal(SDL_Renderer *renderer){
         int x, y;
         SDL_GetMouseState(&x, &y);
         if(x>=solo->x && x<=solo->w && y>=solo->y && y<=solo->h){
-            afficheMenuSolo(renderer);
+            // afficheMenuSoloSDL(renderer);
+            (*act) = MENU_SOLO;
         }else if (x>=multiplayer->x && x<=multiplayer->w && y>=multiplayer->y && y<=multiplayer->h){
-            afficheMenuMultiplayer(renderer);
+            // afficheMenuMultiplayerSDL(renderer);
+            (*act) = MENU_MULTI;
         }
     }
 
 }
 
 
-void afficheMenuSolo(SDL_Renderer *renderer){
+void afficheMenuSoloSDL(SDL_Renderer *renderer, actions *act){
     afficheTexte(renderer, "Solo",LARGEUR/2,(HAUTEUR/3));
 
     // Rectangle Vs algo  
@@ -174,15 +178,16 @@ void afficheMenuSolo(SDL_Renderer *renderer){
         SDL_GetMouseState(&x, &y);
         if(x>=algo->x && x<=algo->w && y>=algo->y && y<=algo->h){
             // Lancer le jeu contre le bot algo
+            (*act) = PLAY_BOT_ALGO;
         }else if (x>=q->x && x<=q->w && y>=q->y && y<=q->h){
             // Lancer le jeu contre le bot qlearning
-
+            (*act) = PLAY_BOT_Q;
         }
     }
 }
 
 
-void afficheMenuMultiplayer(SDL_Renderer *renderer){
+void afficheMenuMultiplayerSDL(SDL_Renderer *renderer, actions *act){
     // Affichage Titre
     afficheTexte(renderer, "Multiplayer", LARGEUR/2,(HAUTEUR/3));
 
@@ -209,8 +214,10 @@ void afficheMenuMultiplayer(SDL_Renderer *renderer){
         SDL_GetMouseState(&xSouris, &ySouris);
         if(xSouris>=machine->x && xSouris<=machine->w && ySouris>=machine->y && ySouris<=machine->h){
             // Lancer le jeu avec 2 joueurs
+            (*act) = PLAY_MULTI;
         }else if (xSouris>=others->x && xSouris<=others->w && ySouris>=others->y && ySouris<=others->h){
             // Lancer le jeu en ligne mais jsp comment faire ça.
+            (*act) = PLAY_ONLINE;
         }
     }
 }

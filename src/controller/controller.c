@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "../model/model.h"
-#include "../views/view_sdl.h"
-#include "../views/view_ncurse.h"
 #include "../views/view.h"
+#include "../utils/utils.h"
 #include "./controller.h"
 
 
@@ -29,9 +29,14 @@ controller *init_controller(view *sdl, view *ncurses){
 
     c->sdl = sdl;
     c->ncurses = ncurses;
+
+    // DES TRUCS
+
+    return c;
 }
 
 void create_model(controller *c){
+    // TODO
     // RECUPERER TAILLE NCURSES SI EXISTE SINON SDL
     // CREER LE MODELE ET L'AFFECTER AU CONTROLLER
 }
@@ -43,4 +48,44 @@ void controller_destroy(controller *c) {
     destroy_model(c->m);
 
     free(c);
+}
+
+// TODO
+void go_to_menu_principal(controller *c, actions *act){
+    affiche_menu_principal(c->ncurses, act);
+    affiche_menu_principal(c->sdl, act);
+}
+void go_to_menu_solo(controller *c, actions *act){
+    affiche_menu_solo(c->ncurses, act);
+    affiche_menu_solo(c->sdl, act);
+}
+void go_to_menu_multijoueur(controller *c, actions *act){
+    affiche_menu_multijoueur(c->ncurses, act);
+    affiche_menu_multijoueur(c->sdl, act);
+}
+
+
+void launch(controller *c){
+    // TODO : VERIFIER C != NULL
+    actions act = MENU_PRINCIPAL;
+    while(1){
+        switch (act)
+        {
+        case QUITTER:
+            break;
+        case MENU_PRINCIPAL:
+            go_to_menu_principal(c, &act);
+            break;
+        case MENU_MULTI:
+            go_to_menu_multijoueur(c, &act);
+            break;
+        case MENU_SOLO:
+            go_to_menu_solo(c, &act);
+            break;
+        default:
+            break;
+        }
+    }
+
+
 }

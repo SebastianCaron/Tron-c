@@ -8,19 +8,13 @@
 #include "views/view_sdl.h"
 #include "controller/controller.h"
 
-#define TEST 0
+#define TEST 1
 
 int test(){
-    printf("DEBUG :\n");
-    grid *g = load_map("./maps/map1.txt", 25, 25);
-    printf("DEBUG 1 OK\n");
 
-    display_grid(g);
-    printf("DEBUG 2 OK\n");
-
-    destroy_grid(g);
-    printf("DEBUG 3 OK\n");
-
+    view *vsdl = init_view_sdl();
+    controller *c = init_controller(vsdl, NULL);
+    launch(c);
     return EXIT_SUCCESS;
 }
 

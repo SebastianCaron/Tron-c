@@ -1,6 +1,7 @@
 #pragma once
 
 #include "view.h"
+#include "../controller/controller.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
@@ -21,6 +22,6 @@ void update_screen_sdl(view *, int, int *, int **, int , int);
 void quitter(SDL_Window *window, SDL_Renderer *renderer);
 SDL_Rect *createRect(int h, int w, int x, int y);
 void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y);
-void afficheMenuPrincipal(SDL_Renderer *renderer);
-void afficheMenuSolo(SDL_Renderer *renderer);
-void afficheMenuMultiplayer(SDL_Renderer *renderer);
+void afficheMenuPrincipalSDL(SDL_Renderer *renderer, actions *act);
+void afficheMenuSoloSDL(SDL_Renderer *renderer, actions *act);
+void afficheMenuMultiplayerSDL(SDL_Renderer *renderer, actions *act);
