@@ -64,7 +64,7 @@ int main(int argc, char **argv){
 
     controller *c = init_controller(vsdl, vncr);
     
-
+    launch(c);
 
 
     return EXIT_SUCCESS;
