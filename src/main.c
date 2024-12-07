@@ -8,7 +8,7 @@
 #include "views/view_sdl.h"
 #include "controller/controller.h"
 
-#define TEST 1
+#define TEST 0
 
 int test(){
 
