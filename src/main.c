@@ -8,12 +8,12 @@
 #include "views/view_sdl.h"
 #include "controller/controller.h"
 
-#define TEST 0
+#define TEST 1
 
 int test(){
 
-    view *vsdl = init_view_sdl();
-    controller *c = init_controller(vsdl, NULL);
+    view *vncr = init_view_ncurse();
+    controller *c = init_controller(NULL, vncr);
     launch(c);
     return EXIT_SUCCESS;
 }
