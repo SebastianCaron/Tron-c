@@ -30,8 +30,10 @@ typedef struct v{
     direction (*get_direction)(struct v *);
     void (*destroy_self)(struct v *);
 
-    void (*affiche_menu_principal)(struct v *, actions *);
-    void (*affiche_menu_solo)(struct v *, actions *);
-    void (*affiche_menu_multijoueur)(struct v *, actions *);
+    void (*affiche_menu_principal)(struct v *, int *);
+    void (*affiche_menu_solo)(struct v *, int *);
+    void (*affiche_menu_multijoueur)(struct v *, int *);
+
+    void (*get_action)(struct v *, actions *, int *);
 } view;
 

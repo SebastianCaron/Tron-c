@@ -5,7 +5,7 @@
 #include "view_ncurse.h"
 #include "view.h"
 #include "../controller/controller.h"
-#include <unistd.h>
+
 
 
 view *init_view_ncurse(){
@@ -87,10 +87,15 @@ void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int 
 }
 
 // TODO
-void afficheMenuPrincipalNC(view *v, actions *act){
-    int choix = 0;
+void afficheMenuPrincipalNC(view *v, int *selected_option){
+    v->get_action = get_action_menu_principal_ncurses;
+
     const char *options[] = {"SOLO", "MULTIPLAYER"};
     int n_options = 2;
+    if(*selected_option < 0) *selected_option = n_options-1;
+    if(*selected_option >= n_options) *selected_option = 0;
+
+    int choix = *selected_option;
 
     int hauteur, largeur;
     getmaxyx(stdscr, hauteur, largeur);
@@ -101,45 +106,50 @@ void afficheMenuPrincipalNC(view *v, actions *act){
     int options_y = hauteur / 2;
     int options_x = (largeur - 10) / 2;
 
-    while (1) {
-        clear();
-        mvprintw(hauteur / 4, titre_x, "%s", titre);
+    // clear();
+    mvprintw(hauteur / 4, titre_x, "%s", titre);
 
-        for (int i = 0; i < n_options; i++) {
-            if (i == choix) {
-                mvprintw(options_y + i, options_x, "< %s >", options[i]);
-            } else {
-                mvprintw(options_y + i, options_x, "  %s  ", options[i]);
-            }
+    for (int i = 0; i < n_options; i++) {
+        if (i == choix) {
+            mvprintw(options_y + i, options_x, "< %s >", options[i]);
+        } else {
+            mvprintw(options_y + i, options_x, "  %s  ", options[i]);
         }
+    }
 
-        refresh();
-        int ch = getch();
-        switch (ch) {
-            case KEY_UP:
-                choix = (choix - 1 + n_options) % n_options;
-                break;
-            case KEY_DOWN:
-                choix = (choix + 1) % n_options;
-                break;
-            case '\n':
-                if(choix == 0){
-                    (*act) = MENU_SOLO;
-                    return;
-                }
-                if(choix == 1){
-                    (*act) = MENU_MULTI;
-                    return;
-                }
+    refresh();
+}
+
+void get_action_menu_principal_ncurses(view *v, actions *act, int *selected_option){
+    refresh();
+    int ch = getch();
+    switch (ch) {
+        case KEY_UP:
+            (*selected_option) = (*selected_option) - 1;
+            break;
+        case KEY_DOWN:
+            (*selected_option) = (*selected_option) + 1;
+            break;
+        case '\n':
+            if((*selected_option) == 0){
+                (*act) = MENU_SOLO;
                 return;
-        }
-        usleep(100000);
+            }
+            if((*selected_option) == 1){
+                (*act) = MENU_MULTI;
+                return;
+            }
+            return;
+        // default:
+        //     (*act) = NO_ACTION;
+        //     return;
     }
 }
-void afficheMenuSoloNC(view *v, actions *act){
+
+void afficheMenuSoloNC(view *v, int *selected_option){
 
 }
-void afficheMenuMultiplayerNC(view *v, actions *act){
+void afficheMenuMultiplayerNC(view *v, int *selected_option){
 
 }
 

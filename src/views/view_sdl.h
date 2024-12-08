@@ -25,3 +25,5 @@ void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y);
 void afficheMenuPrincipalSDL(view *v, actions *act);
 void afficheMenuSoloSDL(view *v, actions *act);
 void afficheMenuMultiplayerSDL(view *v, actions *act);
+
+void get_action_menu_principal_sdl(view *v, actions *act, int *selected_option);

@@ -137,6 +137,7 @@ void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y) {
 
 void afficheMenuPrincipalSDL(view *v, actions *act){
     SDL_Renderer *renderer = v->sdl->renderer;
+    v->get_action = get_action_menu_principal_sdl;
     // Affichage Titre
     afficheTexte(renderer, "Tron", LARGEUR/2, HAUTEUR/3);
     // Rectangle Solo
@@ -156,22 +157,43 @@ void afficheMenuPrincipalSDL(view *v, actions *act){
     SDL_RenderPresent(renderer);
 
     // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
-    SDL_Event event;
-    SDL_WaitEvent(&event);
-    if(event.type == SDL_MOUSEBUTTONDOWN){
-        int x, y;
-        SDL_GetMouseState(&x, &y);
-        if(x>=solo->x && x<=solo->w && y>=solo->y && y<=solo->h){
-            // afficheMenuSoloSDL(renderer);
-            (*act) = MENU_SOLO;
-        }else if (x>=multiplayer->x && x<=multiplayer->w && y>=multiplayer->y && y<=multiplayer->h){
-            // afficheMenuMultiplayerSDL(renderer);
-            (*act) = MENU_MULTI;
-        }
-    }else{
-        (*act) = NO_ACTION;
-    }
+    // SDL_Event event;
+    // SDL_WaitEvent(&event);
+    // if(event.type == SDL_MOUSEBUTTONDOWN){
+    //     int x, y;
+    //     SDL_GetMouseState(&x, &y);
+    //     if(x>=solo->x && x<=solo->w && y>=solo->y && y<=solo->h){
+    //         // afficheMenuSoloSDL(renderer);
+    //         (*act) = MENU_SOLO;
+    //     }else if (x>=multiplayer->x && x<=multiplayer->w && y>=multiplayer->y && y<=multiplayer->h){
+    //         // afficheMenuMultiplayerSDL(renderer);
+    //         (*act) = MENU_MULTI;
+    //     }
+    // }else{
+    //     (*act) = NO_ACTION;
+    // }
 
+}
+
+void get_action_menu_principal_sdl(view *v, actions *act, int *selected_option){
+    // TODO
+    // // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
+    // POLL EVENT
+    // SDL_Event event;
+    // SDL_WaitEvent(&event);
+    // if(event.type == SDL_MOUSEBUTTONDOWN){
+    //     int x, y;
+    //     SDL_GetMouseState(&x, &y);
+    //     if(x>=solo->x && x<=solo->w && y>=solo->y && y<=solo->h){
+    //         // afficheMenuSoloSDL(renderer);
+    //         (*act) = MENU_SOLO;
+    //     }else if (x>=multiplayer->x && x<=multiplayer->w && y>=multiplayer->y && y<=multiplayer->h){
+    //         // afficheMenuMultiplayerSDL(renderer);
+    //         (*act) = MENU_MULTI;
+    //     }
+    // }else{
+    //     (*act) = NO_ACTION;
+    // }
 }
 
 

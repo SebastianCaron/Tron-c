@@ -14,7 +14,7 @@ int test(){
 
     view *vncr = init_view_ncurse();
     controller *c = init_controller(vncr);
-    launch(c);
+    go_to_menu_principal(c);
     return EXIT_SUCCESS;
 }
 
@@ -69,9 +69,8 @@ int main(int argc, char **argv){
     }else{
         c = init_controller(vncr);
     }
-    
-    launch(c);
 
+    go_to_menu_principal(c);
 
     return EXIT_SUCCESS;
 }

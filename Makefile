@@ -33,10 +33,15 @@ clean:
 mrpropre: clean
 	clear
 	rm -f $(TARGET)
+	rm -rf val.txt
 
 fr0: mrpropre all
 	clear
 	./tron
+
+debug: mrpropre all
+	clear
+	valgrind --log-file=val.txt ./tron
 
 -include $(DEPS)
 

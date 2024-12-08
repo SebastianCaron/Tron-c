@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <stdarg.h>
+#include <unistd.h>
 
 #include "../model/model.h"
 #include "../views/view.h"
@@ -50,6 +50,10 @@ controller *init_controller(view *v, ...){
         c->views[c->nb_view-1] = nv;
     }
 
+    c->nb_view -= 1;
+    // printf("%d\n", c->nb_view);
+    // exit(EXIT_SUCCESS);
+
     return c;
 }
 
@@ -69,8 +73,33 @@ void controller_destroy(controller *c) {
 }
 
 // TODO
-void go_to_menu_principal(controller *c, actions *act){
+void go_to_menu_principal(controller *c){
+    actions act = NO_ACTION;
+    int selected_option = 0;
+    while(1){
+        for(int i = 0; i < c->nb_view; i++){
+            c->views[i]->affiche_menu_principal(c->views[i], &selected_option);
+        }
 
+        for(int i = 0; i < c->nb_view; i++){
+            c->views[i]->get_action(c->views[i], &act, &selected_option);
+        }
+
+
+        switch (act)
+        {
+            case MENU_SOLO:
+                go_to_menu_solo(c);
+                return;
+            case MENU_MULTI:
+                go_to_menu_multijoueur(c);
+                return;
+            default:
+                break;
+        }
+
+        usleep(10000);
+    }
 
     // AFFICHER MENU
     // RECUPERER INPUT
@@ -78,35 +107,9 @@ void go_to_menu_principal(controller *c, actions *act){
 
     // EFFECTUER ACTIONS
 }
-void go_to_menu_solo(controller *c, actions *act){
+void go_to_menu_solo(controller *c){
 
 }
-void go_to_menu_multijoueur(controller *c, actions *act){
-
-}
-
-
-void launch(controller *c){
-    // TODO : VERIFIER C != NULL
-    actions act = MENU_PRINCIPAL;
-    while(1){
-        switch (act)
-        {
-        case QUITTER:
-            break;
-        case MENU_PRINCIPAL:
-            go_to_menu_principal(c, &act);
-            break;
-        case MENU_MULTI:
-            go_to_menu_multijoueur(c, &act);
-            break;
-        case MENU_SOLO:
-            go_to_menu_solo(c, &act);
-            break;
-        default:
-            break;
-        }
-    }
-
+void go_to_menu_multijoueur(controller *c){
 
 }
