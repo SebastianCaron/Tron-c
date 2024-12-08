@@ -41,6 +41,9 @@ int collision_player(model *m, int player);
 // Return 1 if the game is over
 int est_fini(model *m);
 
+// Initialize positions of players
+void init_positions(model *m);
+
 
 
 

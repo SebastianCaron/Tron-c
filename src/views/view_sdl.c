@@ -87,7 +87,7 @@ void quitter(SDL_Window *window, SDL_Renderer *renderer){
 // J'ai mis l'ecoute d'évenement pour quitter ici parce que je sais pas ou le mettre sinon a part dans le main
 direction get_direction_sdl(view *v){    
     SDL_Event event;
-    while (SDL_WaitEvent(&event) > 0){
+    while (SDL_PollEvent(&event) > 0){
         if (event.type == SDL_QUIT){
             quitter(v->sdl->window, v->sdl->renderer);
         }else if(event.type == SDL_KEYDOWN){
