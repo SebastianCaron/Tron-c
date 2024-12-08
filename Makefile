@@ -26,7 +26,7 @@ $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(COMPILER) $(CFLAGS) -c $< -o $@
 
-.PHONY: clean mrpropre
+.PHONY: clean mrpropre fr0 debug
 clean:
 	rm -rf $(BIN_DIR)
 
