@@ -14,6 +14,8 @@ typedef struct{
 typedef struct{
     SDL_Window *window;
     SDL_Renderer *renderer;
+    SDL_Rect *buttons[20];
+    unsigned nb_buttons;
 } view_sdl;
 
 typedef struct v{

@@ -8,13 +8,15 @@
 #include "views/view_sdl.h"
 #include "controller/controller.h"
 
-#define TEST 1
+#define TEST 0
 
 int test(){
 
-    view *vncr = init_view_ncurse();
+    view *vncr = init_view_sdl();
     controller *c = init_controller(vncr);
     go_to_menu_principal(c);
+
+    destroy_controller(c);
     return EXIT_SUCCESS;
 }
 

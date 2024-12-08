@@ -19,7 +19,7 @@ controller *init_controller(view *, ...);
 
 void controllerPlay(model *, view *);
 
-void destroy_controller(model *, view *);
+void destroy_controller(controller *);
 
 
 void go_to_menu_principal(controller *);

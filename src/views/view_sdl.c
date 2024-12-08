@@ -140,6 +140,7 @@ void afficheMenuPrincipalSDL(view *v, actions *act){
     v->get_action = get_action_menu_principal_sdl;
     // Affichage Titre
     afficheTexte(renderer, "Tron", LARGEUR/2, HAUTEUR/3);
+
     // Rectangle Solo
     SDL_Rect *solo = createRect(50, 100, LARGEUR/2, 2*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
@@ -154,47 +155,54 @@ void afficheMenuPrincipalSDL(view *v, actions *act){
     afficheTexte(renderer, "multiplayer", LARGEUR/2,2.5*(HAUTEUR/3));
     // Le dessiner et mettre le titre dedans
 
+    // Ajoute les boutons dans la structure pour detecter les actions
+    v->sdl->nb_buttons = 2;
+    v->sdl->buttons[0] = solo;
+    v->sdl->buttons[1] = multiplayer;
+
     SDL_RenderPresent(renderer);
 
-    // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
-    // SDL_Event event;
-    // SDL_WaitEvent(&event);
-    // if(event.type == SDL_MOUSEBUTTONDOWN){
-    //     int x, y;
-    //     SDL_GetMouseState(&x, &y);
-    //     if(x>=solo->x && x<=solo->w && y>=solo->y && y<=solo->h){
-    //         // afficheMenuSoloSDL(renderer);
-    //         (*act) = MENU_SOLO;
-    //     }else if (x>=multiplayer->x && x<=multiplayer->w && y>=multiplayer->y && y<=multiplayer->h){
-    //         // afficheMenuMultiplayerSDL(renderer);
-    //         (*act) = MENU_MULTI;
-    //     }
-    // }else{
-    //     (*act) = NO_ACTION;
-    // }
-
 }
 
-void get_action_menu_principal_sdl(view *v, actions *act, int *selected_option){
-    // TODO
-    // // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
-    // POLL EVENT
-    // SDL_Event event;
-    // SDL_WaitEvent(&event);
-    // if(event.type == SDL_MOUSEBUTTONDOWN){
-    //     int x, y;
-    //     SDL_GetMouseState(&x, &y);
-    //     if(x>=solo->x && x<=solo->w && y>=solo->y && y<=solo->h){
-    //         // afficheMenuSoloSDL(renderer);
-    //         (*act) = MENU_SOLO;
-    //     }else if (x>=multiplayer->x && x<=multiplayer->w && y>=multiplayer->y && y<=multiplayer->h){
-    //         // afficheMenuMultiplayerSDL(renderer);
-    //         (*act) = MENU_MULTI;
-    //     }
-    // }else{
-    //     (*act) = NO_ACTION;
-    // }
+void get_action_menu_principal_sdl(view *v, actions *act, int *selected_option) {
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+            case SDL_QUIT:
+                *act = QUITTER;
+                return;
+
+            case SDL_MOUSEBUTTONDOWN: {
+                int x = event.button.x;
+                int y = event.button.y;
+                printf("X : %d, Y : %d\n", x, y);
+                for (unsigned i = 0; i < v->sdl->nb_buttons; i++) {
+                    if (x >= v->sdl->buttons[i]->x &&
+                        x <= (v->sdl->buttons[i]->x + v->sdl->buttons[i]->w) &&
+                        y >= v->sdl->buttons[i]->y &&
+                        y <= (v->sdl->buttons[i]->y + v->sdl->buttons[i]->h)) {
+                        switch (i) {
+                            case 0:
+                                *act = MENU_SOLO;
+                                return;
+                            case 1:
+                                *act = MENU_MULTI;
+                                return;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                break;
+            }
+
+            default:
+                break;
+        }
+    }
 }
+
 
 
 void afficheMenuSoloSDL(view *v, actions *act){

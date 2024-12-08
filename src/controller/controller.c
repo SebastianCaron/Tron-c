@@ -63,7 +63,7 @@ void create_model(controller *c){
     // CREER LE MODELE ET L'AFFECTER AU CONTROLLER
 }
 
-void controller_destroy(controller *c) {
+void destroy_controller(controller *c) {
     if(c == NULL) return;
     for(int i = 0; i < c->nb_view; i++){
         c->views[i]->destroy_self(c->views[i]);
@@ -72,41 +72,43 @@ void controller_destroy(controller *c) {
     free(c);
 }
 
-// TODO
 void go_to_menu_principal(controller *c){
     actions act = NO_ACTION;
     int selected_option = 0;
     while(1){
         for(int i = 0; i < c->nb_view; i++){
+            // MET A JOUR LES VUES
             c->views[i]->affiche_menu_principal(c->views[i], &selected_option);
         }
 
         for(int i = 0; i < c->nb_view; i++){
+            // RECUPERE LES ACTIONS
             c->views[i]->get_action(c->views[i], &act, &selected_option);
         }
 
 
         switch (act)
         {
+            // EFFECTUE L'ACTION
             case MENU_SOLO:
                 go_to_menu_solo(c);
                 return;
             case MENU_MULTI:
                 go_to_menu_multijoueur(c);
                 return;
+            case QUITTER:
+                destroy_controller(c);
+                return;
             default:
                 break;
         }
 
+        // POUR EVITER DE RAFFRAICHIR TROP SOUVENT
         usleep(10000);
     }
-
-    // AFFICHER MENU
-    // RECUPERER INPUT
-    // SLEEP
-
-    // EFFECTUER ACTIONS
 }
+
+
 void go_to_menu_solo(controller *c){
 
 }
