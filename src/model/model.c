@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <math.h>
+#define PI 3.14159265358979323846
+
 #include "model.h"
 
 model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **grid){
@@ -142,7 +145,41 @@ int est_fini(model *m){
     return (m->n_player_alive <= 1) ? 1 : 0;
 }
 
-// TODO
+position *get_nearest_point_available(model *m, int x, int y){
+    position *p = calloc(1, sizeof(position));
+    if(p == NULL){
+        perror("[MODEL] ERREUR ALLOC Position");
+        exit(EXIT_FAILURE);
+    }
+    p->x = x;
+    p->y = y;
+
+    // TODO
+
+    return p;
+}
+
 void init_positions(model *m){
 
+    float marge = 5.0f;
+
+    float centre_x = ((float) m->nb_colonnes_grid) / 2.0f;
+    float centre_y = ((float) m->nb_lignes_grid) / 2.0f;
+
+    float tmp_a = (((float) m->nb_lignes_grid) - 2 * marge) / 2.0f;
+    float tmp_b = (((float) m->nb_colonnes_grid) - 2 * marge) / 2.0f;
+    float radius = tmp_a;
+
+    if(tmp_a > tmp_b) radius = tmp_b;
+
+    float angle = 0.0f;
+    float x = 0.0f;
+    float y = 0.0f;
+    for(int k = 0; k < m->n_player; k++){
+        angle = 2 * PI * k / ((float)m->n_player);
+        x = centre_x + radius * cos(angle);
+        y = centre_y + radius * sin(angle);
+
+        m->players[k] = get_nearest_point_available(m, round(x), round(y));
+    }
 }

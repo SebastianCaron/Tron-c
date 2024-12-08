@@ -6,6 +6,7 @@
         "stdlib.h": "c",
         "view_ncurse.h": "c",
         "view.h": "c",
-        "controller.h": "c"
+        "controller.h": "c",
+        "math.h": "c"
     }
 }
