@@ -85,7 +85,6 @@ void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int 
 
 }
 
-// TODO
 void afficheMenuPrincipalNC(view *v, int *selected_option){
     v->get_action = get_action_menu_principal_ncurses;
 
@@ -105,7 +104,7 @@ void afficheMenuPrincipalNC(view *v, int *selected_option){
     int options_y = hauteur / 2;
     int options_x = (largeur - 10) / 2;
 
-    // clear();
+    clear();
     mvprintw(hauteur / 4, titre_x, "%s", titre);
 
     for (int i = 0; i < n_options; i++) {
@@ -164,7 +163,7 @@ void afficheMenuSoloNC(view *v, int *selected_option){
     int options_y = hauteur / 2;
     int options_x = (largeur - 10) / 2;
 
-    // clear();
+    clear();
     mvprintw(hauteur / 4, titre_x, "%s", titre);
 
     for (int i = 0; i < n_options; i++) {
@@ -223,7 +222,7 @@ void afficheMenuMultiplayerNC(view *v, int *selected_option){
     int options_y = hauteur / 2;
     int options_x = (largeur - 10) / 2;
 
-    // clear();
+    clear();
     mvprintw(hauteur / 4, titre_x, "%s", titre);
 
     for (int i = 0; i < n_options; i++) {
