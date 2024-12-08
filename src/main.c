@@ -13,7 +13,7 @@
 int test(){
 
     view *vncr = init_view_ncurse();
-    controller *c = init_controller(NULL, vncr);
+    controller *c = init_controller(vncr);
     launch(c);
     return EXIT_SUCCESS;
 }
@@ -54,7 +54,7 @@ int main(int argc, char **argv){
     }
 
 
-
+    controller *c;
     if(with_sdl){
         vsdl = init_view_sdl();
     }
@@ -62,7 +62,13 @@ int main(int argc, char **argv){
         vncr = init_view_ncurse();
     }
 
-    controller *c = init_controller(vsdl, vncr);
+    if(with_sdl && with_ncurse){
+        c = init_controller(vsdl, vncr);
+    }else if(with_sdl){
+        c = init_controller(vsdl);
+    }else{
+        c = init_controller(vncr);
+    }
     
     launch(c);
 

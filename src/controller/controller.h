@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdarg.h>
+
 #include "../model/model.h"
 #include "../views/view.h"
 #include "../utils/utils.h"
@@ -7,13 +9,13 @@
 
 typedef struct {
     model *m;
-    view *sdl;
-    view *ncurses;
+    unsigned nb_view;
+    view **views;
 } controller;
 
 
 
-controller *init_controller(view *, view *);
+controller *init_controller(view *, ...);
 
 void controllerPlay(model *, view *);
 

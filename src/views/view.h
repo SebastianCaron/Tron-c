@@ -29,9 +29,9 @@ typedef struct v{
 
     direction (*get_direction)(struct v *);
     void (*destroy_self)(struct v *);
-} view;
 
-void affiche_menu_principal(view *v, actions *act);
-void affiche_menu_solo(view *v, actions *act);
-void affiche_menu_multijoueur(view *v, actions *act);
+    void (*affiche_menu_principal)(struct v *, actions *);
+    void (*affiche_menu_solo)(struct v *, actions *);
+    void (*affiche_menu_multijoueur)(struct v *, actions *);
+} view;
 

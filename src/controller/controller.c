@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <stdarg.h>
+
 #include "../model/model.h"
 #include "../views/view.h"
 #include "../utils/utils.h"
@@ -16,21 +18,37 @@ void controllerPlay(model *m, view *v){
     }
 }
 
-controller *init_controller(view *sdl, view *ncurses){
-    // Demander tous les paramètres à mettre dans init_game
-    // model *game = init_game();
-    //controllerPlay(game, v);
-
+controller *init_controller(view *v, ...){
     controller *c = calloc(1, sizeof(controller));
     if(c == NULL){
         perror("[CONTROLLER] erreur allocation de la structure controller.");
         exit(EXIT_FAILURE);
     }
 
-    c->sdl = sdl;
-    c->ncurses = ncurses;
+    va_list args;
+    va_start(args, v);
 
-    // DES TRUCS
+    c->nb_view = 1;
+    c->views = realloc(c->views, sizeof(view *) * c->nb_view);
+    c->views[c->nb_view-1] = v;
+
+    while (1) {
+        view *nv = va_arg(args, view *);
+
+        if (nv == NULL) {
+            break;
+        }
+
+        c->nb_view += 1;
+
+        c->views = realloc(c->views, sizeof(view *) * c->nb_view);
+        if(c->views == NULL){
+            perror("[CONTROLLER] erreur allocation liste views.");
+            exit(EXIT_FAILURE);
+        }
+
+        c->views[c->nb_view-1] = nv;
+    }
 
     return c;
 }
@@ -43,25 +61,28 @@ void create_model(controller *c){
 
 void controller_destroy(controller *c) {
     if(c == NULL) return;
-    if(c->sdl != NULL) c->sdl->destroy_self(c->sdl);
-    if(c->ncurses != NULL) c->ncurses->destroy_self(c->ncurses);
+    for(int i = 0; i < c->nb_view; i++){
+        c->views[i]->destroy_self(c->views[i]);
+    }
     destroy_model(c->m);
-
     free(c);
 }
 
 // TODO
 void go_to_menu_principal(controller *c, actions *act){
-    affiche_menu_principal(c->ncurses, act);
-    affiche_menu_principal(c->sdl, act);
+
+
+    // AFFICHER MENU
+    // RECUPERER INPUT
+    // SLEEP
+
+    // EFFECTUER ACTIONS
 }
 void go_to_menu_solo(controller *c, actions *act){
-    affiche_menu_solo(c->ncurses, act);
-    affiche_menu_solo(c->sdl, act);
+
 }
 void go_to_menu_multijoueur(controller *c, actions *act){
-    affiche_menu_multijoueur(c->ncurses, act);
-    affiche_menu_multijoueur(c->sdl, act);
+
 }
 
 

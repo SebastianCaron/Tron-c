@@ -29,6 +29,12 @@ view *init_view_sdl(){
     v->get_direction = get_direction_sdl;
     // v->update_change_screen = ;
     v->update_screen = update_screen_sdl;
+
+    v->affiche_menu_principal = afficheMenuPrincipalSDL;
+    v->affiche_menu_multijoueur = afficheMenuMultiplayerSDL;
+    v->affiche_menu_solo = afficheMenuSoloSDL;
+
+
     v->type = 's';
 
     view_sdl *viewSdl =(view_sdl *)malloc(sizeof(view_sdl));
@@ -129,7 +135,8 @@ void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y) {
 }
 
 
-void afficheMenuPrincipalSDL(SDL_Renderer *renderer, actions *act){
+void afficheMenuPrincipalSDL(view *v, actions *act){
+    SDL_Renderer *renderer = v->sdl->renderer;
     // Affichage Titre
     afficheTexte(renderer, "Tron", LARGEUR/2, HAUTEUR/3);
     // Rectangle Solo
@@ -168,7 +175,8 @@ void afficheMenuPrincipalSDL(SDL_Renderer *renderer, actions *act){
 }
 
 
-void afficheMenuSoloSDL(SDL_Renderer *renderer, actions *act){
+void afficheMenuSoloSDL(view *v, actions *act){
+    SDL_Renderer *renderer = v->sdl->renderer;
     afficheTexte(renderer, "Solo",LARGEUR/2,(HAUTEUR/3));
 
     // Rectangle Vs algo  
@@ -201,7 +209,8 @@ void afficheMenuSoloSDL(SDL_Renderer *renderer, actions *act){
 }
 
 
-void afficheMenuMultiplayerSDL(SDL_Renderer *renderer, actions *act){
+void afficheMenuMultiplayerSDL(view *v, actions *act){
+    SDL_Renderer *renderer = v->sdl->renderer;
     // Affichage Titre
     afficheTexte(renderer, "Multiplayer", LARGEUR/2,(HAUTEUR/3));
 

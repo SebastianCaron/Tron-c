@@ -43,6 +43,10 @@ view *init_view_ncurse(){
     v->get_direction = get_direction_ncurses;
     // v->update_change_screen = ;
     v->update_screen = update_screen_ncurses;
+    v->affiche_menu_principal = afficheMenuPrincipalNC;
+    v->affiche_menu_multijoueur = afficheMenuMultiplayerNC;
+    v->affiche_menu_solo = afficheMenuSoloNC;
+
     refresh();
 
     return v;
