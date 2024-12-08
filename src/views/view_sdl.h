@@ -27,3 +27,5 @@ void afficheMenuSoloSDL(view *v, actions *act);
 void afficheMenuMultiplayerSDL(view *v, actions *act);
 
 void get_action_menu_principal_sdl(view *v, actions *act, int *selected_option);
+void get_action_menu_solo_sdl(view *v, actions *act, int *selected_option);
+void get_action_menu_multi_sdl(view *v, actions *act, int *selected_option);

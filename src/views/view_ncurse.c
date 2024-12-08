@@ -72,8 +72,7 @@ direction get_direction_ncurses(view *v){
             return LEFT;
         case KEY_UP:
             return UP;
-        case KEY_DOWN:    // vn->grid_w = subwin(stdscr, LINES-2, COLS-40, 1, 20); 
-    // box(vn->grid_w, ACS_VLINE, ACS_HLINE);
+        case KEY_DOWN:
             return DOWN;
         default:
             // printw("%c (code : %d)\n", ch, ch);
@@ -147,10 +146,121 @@ void get_action_menu_principal_ncurses(view *v, actions *act, int *selected_opti
 }
 
 void afficheMenuSoloNC(view *v, int *selected_option){
+    v->get_action = get_action_menu_solo_ncurses;
 
+    const char *options[] = {"VS ALGO", "VS Q-LEARNING"};
+    int n_options = 2;
+    if(*selected_option < 0) *selected_option = n_options-1;
+    if(*selected_option >= n_options) *selected_option = 0;
+
+    int choix = *selected_option;
+
+    int hauteur, largeur;
+    getmaxyx(stdscr, hauteur, largeur);
+
+    const char *titre = "SOLO";
+    int titre_x = (largeur - strlen(titre)) / 2;
+
+    int options_y = hauteur / 2;
+    int options_x = (largeur - 10) / 2;
+
+    // clear();
+    mvprintw(hauteur / 4, titre_x, "%s", titre);
+
+    for (int i = 0; i < n_options; i++) {
+        if (i == choix) {
+            mvprintw(options_y + i, options_x, "< %s >", options[i]);
+        } else {
+            mvprintw(options_y + i, options_x, "  %s  ", options[i]);
+        }
+    }
+
+    refresh();
 }
-void afficheMenuMultiplayerNC(view *v, int *selected_option){
 
+void get_action_menu_solo_ncurses(view *v, actions *act, int *selected_option){
+    refresh();
+    int ch = getch();
+    switch (ch) {
+        case KEY_UP:
+            (*selected_option) = (*selected_option) - 1;
+            break;
+        case KEY_DOWN:
+            (*selected_option) = (*selected_option) + 1;
+            break;
+        case '\n':
+            if((*selected_option) == 0){
+                (*act) = PLAY_BOT_ALGO;
+                return;
+            }
+            if((*selected_option) == 1){
+                (*act) = PLAY_BOT_Q;
+                return;
+            }
+            return;
+        // default:
+        //     (*act) = NO_ACTION;
+        //     return;
+    }
+}
+
+void afficheMenuMultiplayerNC(view *v, int *selected_option){
+    v->get_action = get_action_menu_multi_ncurses;
+
+    const char *options[] = {"ON THIS MACHINE", "ONLINE"};
+    int n_options = 2;
+    if(*selected_option < 0) *selected_option = n_options-1;
+    if(*selected_option >= n_options) *selected_option = 0;
+
+    int choix = *selected_option;
+
+    int hauteur, largeur;
+    getmaxyx(stdscr, hauteur, largeur);
+
+    const char *titre = "MULTIPLAYER";
+    int titre_x = (largeur - strlen(titre)) / 2;
+
+    int options_y = hauteur / 2;
+    int options_x = (largeur - 10) / 2;
+
+    // clear();
+    mvprintw(hauteur / 4, titre_x, "%s", titre);
+
+    for (int i = 0; i < n_options; i++) {
+        if (i == choix) {
+            mvprintw(options_y + i, options_x, "< %s >", options[i]);
+        } else {
+            mvprintw(options_y + i, options_x, "  %s  ", options[i]);
+        }
+    }
+
+    refresh();
+}
+
+void get_action_menu_multi_ncurses(view *v, actions *act, int *selected_option){
+    refresh();
+    int ch = getch();
+    switch (ch) {
+        case KEY_UP:
+            (*selected_option) = (*selected_option) - 1;
+            break;
+        case KEY_DOWN:
+            (*selected_option) = (*selected_option) + 1;
+            break;
+        case '\n':
+            if((*selected_option) == 0){
+                (*act) = PLAY_MULTI;
+                return;
+            }
+            if((*selected_option) == 1){
+                (*act) = PLAY_ONLINE;
+                return;
+            }
+            return;
+        // default:
+        //     (*act) = NO_ACTION;
+        //     return;
+    }
 }
 
 

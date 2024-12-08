@@ -176,7 +176,7 @@ void get_action_menu_principal_sdl(view *v, actions *act, int *selected_option) 
             case SDL_MOUSEBUTTONDOWN: {
                 int x = event.button.x;
                 int y = event.button.y;
-                printf("X : %d, Y : %d\n", x, y);
+                // printf("X : %d, Y : %d\n", x, y);
                 for (unsigned i = 0; i < v->sdl->nb_buttons; i++) {
                     if (x >= v->sdl->buttons[i]->x &&
                         x <= (v->sdl->buttons[i]->x + v->sdl->buttons[i]->w) &&
@@ -207,6 +207,7 @@ void get_action_menu_principal_sdl(view *v, actions *act, int *selected_option) 
 
 void afficheMenuSoloSDL(view *v, actions *act){
     SDL_Renderer *renderer = v->sdl->renderer;
+    v->get_action = get_action_menu_solo_sdl;
     afficheTexte(renderer, "Solo",LARGEUR/2,(HAUTEUR/3));
 
     // Rectangle Vs algo  
@@ -220,20 +221,50 @@ void afficheMenuSoloSDL(view *v, actions *act){
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, q);
     afficheTexte(renderer, "vs q-learning",LARGEUR/2,2.5*(HAUTEUR/3));
+    
+    v->sdl->nb_buttons = 2;
+    v->sdl->buttons[0] = algo;
+    v->sdl->buttons[1] = q;
 
     SDL_RenderPresent(renderer);
-    // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
 
+}
+
+void get_action_menu_solo_sdl(view *v, actions *act, int *selected_option) {
     SDL_Event event;
-    if(event.type==SDL_MOUSEBUTTONDOWN){
-        int x, y;
-        SDL_GetMouseState(&x, &y);
-        if(x>=algo->x && x<=algo->w && y>=algo->y && y<=algo->h){
-            // Lancer le jeu contre le bot algo
-            (*act) = PLAY_BOT_ALGO;
-        }else if (x>=q->x && x<=q->w && y>=q->y && y<=q->h){
-            // Lancer le jeu contre le bot qlearning
-            (*act) = PLAY_BOT_Q;
+
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+            case SDL_QUIT:
+                *act = QUITTER;
+                return;
+
+            case SDL_MOUSEBUTTONDOWN: {
+                int x = event.button.x;
+                int y = event.button.y;
+                // printf("X : %d, Y : %d\n", x, y);
+                for (unsigned i = 0; i < v->sdl->nb_buttons; i++) {
+                    if (x >= v->sdl->buttons[i]->x &&
+                        x <= (v->sdl->buttons[i]->x + v->sdl->buttons[i]->w) &&
+                        y >= v->sdl->buttons[i]->y &&
+                        y <= (v->sdl->buttons[i]->y + v->sdl->buttons[i]->h)) {
+                        switch (i) {
+                            case 0:
+                                *act = PLAY_BOT_ALGO;
+                                return;
+                            case 1:
+                                *act = PLAY_BOT_Q;
+                                return;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                break;
+            }
+
+            default:
+                break;
         }
     }
 }
@@ -241,6 +272,7 @@ void afficheMenuSoloSDL(view *v, actions *act){
 
 void afficheMenuMultiplayerSDL(view *v, actions *act){
     SDL_Renderer *renderer = v->sdl->renderer;
+    v->get_action = get_action_menu_multi_sdl;
     // Affichage Titre
     afficheTexte(renderer, "Multiplayer", LARGEUR/2,(HAUTEUR/3));
 
@@ -260,20 +292,47 @@ void afficheMenuMultiplayerSDL(view *v, actions *act){
 
     SDL_RenderPresent(renderer);
 
-    // Boucle d'écoute pour savoir sur qu'elle bouton on a cliqué
+}
+
+void get_action_menu_multi_sdl(view *v, actions *act, int *selected_option) {
     SDL_Event event;
-    if(event.type==SDL_MOUSEBUTTONDOWN){
-        int xSouris, ySouris;
-        SDL_GetMouseState(&xSouris, &ySouris);
-        if(xSouris>=machine->x && xSouris<=machine->w && ySouris>=machine->y && ySouris<=machine->h){
-            // Lancer le jeu avec 2 joueurs
-            (*act) = PLAY_MULTI;
-        }else if (xSouris>=others->x && xSouris<=others->w && ySouris>=others->y && ySouris<=others->h){
-            // Lancer le jeu en ligne mais jsp comment faire ça.
-            (*act) = PLAY_ONLINE;
+
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+            case SDL_QUIT:
+                *act = QUITTER;
+                return;
+
+            case SDL_MOUSEBUTTONDOWN: {
+                int x = event.button.x;
+                int y = event.button.y;
+                // printf("X : %d, Y : %d\n", x, y);
+                for (unsigned i = 0; i < v->sdl->nb_buttons; i++) {
+                    if (x >= v->sdl->buttons[i]->x &&
+                        x <= (v->sdl->buttons[i]->x + v->sdl->buttons[i]->w) &&
+                        y >= v->sdl->buttons[i]->y &&
+                        y <= (v->sdl->buttons[i]->y + v->sdl->buttons[i]->h)) {
+                        switch (i) {
+                            case 0:
+                                *act = PLAY_MULTI;
+                                return;
+                            case 1:
+                                *act = PLAY_ONLINE;
+                                return;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                break;
+            }
+
+            default:
+                break;
         }
     }
 }
+
 
 void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes){
     if(v == NULL){

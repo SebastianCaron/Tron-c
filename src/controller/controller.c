@@ -110,8 +110,58 @@ void go_to_menu_principal(controller *c){
 
 
 void go_to_menu_solo(controller *c){
+    actions act = NO_ACTION;
+    int selected_option = 0;
+    while(1){
+        for(int i = 0; i < c->nb_view; i++){
+            // MET A JOUR LES VUES
+            c->views[i]->affiche_menu_solo(c->views[i], &selected_option);
+        }
 
+        for(int i = 0; i < c->nb_view; i++){
+            // RECUPERE LES ACTIONS
+            c->views[i]->get_action(c->views[i], &act, &selected_option);
+        }
+
+
+        switch (act)
+        {
+            case QUITTER:
+                destroy_controller(c);
+                return;
+            default:
+                break;
+        }
+
+        // POUR EVITER DE RAFFRAICHIR TROP SOUVENT
+        usleep(10000);
+    }
 }
 void go_to_menu_multijoueur(controller *c){
+    actions act = NO_ACTION;
+    int selected_option = 0;
+    while(1){
+        for(int i = 0; i < c->nb_view; i++){
+            // MET A JOUR LES VUES
+            c->views[i]->affiche_menu_multijoueur(c->views[i], &selected_option);
+        }
 
+        for(int i = 0; i < c->nb_view; i++){
+            // RECUPERE LES ACTIONS
+            c->views[i]->get_action(c->views[i], &act, &selected_option);
+        }
+
+
+        switch (act)
+        {
+            case QUITTER:
+                destroy_controller(c);
+                return;
+            default:
+                break;
+        }
+
+        // POUR EVITER DE RAFFRAICHIR TROP SOUVENT
+        usleep(10000);
+    }
 }

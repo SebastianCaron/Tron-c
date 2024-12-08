@@ -16,3 +16,5 @@ void afficheMenuSoloNC(view *v, int *);
 void afficheMenuMultiplayerNC(view *v, int *);
 
 void get_action_menu_principal_ncurses(view *v, actions *act, int *selected_option);
+void get_action_menu_solo_ncurses(view *v, actions *act, int *selected_option);
+void get_action_menu_multi_ncurses(view *v, actions *act, int *selected_option);
