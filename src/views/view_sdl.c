@@ -36,6 +36,8 @@ view *init_view_sdl(){
 
 
     v->type = 's';
+    v->width = 30;
+    v->height = 30;
 
     view_sdl *viewSdl =(view_sdl *)malloc(sizeof(view_sdl));
     if(!viewSdl){

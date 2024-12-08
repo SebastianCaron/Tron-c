@@ -9,12 +9,23 @@
 #include "./controller.h"
 
 
-void controllerPlay(model *m, view *v){
-    while(!est_fini(m)){
-        direction dir = v->get_direction(v);
-        move_player(m, m->n_player, dir);
+void controller_play_solo_j_vs_random(controller *c){
+    create_model(c, 2);
+    int i = 0;
+    int *scores = calloc(2, sizeof(int));
+    while(!est_fini(c->m)){
+        direction dir = NODIRECTION;
+        for(i = 0; i < c->nb_view; i++){
+            dir = c->views[i]->get_direction(c->views[i]);
+        }
+        move_player(c->m, 0, dir);
+        move_player(c->m, 1, UP);
 
-        v->update_change_screen(v, m->grid, m->nb_lignes_grid, m->nb_colonnes_grid);
+
+        for(i = 0; i < c->nb_view; i++){
+            c->views[i]->update_screen(c->views[i],2, scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+        }
+        usleep(10000);
     }
 }
 
@@ -57,10 +68,22 @@ controller *init_controller(view *v, ...){
     return c;
 }
 
-void create_model(controller *c){
-    // TODO
-    // RECUPERER TAILLE NCURSES SI EXISTE SINON SDL
-    // CREER LE MODELE ET L'AFFECTER AU CONTROLLER
+void create_model(controller *c, int nb_player){
+    view *best = NULL;
+    
+    for(unsigned i = 0; i < c->nb_view; i++){
+        if(c->views[i]->type == 'n'){
+            grid *g = load_map("./maps/map1.txt", c->views[i]->width, c->views[i]->height);
+            c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
+            return;
+        }else{
+            best = c->views[i];
+        }
+    }
+    grid *g = load_map("./maps/map1.txt", best->width, best->height);
+    printf("G : %d %d\n", best->width, best->height);
+    display_grid(g);
+    c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
 }
 
 void destroy_controller(controller *c) {
@@ -97,7 +120,6 @@ void go_to_menu_principal(controller *c){
                 go_to_menu_multijoueur(c);
                 return;
             case QUITTER:
-                destroy_controller(c);
                 return;
             default:
                 break;
@@ -126,8 +148,10 @@ void go_to_menu_solo(controller *c){
 
         switch (act)
         {
+            case PLAY_BOT_ALGO:
+                controller_play_solo_j_vs_random(c);
+                return;
             case QUITTER:
-                destroy_controller(c);
                 return;
             default:
                 break;
@@ -155,7 +179,6 @@ void go_to_menu_multijoueur(controller *c){
         switch (act)
         {
             case QUITTER:
-                destroy_controller(c);
                 return;
             default:
                 break;

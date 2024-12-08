@@ -16,7 +16,7 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **
         exit(EXIT_FAILURE);
     }
 
-    game->dead= (char *) calloc(nb_player, sizeof(char));
+    game->dead = (char *) calloc(nb_player, sizeof(char));
     if(!game->dead){
         perror("[MODEL] erreur allocation des etats de vie des joueurs.");
         exit(EXIT_FAILURE);
@@ -47,6 +47,8 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **
         perror("[MODEL] erreur allocation d'une colonne de la grille de jeu.");
         exit(EXIT_FAILURE);
     }
+
+    init_positions(game);
 
     return game;
 }
@@ -138,4 +140,9 @@ int est_fini(model *m){
         exit(EXIT_FAILURE);
     }  
     return (m->n_player_alive <= 1) ? 1 : 0;
+}
+
+// TODO
+void init_positions(model *m){
+
 }

@@ -22,8 +22,8 @@ view *init_view_ncurse(){
 
 
     v->type = 'n';
-    v->width = COLS;
-    v->height = LINES;
+    v->width = COLS-40;
+    v->height = LINES-2;
 
     v->ncurse = vn;
     initscr();
@@ -82,7 +82,15 @@ direction get_direction_ncurses(view *v){
 }
 
 void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes){
-
+    clear();
+    v->ncurse->grid_w = subwin(stdscr, LINES-2, COLS-40, 1, 20); 
+    box(v->ncurse->grid_w, ACS_VLINE, ACS_HLINE);
+    for(int i = 0; i < nb_lignes; i++){
+        for(int j = 0; j < nb_colonnes; j++){
+            mvprintw(i, j, "%s", grid[i][j] == WALL ? "█" : " ");
+        }
+    }
+    
 }
 
 void afficheMenuPrincipalNC(view *v, int *selected_option){

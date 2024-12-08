@@ -30,7 +30,7 @@ grid *load_grid_as_it_is(char *path, int nb_lignes, int nb_colonnes){
     }
 
     grid *g = calloc(1, sizeof(grid));
-    if(!g){
+    if(g == NULL){
         perror("[UTILS] ERREUR ALLOCATION GRID");
         fclose(f);
         return NULL;

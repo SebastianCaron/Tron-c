@@ -73,6 +73,7 @@ int main(int argc, char **argv){
     }
 
     go_to_menu_principal(c);
+    destroy_controller(c);
 
     return EXIT_SUCCESS;
 }
