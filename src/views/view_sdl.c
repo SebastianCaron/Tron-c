@@ -120,7 +120,7 @@ SDL_Rect *createRect(int h, int w, int x, int y){
 }
 
 void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y) {
-    TTF_Font *font = TTF_OpenFont("./res/arial.ttf", 24);//faut voir la taille
+    TTF_Font *font = TTF_OpenFont("./res/arial.ttf", 50);//faut voir la taille
     if (font == NULL) {
         fprintf(stderr, "Erreur lors du chargement de la police : %s\n", TTF_GetError());
     }
@@ -137,6 +137,10 @@ void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y) {
 }
 
 
+// AFfichage titre en plus grand que boutons,
+// Centrer le texte dans affiche texte 
+
+
 void afficheMenuPrincipalSDL(view *v, actions *act){
     
     SDL_Renderer *renderer = v->sdl->renderer;
@@ -144,22 +148,22 @@ void afficheMenuPrincipalSDL(view *v, actions *act){
     SDL_RenderClear(renderer);
     v->get_action = get_action_menu_principal_sdl;
     // Affichage Titre
-    afficheTexte(renderer, "Tron", LARGEUR/2-20, HAUTEUR-20);
+    afficheTexte(renderer, "TRON", LARGEUR/2.5, 100);
 
     // Rectangle Solo
-    SDL_Rect *solo = createRect(50, 100, LARGEUR/2, 2*(HAUTEUR/3));
+    SDL_Rect *solo = createRect(50, 100, LARGEUR/2.5, 300);
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, solo);
     SDL_RenderFillRect(renderer, solo);
-    afficheTexte(renderer, "solo", LARGEUR/2,2*HAUTEUR/2);
+    afficheTexte(renderer, "solo", LARGEUR/2.5,300);
     // Le dessiner et mettre le titre dedans
 
     // Rectangle Multiplayer
-    SDL_Rect *multiplayer = createRect(50, 100, LARGEUR/2,2.5*(HAUTEUR/3));//Les positions x et y c'est du test la pour le coup 
+    SDL_Rect *multiplayer = createRect(50, 100, LARGEUR/2.5,400);//Les positions x et y c'est du test la pour le coup 
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, multiplayer);
     SDL_RenderFillRect(renderer, multiplayer);
-    afficheTexte(renderer, "multiplayer", LARGEUR/2,2.5*(HAUTEUR/3));
+    afficheTexte(renderer, "multiplayer", LARGEUR/2.5,400);
     // Le dessiner et mettre le titre dedans
 
     // Ajoute les boutons dans la structure pour detecter les actions
