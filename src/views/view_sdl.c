@@ -415,7 +415,7 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
     for (int i = 0; i < nb_player; i++) {
         char score[20];
         snprintf(score, sizeof(score), "Player %d: %d", i + 1, scores[i]);
-        afficheTexte(renderer, score, decalageY, 0);
+        afficheTexte(renderer, score, decalageY, 0); // IL FAUT VOIR L'AFFICHAGE DES SCORES
         decalageY += 10;
     }
     SDL_RenderPresent(renderer);
