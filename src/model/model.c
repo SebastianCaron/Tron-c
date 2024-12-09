@@ -128,7 +128,8 @@ int collision_player(model *m, int indexPlayer){
 
     if(!m->dead[indexPlayer]){
         position *player = m->players[indexPlayer];
-        if(player->y < 0 || player->y >= m->nb_lignes_grid || player->x < 0 || player->x >= m->nb_colonnes_grid || m->grid[player->x][player->y] != (indexPlayer+1)){
+        if(player->y < 0 || player->y >= m->nb_lignes_grid || player->x < 0 || player->x >= m->nb_colonnes_grid || m->grid[player->y][player->x] != (indexPlayer+1)){
+            // printf("PLAYER %d est moooort ! \n", indexPlayer);
             m->dead[indexPlayer] = 1;
             m->n_player_alive--;
             return 1;

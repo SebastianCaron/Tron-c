@@ -190,3 +190,13 @@ void display_grid(grid *g){
         printf("]\n");
     }
 }
+void display_grid_i(int **tab, int nb_lignes, int nb_colonnes){
+    for(int i = 0; i < nb_lignes; i++){
+        printf("[");
+        for(int j = 0; j < nb_colonnes-1; j++){
+            printf("%d, ", tab[i][j]);
+        }
+        if(nb_colonnes >= 1)printf("%d", tab[i][nb_colonnes-1]);
+        printf("]\n");
+    }
+}

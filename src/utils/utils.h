@@ -22,3 +22,4 @@ void destroy_grid(grid *g);
 int string_equal(char *a, char *b);
 
 void display_grid(grid *g);
+void display_grid_i(int **tab, int nb_lignes, int nb_colonnes);
