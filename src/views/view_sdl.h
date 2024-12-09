@@ -8,8 +8,8 @@
 #define HAUTEUR 600
 #define LARGEUR 800
 
-#define HPIXEL HAUTEUR/20
-#define WPIXEL LARGEUR/44
+#define HPIXEL HAUTEUR/30
+#define WPIXEL LARGEUR/30
 
 view *init_view_sdl();
 
