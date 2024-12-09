@@ -20,13 +20,13 @@ view *init_view_ncurse(){
         exit(EXIT_FAILURE);
     }
 
-
+    initscr();
     v->type = 'n';
     v->width = COLS-40;
     v->height = LINES-2;
 
     v->ncurse = vn;
-    initscr();
+
     clear();
     timeout(-1);
     noecho();
@@ -91,10 +91,19 @@ void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int 
     box(v->ncurse->grid_w, ACS_VLINE, ACS_HLINE);
     for(int i = 0; i < nb_lignes; i++){
         for(int j = 0; j < nb_colonnes; j++){
-            mvprintw(i, j, "%s", grid[i][j] == WALL ? "█" : " ");
+            char *s = " ";
+            if(grid[i][j] == WALL){
+                s = "#";
+            }else if(grid[i][j] < 0){
+                s = "#";
+            }else if(grid[i][j] > 0){
+                s = "-";
+            }
+            mvwprintw(v->ncurse->grid_w, j, i, "%s", s);
         }
     }
-    
+    refresh();
+    wrefresh(v->ncurse->grid_w);
 }
 
 void afficheMenuPrincipalNC(view *v, int *selected_option){

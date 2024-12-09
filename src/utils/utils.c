@@ -140,13 +140,15 @@ grid *upscale_grid(grid *g, int nb_lignes, int nb_colonnes){
 int **allocate_grid(int nb_lignes, int nb_colonnes){
     int **res = calloc(nb_lignes, sizeof(int *));
     if(res == NULL){
-        perror("[UTILS] ERREUR ALLOCATION GRID LINES");
+        perror("[UTILS] ERREUR ALLOCATION GRID LINES : ");
+        printf("%d x %d\n", nb_lignes, nb_colonnes);
         return NULL;
     }
     for(int i = 0; i < nb_lignes; i++){
         res[i] = calloc(nb_colonnes, sizeof(int));
         if(res[i] == NULL){
             perror("[UTILS] ERREUR ALLOCATION GRID LINE");
+            printf("%d x %d\n", nb_lignes, nb_colonnes);
             return NULL;
         }
     }
