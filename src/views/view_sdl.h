@@ -21,7 +21,7 @@ void update_screen_sdl(view *, int, int *, int **, int , int);
 
 void quitter(SDL_Window *window, SDL_Renderer *renderer);
 SDL_Rect *createRect(int h, int w, int x, int y);
-void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y);
+void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y, int titre);
 void afficheMenuPrincipalSDL(view *v, actions *act);
 void afficheMenuSoloSDL(view *v, actions *act);
 void afficheMenuMultiplayerSDL(view *v, actions *act);

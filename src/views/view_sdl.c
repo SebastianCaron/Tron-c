@@ -123,11 +123,9 @@ SDL_Rect *createRect(int h, int w, int x, int y){
     return ret;
 }
 
-void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y) {
-    TTF_Font *font = TTF_OpenFont("./res/arial.ttf", 50);//faut voir la taille
-    if (font == NULL) {
-        fprintf(stderr, "Erreur lors du chargement de la police : %s\n", TTF_GetError());
-    }
+void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y, int titre) {
+    TTF_Font *font = TTF_OpenFont("./res/arial.ttf", 40);
+    if(titre)font = TTF_OpenFont("./res/arial.ttf", 50);
     SDL_Color color = {255, 255, 255, 255}; 
     SDL_Surface *surfaceTexte = TTF_RenderText_Solid(font, texte, color);
     SDL_Texture *textureTexte = SDL_CreateTextureFromSurface(renderer, surfaceTexte);
@@ -152,14 +150,14 @@ void afficheMenuPrincipalSDL(view *v, actions *act){
     SDL_RenderClear(renderer);
     v->get_action = get_action_menu_principal_sdl;
     // Affichage Titre
-    afficheTexte(renderer, "TRON", LARGEUR/2.5, 100);
+    afficheTexte(renderer, "TRON", LARGEUR/2.5, 100, 1);
 
     // Rectangle Solo
     SDL_Rect *solo = createRect(50, 100, LARGEUR/2.5, 300);
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, solo);
     SDL_RenderFillRect(renderer, solo);
-    afficheTexte(renderer, "solo", LARGEUR/2.5,300);
+    afficheTexte(renderer, "solo", LARGEUR/2.5,300, 0);
     // Le dessiner et mettre le titre dedans
 
     // Rectangle Multiplayer
@@ -167,7 +165,7 @@ void afficheMenuPrincipalSDL(view *v, actions *act){
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, multiplayer);
     SDL_RenderFillRect(renderer, multiplayer);
-    afficheTexte(renderer, "multiplayer", LARGEUR/2.5,400);
+    afficheTexte(renderer, "multiplayer", LARGEUR/2.5,400, 0);
     // Le dessiner et mettre le titre dedans
 
     // Ajoute les boutons dans la structure pour detecter les actions
@@ -225,21 +223,21 @@ void afficheMenuSoloSDL(view *v, actions *act){
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     v->get_action = get_action_menu_solo_sdl;
-    afficheTexte(renderer, "Solo",LARGEUR/2,(HAUTEUR/3));
+    afficheTexte(renderer, "Solo",LARGEUR/2,(HAUTEUR/3), 1);
 
     // Rectangle Vs algo  
     SDL_Rect *algo = createRect(50, 100, LARGEUR/2,2*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, algo);
     SDL_RenderFillRect(renderer, algo);
-    afficheTexte(renderer, "vs algo", LARGEUR/2,2*(HAUTEUR/3));
+    afficheTexte(renderer, "vs algo", LARGEUR/2,2*(HAUTEUR/3), 0);
 
     // Rectangle Vs Q-learning
     SDL_Rect *q = createRect(50, 100, LARGEUR/2,2.5*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, q);
     SDL_RenderFillRect(renderer, q);
-    afficheTexte(renderer, "vs q-learning",LARGEUR/2,2.5*(HAUTEUR/3));
+    afficheTexte(renderer, "vs q-learning",LARGEUR/2,2.5*(HAUTEUR/3),0);
     
     v->sdl->nb_buttons = 2;
     v->sdl->buttons[0] = algo;
@@ -295,14 +293,14 @@ void afficheMenuMultiplayerSDL(view *v, actions *act){
     SDL_RenderClear(renderer);
     v->get_action = get_action_menu_multi_sdl;
     // Affichage Titre
-    afficheTexte(renderer, "Multiplayer", LARGEUR/2,(HAUTEUR/3));
+    afficheTexte(renderer, "Multiplayer", LARGEUR/2,(HAUTEUR/3),1);
 
     // Rectangle On this machine
     SDL_Rect *machine = createRect(50, 100, LARGEUR/2,2*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, machine);
     SDL_RenderFillRect(renderer, machine);
-    afficheTexte(renderer, "on this machine (2 players)", LARGEUR/2,2*(HAUTEUR/3));
+    afficheTexte(renderer, "on this machine (2 players)", LARGEUR/2,2*(HAUTEUR/3),0);
     // Le dessiner et mettre le titre dedans
 
     // Rectangle with other
@@ -310,7 +308,7 @@ void afficheMenuMultiplayerSDL(view *v, actions *act){
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, others);
     SDL_RenderFillRect(renderer, others);
-    afficheTexte(renderer, "with others", LARGEUR/2,2.5*(HAUTEUR/3));
+    afficheTexte(renderer, "with others", LARGEUR/2,2.5*(HAUTEUR/3),0);
     // Le dessiner et mettre le titre dedans
 
     SDL_RenderPresent(renderer);
@@ -408,7 +406,7 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
     for (int i = 0; i < nb_player; i++) {
         char score[20];
         snprintf(score, sizeof(score), "Player %d: %d", i + 1, scores[i]);
-        afficheTexte(renderer, score, 10, decalageY);
+        afficheTexte(renderer, score, 10, decalageY, 0);
         decalageY += 10;
     }
     SDL_RenderPresent(renderer);
