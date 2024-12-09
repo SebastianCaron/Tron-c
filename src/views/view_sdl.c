@@ -25,7 +25,7 @@ view *init_view_sdl(){
         exit(EXIT_FAILURE);
     }
 
-    v->destroy_self = destroy_view_sdl;
+    v->destroy_self = destroy_view_sdl; 
     v->get_direction = get_direction_sdl;
     // v->update_change_screen = ;
     v->update_screen = update_screen_sdl;
@@ -138,7 +138,10 @@ void afficheTexte(SDL_Renderer *renderer,char *texte, int x, int y) {
 
 
 void afficheMenuPrincipalSDL(view *v, actions *act){
+    
     SDL_Renderer *renderer = v->sdl->renderer;
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
     v->get_action = get_action_menu_principal_sdl;
     // Affichage Titre
     afficheTexte(renderer, "Tron", LARGEUR/2, HAUTEUR/3);
@@ -211,6 +214,8 @@ void get_action_menu_principal_sdl(view *v, actions *act, int *selected_option) 
 
 void afficheMenuSoloSDL(view *v, actions *act){
     SDL_Renderer *renderer = v->sdl->renderer;
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
     v->get_action = get_action_menu_solo_sdl;
     afficheTexte(renderer, "Solo",LARGEUR/2,(HAUTEUR/3));
 
@@ -278,6 +283,8 @@ void get_action_menu_solo_sdl(view *v, actions *act, int *selected_option) {
 
 void afficheMenuMultiplayerSDL(view *v, actions *act){
     SDL_Renderer *renderer = v->sdl->renderer;
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
     v->get_action = get_action_menu_multi_sdl;
     // Affichage Titre
     afficheTexte(renderer, "Multiplayer", LARGEUR/2,(HAUTEUR/3));
