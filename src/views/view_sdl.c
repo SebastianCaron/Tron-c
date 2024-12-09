@@ -151,7 +151,7 @@ void afficheMenuPrincipalSDL(view *v, actions *act){
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, solo);
     SDL_RenderFillRect(renderer, solo);
-    afficheTexte(renderer, "solo", LARGEUR/2,HAUTEUR/2);
+    afficheTexte(renderer, "solo", LARGEUR/2,2*HAUTEUR/2);
     // Le dessiner et mettre le titre dedans
 
     // Rectangle Multiplayer
