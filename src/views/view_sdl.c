@@ -144,7 +144,7 @@ void afficheMenuPrincipalSDL(view *v, actions *act){
     SDL_RenderClear(renderer);
     v->get_action = get_action_menu_principal_sdl;
     // Affichage Titre
-    afficheTexte(renderer, "Tron", LARGEUR/2, HAUTEUR/3);
+    afficheTexte(renderer, "Tron", LARGEUR/2-20, HAUTEUR-20);
 
     // Rectangle Solo
     SDL_Rect *solo = createRect(50, 100, LARGEUR/2, 2*(HAUTEUR/3));
