@@ -147,6 +147,7 @@ void afficheMenuPrincipalSDL(view *v, actions *act){
     SDL_Rect *solo = createRect(50, 100, LARGEUR/2, 2*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, solo);
+    SDL_RenderFillRect(renderer, solo);
     afficheTexte(renderer, "solo", LARGEUR/2,HAUTEUR/2);
     // Le dessiner et mettre le titre dedans
 
@@ -154,6 +155,7 @@ void afficheMenuPrincipalSDL(view *v, actions *act){
     SDL_Rect *multiplayer = createRect(50, 100, LARGEUR/2,2.5*(HAUTEUR/3));//Les positions x et y c'est du test la pour le coup 
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, multiplayer);
+    SDL_RenderFillRect(renderer, multiplayer);
     afficheTexte(renderer, "multiplayer", LARGEUR/2,2.5*(HAUTEUR/3));
     // Le dessiner et mettre le titre dedans
 
@@ -216,12 +218,14 @@ void afficheMenuSoloSDL(view *v, actions *act){
     SDL_Rect *algo = createRect(50, 100, LARGEUR/2,2*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, algo);
+    SDL_RenderFillRect(renderer, algo);
     afficheTexte(renderer, "vs algo", LARGEUR/2,2*(HAUTEUR/3));
 
     // Rectangle Vs Q-learning
     SDL_Rect *q = createRect(50, 100, LARGEUR/2,2.5*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, q);
+    SDL_RenderFillRect(renderer, q);
     afficheTexte(renderer, "vs q-learning",LARGEUR/2,2.5*(HAUTEUR/3));
     
     v->sdl->nb_buttons = 2;
@@ -282,6 +286,7 @@ void afficheMenuMultiplayerSDL(view *v, actions *act){
     SDL_Rect *machine = createRect(50, 100, LARGEUR/2,2*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, machine);
+    SDL_RenderFillRect(renderer, machine);
     afficheTexte(renderer, "on this machine (2 players)", LARGEUR/2,2*(HAUTEUR/3));
     // Le dessiner et mettre le titre dedans
 
@@ -289,6 +294,7 @@ void afficheMenuMultiplayerSDL(view *v, actions *act){
     SDL_Rect *others = createRect(50, 100, LARGEUR/2,2.5*(HAUTEUR/3));
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
     SDL_RenderDrawRect(renderer, others);
+    SDL_RenderFillRect(renderer, others);
     afficheTexte(renderer, "with others", LARGEUR/2,2.5*(HAUTEUR/3));
     // Le dessiner et mettre le titre dedans
 
