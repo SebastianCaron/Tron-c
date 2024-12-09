@@ -13,7 +13,7 @@ void controller_play_solo_j_vs_random(controller *c){
     create_model(c, 2);
     int i = 0;
     int *scores = calloc(2, sizeof(int));
-    direction dir = NODIRECTION;
+    direction dir = LEFT;
     while(!est_fini(c->m)){
         for(i = 0; i < c->nb_view; i++){
             c->views[i]->get_direction(c->views[i], &dir);

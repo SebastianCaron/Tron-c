@@ -41,7 +41,7 @@ fr0: mrpropre all
 
 debug: mrpropre all
 	clear
-	valgrind --log-file=val.txt ./tron
+	valgrind --log-file=val.txt ./tron -sdl
 
 -include $(DEPS)
 
