@@ -15,7 +15,7 @@ view *init_view_sdl();
 
 void destroy_view_sdl(view *);
 
-direction get_direction_sdl();
+direction get_direction_sdl(view *v, direction *dir);
 
 void update_screen_sdl(view *, int, int *, int **, int , int);
 

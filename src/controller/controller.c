@@ -13,10 +13,10 @@ void controller_play_solo_j_vs_random(controller *c){
     create_model(c, 2);
     int i = 0;
     int *scores = calloc(2, sizeof(int));
+    direction dir = NODIRECTION;
     while(!est_fini(c->m)){
-        direction dir = NODIRECTION;
         for(i = 0; i < c->nb_view; i++){
-            dir = c->views[i]->get_direction(c->views[i]);
+            c->views[i]->get_direction(c->views[i], &dir);
         }
         move_player(c->m, 0, dir);
         move_player(c->m, 1, UP);
@@ -25,7 +25,7 @@ void controller_play_solo_j_vs_random(controller *c){
         for(i = 0; i < c->nb_view; i++){
             c->views[i]->update_screen(c->views[i],2, scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
         }
-        usleep(50000);
+        usleep(100000);
     }
 }
 

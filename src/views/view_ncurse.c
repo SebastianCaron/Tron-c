@@ -63,16 +63,20 @@ void destroy_view_ncurses(view *v){
     free(v);
 }
 
-direction get_direction_ncurses(view *v){
+direction get_direction_ncurses(view *v, direction *dir){
     int ch = getch();
     switch (ch) {
         case KEY_RIGHT:
+            if((*dir) != LEFT) (*dir) = RIGHT;
             return RIGHT;
         case KEY_LEFT:
+            if((*dir) != RIGHT) (*dir) = LEFT;
             return LEFT;
         case KEY_UP:
+            if((*dir) != DOWN) (*dir) = UP;
             return UP;
         case KEY_DOWN:
+            if((*dir) != UP) (*dir) = DOWN;
             return DOWN;
         default:
             // printw("%c (code : %d)\n", ch, ch);
