@@ -382,7 +382,7 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
             pixel.x = j*WPIXEL;
             pixel.y = i*HPIXEL;
 
-            if(grid[i][j]=='#'){
+            if(grid[i][j] == WALL){
                 SDL_SetRenderDrawColor(renderer, tabColors[9].r, tabColors[9].g, tabColors[9].b, tabColors[9].a);
             }
             else{

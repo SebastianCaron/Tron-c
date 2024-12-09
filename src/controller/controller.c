@@ -16,6 +16,7 @@ void controller_play_solo_j_vs_random(controller *c){
     direction dir = LEFT;
     while(!est_fini(c->m)){
         for(i = 0; i < c->nb_view; i++){
+            // RECUPERE LES INPUTS VIA LES VIEWS
             c->views[i]->get_direction(c->views[i], &dir);
         }
         move_player(c->m, 0, dir);
@@ -23,6 +24,7 @@ void controller_play_solo_j_vs_random(controller *c){
 
 
         for(i = 0; i < c->nb_view; i++){
+            // MET A JOUR LES VIEWS
             c->views[i]->update_screen(c->views[i],2, scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
         }
         usleep(100000);
@@ -73,14 +75,14 @@ void create_model(controller *c, int nb_player){
     
     for(unsigned i = 0; i < c->nb_view; i++){
         if(c->views[i]->type == 'n'){
-            grid *g = load_map("./maps/map1.txt", c->views[i]->width, c->views[i]->height);
+            grid *g = load_map("./maps/map2.txt", c->views[i]->width, c->views[i]->height);
             c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
             return;
         }else{
             best = c->views[i];
         }
     }
-    grid *g = load_map("./maps/map1.txt", best->width, best->height);
+    grid *g = load_map("./maps/map2.txt", best->width, best->height);
     printf("G : %d %d\n", best->width, best->height);
     display_grid(g);
     c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
@@ -98,6 +100,7 @@ void destroy_controller(controller *c) {
 void go_to_menu_principal(controller *c){
     actions act = NO_ACTION;
     int selected_option = 0;
+    // INIT SDL MENU PRINCIPAL
     while(1){
         for(int i = 0; i < c->nb_view; i++){
             // MET A JOUR LES VUES
@@ -113,6 +116,7 @@ void go_to_menu_principal(controller *c){
         switch (act)
         {
             // EFFECTUE L'ACTION
+            // DETRUIRE MENU & BUTTONS
             case MENU_SOLO:
                 go_to_menu_solo(c);
                 return;
