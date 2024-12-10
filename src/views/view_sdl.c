@@ -72,7 +72,7 @@ void destroy_view_sdl(view *v){
     }
     TTF_Quit();
     SDL_Quit();
-    free(v->sdl);
+    // free(v->sdl);
     free(v);
 }
 

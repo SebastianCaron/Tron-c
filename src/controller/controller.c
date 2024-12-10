@@ -30,7 +30,7 @@ void controller_play_solo_j_vs_random(controller *c){
             // MET A JOUR LES VIEWS
             c->views[i]->update_screen(c->views[i],2, scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
         }
-        usleep(500000);
+        usleep(100000);
     }
     // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
 }
