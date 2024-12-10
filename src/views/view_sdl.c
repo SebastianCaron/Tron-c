@@ -399,7 +399,7 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
             else{
                 int indice = grid[i][j];
                 if (indice < 0){
-                    SDL_SetRenderDrawColor(renderer, tabColors[indice*-1].r, tabColors[indice*-1].g, tabColors[indice*-1].b, (tabColors[indice*-1].a) - 200);
+                    SDL_SetRenderDrawColor(renderer, tabColors[indice*-1].r, tabColors[indice*-1].g, tabColors[indice*-1].b, (tabColors[indice*-1].a) - 100);
                 }else{
                     SDL_SetRenderDrawColor(renderer, tabColors[indice].r, tabColors[indice].g, tabColors[indice].b, tabColors[indice].a);
                 }
