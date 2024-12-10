@@ -34,6 +34,7 @@ mrpropre: clean
 	clear
 	rm -f $(TARGET)
 	rm -rf val.txt
+	rm -rf debug_ncurse.txt
 
 fr0: mrpropre all
 	clear
@@ -42,6 +43,10 @@ fr0: mrpropre all
 debug: mrpropre all
 	clear
 	valgrind --log-file=val.txt ./tron -sdl
+
+ncurse: mrpropre all
+	clear
+	./tron -ncurse 2> debug_ncurse.txt
 
 -include $(DEPS)
 

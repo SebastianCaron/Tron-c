@@ -22,8 +22,9 @@ view *init_view_ncurse(){
 
     initscr();
     v->type = 'n';
-    v->width = COLS-40;
-    v->height = LINES-2;
+    getmaxyx(stdscr, v->height, v->width);
+    v->width -= 20;
+    v->height -= 2;
 
     v->ncurse = vn;
 
@@ -33,6 +34,8 @@ view *init_view_ncurse(){
     cbreak();
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
+
+    v->ncurse->grid_w = subwin(stdscr, v->height, v->width, 1, 20);
 
     // vn->grid_w = subwin(stdscr, LINES-2, COLS-40, 1, 20); 
     // box(vn->grid_w, ACS_VLINE, ACS_HLINE);
@@ -54,7 +57,6 @@ view *init_view_ncurse(){
 
 void destroy_view_ncurses(view *v){
     if(v == NULL) return;
-    timeout(5000);
     getch();
     endwin();
     clear();
@@ -87,22 +89,21 @@ direction get_direction_ncurses(view *v, direction *dir){
 
 void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes){
     clear();
-    v->ncurse->grid_w = subwin(stdscr, LINES-2, COLS-40, 1, 20); 
     box(v->ncurse->grid_w, ACS_VLINE, ACS_HLINE);
+    // fprintf(stderr, "C : %d, L : %d\n", nb_colonnes, nb_lignes);
     for(int i = 0; i < nb_lignes; i++){
         for(int j = 0; j < nb_colonnes; j++){
-            char *s = " ";
+            char s = ' ';
             if(grid[i][j] == WALL){
-                s = "#";
+                s = '#';
             }else if(grid[i][j] < 0){
-                s = "#";
+                s = '#';
             }else if(grid[i][j] > 0){
-                s = "-";
+                s = '-';
             }
-            mvwprintw(v->ncurse->grid_w, j, i, "%s", s);
+            mvwprintw(v->ncurse->grid_w, i, j, "%c", s);
         }
     }
-    refresh();
     wrefresh(v->ncurse->grid_w);
 }
 

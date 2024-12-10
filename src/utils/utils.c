@@ -9,13 +9,11 @@ grid *load_map(char *path, int nb_lignes, int nb_colonnes){
     int nbfc = 0;
     int nbfl = 0;
     count_nb_lignes_colonnes(path, &nbfl, &nbfc);
-
     grid *g = load_grid_as_it_is(path, nbfl, nbfc);
     if(!g){
         return NULL;
     }
     // display_grid(g);
-
     grid *ng = upscale_grid(g, nb_lignes, nb_colonnes);
     destroy_grid(g);
     return ng;
@@ -115,6 +113,7 @@ grid *upscale_grid(grid *g, int nb_lignes, int nb_colonnes){
     }
     ng->nb_colonnes = nb_colonnes;
     ng->nb_lignes = nb_lignes;
+
 
     ng->grid = allocate_grid(ng->nb_lignes, ng->nb_colonnes);
 

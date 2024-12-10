@@ -30,7 +30,7 @@ void controller_play_solo_j_vs_random(controller *c){
             // MET A JOUR LES VIEWS
             c->views[i]->update_screen(c->views[i],2, scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
         }
-        usleep(100000);
+        usleep(500000);
     }
     // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
 }
@@ -79,16 +79,18 @@ void create_model(controller *c, int nb_player){
     
     for(unsigned i = 0; i < c->nb_view; i++){
         if(c->views[i]->type == 'n'){
-            grid *g = load_map("./maps/map1.txt", c->views[i]->width, c->views[i]->height);
+            grid *g = load_map("./maps/map1.txt", c->views[i]->height, c->views[i]->width);
             c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
             return;
         }else{
             best = c->views[i];
         }
     }
-    grid *g = load_map("./maps/map1.txt", best->width, best->height);
+
+    grid *g = load_map("./maps/map1.txt", best->height, best->width);
     // printf("G : %d %d\n", best->width, best->height);
     // display_grid(g);
+
     c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
 }
 
