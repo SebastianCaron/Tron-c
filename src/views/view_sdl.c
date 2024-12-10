@@ -363,6 +363,7 @@ void get_action_menu_multi_sdl(view *v, actions *act, int *selected_option) {
 
 
 void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes){
+
     if(v == NULL){
         perror("[VIEW SDL] V is null.");
         exit(EXIT_FAILURE);
@@ -379,6 +380,8 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
     }
 
     SDL_Renderer *renderer = v->sdl->renderer;
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
 
     for(int i = 0; i<nb_lignes;i++){
         for (int j= 0 ;j <nb_colonnes;j++){
@@ -417,4 +420,5 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
         decalageY += 10;
     }
     SDL_RenderPresent(renderer);
+
 }
