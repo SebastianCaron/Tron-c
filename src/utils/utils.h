@@ -10,7 +10,7 @@ typedef struct{
 } grid;
 
 typedef enum {NBJOUEUR = 1, GRID = 2, POSITIONS = 3, SCORES = 4, MOUVEMENT = 5, ISOVER = 6, START = 7, NEEDGRID = 8, ENDPACKET = 9} f_packet;
-typedef enum {QUITTER, MENU_PRINCIPAL, MENU_SOLO, MENU_MULTI, NO_ACTION, PLAY_BOT_ALGO, PLAY_BOT_RANDOM, PLAY_BOT_Q, PLAY_MULTI, PLAY_ONLINE} actions;
+typedef enum {QUITTER, MENU_PRINCIPAL, MENU_SOLO, MENU_MULTI, NO_ACTION, PLAY_BOT_ALGO, PLAY_BOT_RANDOM, PLAY_BOT_Q, PLAY_MULTI, PLAY_ONLINE, RETOUR} actions;
 
 grid *load_map(char *path, int nb_colonnes, int nb_lignes);
 grid *load_grid_as_it_is(char *path, int nb_lignes, int nb_colonnes);
