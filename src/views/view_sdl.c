@@ -386,10 +386,10 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
         for (int j= 0 ;j <nb_colonnes;j++){
 
             SDL_Rect pixel;
-            pixel.h = HPIXEL;
-            pixel.w= WPIXEL;
-            pixel.x = j*WPIXEL;
-            pixel.y = i*HPIXEL;
+            pixel.h = HAUTEUR / nb_lignes;
+            pixel.w= LARGEUR / nb_colonnes;
+            pixel.x = j*(LARGEUR / nb_colonnes);
+            pixel.y = i*(HAUTEUR / nb_lignes);
 
             if(grid[i][j] == WALL){
                 SDL_SetRenderDrawColor(renderer, tabColors[9].r, tabColors[9].g, tabColors[9].b, tabColors[9].a);
