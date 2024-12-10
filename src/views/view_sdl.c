@@ -409,9 +409,6 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
     }
 
     // Afficher les scores 
-    TTF_Font *font = TTF_OpenFont("arial.ttf", 10);//faut voir la taille
-    SDL_Color color = {255, 255, 255, 255}; 
-
     int decalageY = 10;
 
     for (int i = 0; i < nb_player; i++) {
