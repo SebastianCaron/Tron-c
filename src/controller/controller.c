@@ -162,6 +162,7 @@ void go_to_menu_solo(controller *c){
                 controller_play_solo_j_vs_random(c);
                 return;
             case QUITTER:
+                go_to_menu_principal(c);
                 return;
             default:
                 break;
@@ -189,6 +190,7 @@ void go_to_menu_multijoueur(controller *c){
         switch (act)
         {
             case QUITTER:
+                go_to_menu_principal(c);
                 return;
             default:
                 break;
