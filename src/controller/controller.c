@@ -161,7 +161,7 @@ void go_to_menu_solo(controller *c){
             case PLAY_BOT_ALGO:
                 controller_play_solo_j_vs_random(c);
                 return;
-            case QUITTER:
+            case RETOUR:
                 go_to_menu_principal(c);
                 return;
             default:
@@ -189,7 +189,7 @@ void go_to_menu_multijoueur(controller *c){
 
         switch (act)
         {
-            case QUITTER:
+            case RETOUR:
                 go_to_menu_principal(c);
                 return;
             default:
