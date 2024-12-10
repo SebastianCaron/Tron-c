@@ -6,10 +6,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #define HAUTEUR 600
-#define LARGEUR 800
-
-#define HPIXEL HAUTEUR/30
-#define WPIXEL LARGEUR/30
+#define LARGEUR 900
 
 view *init_view_sdl();
 
