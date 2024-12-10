@@ -126,8 +126,11 @@ SDL_Rect *createRect(int h, int w, int x, int y){
 
 SDL_Rect afficheTexte(SDL_Renderer *renderer,char *texte, int y, int titre) {
     TTF_Font *font = TTF_OpenFont("./res/arial.ttf", 40);
-    if(titre)font = TTF_OpenFont("./res/arial.ttf", 50);
-    SDL_Color color = {255, 255, 255, 255}; 
+    SDL_Color color = {0, 0, 0, 255}; 
+    if(titre==1){
+        font = TTF_OpenFont("./res/arial.ttf", 50);
+        color = (SDL_Color) {255, 255, 255, 255};
+    }
     SDL_Surface *surfaceTexte = TTF_RenderText_Solid(font, texte, color);
     SDL_Texture *textureTexte = SDL_CreateTextureFromSurface(renderer, surfaceTexte);
 
@@ -161,18 +164,22 @@ void afficheMenuPrincipalSDL(view *v, int *act){
     // Rectangle Multiplayer
     SDL_Rect multiplayer = afficheTexte(renderer, "multiplayer",400, 0);
 
+    SDL_Rect quitterVariab = afficheTexte(renderer, "QUITTER",500, 0);
+
     // Ajoute les boutons dans la structure pour detecter les actions
-    v->sdl->nb_buttons = 2;
+    v->sdl->nb_buttons = 3;
     v->sdl->buttons[0] = malloc(sizeof(SDL_Rect));
     v->sdl->buttons[1] = malloc(sizeof(SDL_Rect));
+    v->sdl->buttons[2] = malloc(sizeof(SDL_Rect));
 
-    if (!v->sdl->buttons[0] || !v->sdl->buttons[1]) {
+    if (!v->sdl->buttons[0] || !v->sdl->buttons[1] || !v->sdl->buttons[2]) {
         perror("[VIEW SDL] erreur allocation de mémoire pour les boutons.");
         quitter(v->sdl->window, v->sdl->renderer);
     }
 
     *(v->sdl->buttons[0]) = solo;
     *(v->sdl->buttons[1]) = multiplayer;
+    *(v->sdl->buttons[2]) = quitterVariab;
     SDL_RenderPresent(renderer);
 
 }
@@ -201,6 +208,9 @@ void get_action_menu_principal_sdl(view *v, actions *act, int *selected_option) 
                                 return;
                             case 1:
                                 *act = MENU_MULTI;
+                                return;
+                            case 2:
+                                *act = QUITTER;
                                 return;
                             default:
                                 break;
@@ -232,19 +242,23 @@ void afficheMenuSoloSDL(view *v, int *act){
 
     // Rectangle Vs Q-learning
     SDL_Rect q = afficheTexte(renderer, "vs q-learning",400,0);
+
+    SDL_Rect retourVariab = afficheTexte(renderer, "RETOUR",500,0);
     
-    v->sdl->nb_buttons = 2;
+    v->sdl->nb_buttons = 3;
 
     v->sdl->buttons[0] = malloc(sizeof(SDL_Rect));
     v->sdl->buttons[1] = malloc(sizeof(SDL_Rect));
+    v->sdl->buttons[2] = malloc(sizeof(SDL_Rect));
 
-    if (!v->sdl->buttons[0] || !v->sdl->buttons[1]) {
+    if (!v->sdl->buttons[0] || !v->sdl->buttons[1] || !v->sdl->buttons[2]) {
         perror("[VIEW SDL] erreur allocation de mémoire pour les boutons.");
         quitter(v->sdl->window, v->sdl->renderer);
     }
 
     *(v->sdl->buttons[0]) = algo;
     *(v->sdl->buttons[1]) = q;
+    *(v->sdl->buttons[2]) = retourVariab;
 
     SDL_RenderPresent(renderer);
 
@@ -274,6 +288,10 @@ void get_action_menu_solo_sdl(view *v, actions *act, int *selected_option) {
                                 return;
                             case 1:
                                 *act = PLAY_BOT_Q;
+                                return;
+
+                            case 2:
+                                *act = RETOUR;
                                 return;
                             default:
                                 break;
@@ -307,17 +325,21 @@ void afficheMenuMultiplayerSDL(view *v, int *act){
     SDL_Rect others = afficheTexte(renderer, "with others",400,0);
     // Le dessiner et mettre le titre dedans
 
-    v->sdl->nb_buttons = 2;
+    SDL_Rect retourVariab = afficheTexte(renderer, "RETOUR",500,0);
+
+    v->sdl->nb_buttons = 3;
 
     v->sdl->buttons[0] = malloc(sizeof(SDL_Rect));
     v->sdl->buttons[1] = malloc(sizeof(SDL_Rect));
+    v->sdl->buttons[2] = malloc(sizeof(SDL_Rect));
 
-    if (!v->sdl->buttons[0] || !v->sdl->buttons[1]) {
+    if (!v->sdl->buttons[0] || !v->sdl->buttons[1] || !v->sdl->buttons[2]) {
         perror("[VIEW SDL] erreur allocation de mémoire pour les boutons.");
         quitter(v->sdl->window, v->sdl->renderer);
     }
     *(v->sdl->buttons[0]) = machine;
     *(v->sdl->buttons[1]) = others;
+    *(v->sdl->buttons[2]) = retourVariab;
 
     SDL_RenderPresent(renderer);
 
@@ -347,6 +369,9 @@ void get_action_menu_multi_sdl(view *v, actions *act, int *selected_option) {
                                 return;
                             case 1:
                                 *act = PLAY_ONLINE;
+                                return;
+                            case 2:
+                                *act = RETOUR;
                                 return;
                             default:
                                 break;
