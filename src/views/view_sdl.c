@@ -281,7 +281,6 @@ void get_action_menu_solo_sdl(view *v, actions *act, int *selected_option) {
                 }
                 break;
             }
-
             default:
                 break;
         }
@@ -316,7 +315,6 @@ void afficheMenuMultiplayerSDL(view *v, actions *act){
         perror("[VIEW SDL] erreur allocation de mémoire pour les boutons.");
         quitter(v->sdl->window, v->sdl->renderer);
     }
-
     *(v->sdl->buttons[0]) = machine;
     *(v->sdl->buttons[1]) = others;
 
