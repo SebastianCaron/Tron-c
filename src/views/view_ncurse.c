@@ -110,8 +110,8 @@ void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int 
 void afficheMenuPrincipalNC(view *v, int *selected_option){
     v->get_action = get_action_menu_principal_ncurses;
 
-    const char *options[] = {"SOLO", "MULTIPLAYER"};
-    int n_options = 2;
+    const char *options[] = {"SOLO", "MULTIPLAYER", "QUIT"};
+    int n_options = 3;
     if(*selected_option < 0) *selected_option = n_options-1;
     if(*selected_option >= n_options) *selected_option = 0;
 
@@ -159,6 +159,10 @@ void get_action_menu_principal_ncurses(view *v, actions *act, int *selected_opti
                 (*act) = MENU_MULTI;
                 return;
             }
+            if((*selected_option) == 2){
+                (*act) = QUITTER;
+                return;
+            }
             return;
         // default:
         //     (*act) = NO_ACTION;
@@ -169,8 +173,8 @@ void get_action_menu_principal_ncurses(view *v, actions *act, int *selected_opti
 void afficheMenuSoloNC(view *v, int *selected_option){
     v->get_action = get_action_menu_solo_ncurses;
 
-    const char *options[] = {"VS ALGO", "VS Q-LEARNING"};
-    int n_options = 2;
+    const char *options[] = {"VS ALGO", "VS Q-LEARNING", "BACK"};
+    int n_options = 3;
     if(*selected_option < 0) *selected_option = n_options-1;
     if(*selected_option >= n_options) *selected_option = 0;
 
@@ -218,6 +222,10 @@ void get_action_menu_solo_ncurses(view *v, actions *act, int *selected_option){
                 (*act) = PLAY_BOT_Q;
                 return;
             }
+            if((*selected_option) == 2){
+                (*act) = RETOUR;
+                return;
+            }
             return;
         // default:
         //     (*act) = NO_ACTION;
@@ -228,8 +236,8 @@ void get_action_menu_solo_ncurses(view *v, actions *act, int *selected_option){
 void afficheMenuMultiplayerNC(view *v, int *selected_option){
     v->get_action = get_action_menu_multi_ncurses;
 
-    const char *options[] = {"ON THIS MACHINE", "ONLINE"};
-    int n_options = 2;
+    const char *options[] = {"ON THIS MACHINE", "ONLINE", "BACK"};
+    int n_options = 3;
     if(*selected_option < 0) *selected_option = n_options-1;
     if(*selected_option >= n_options) *selected_option = 0;
 
@@ -275,6 +283,10 @@ void get_action_menu_multi_ncurses(view *v, actions *act, int *selected_option){
             }
             if((*selected_option) == 1){
                 (*act) = PLAY_ONLINE;
+                return;
+            }
+            if((*selected_option) == 2){
+                (*act) = RETOUR;
                 return;
             }
             return;
