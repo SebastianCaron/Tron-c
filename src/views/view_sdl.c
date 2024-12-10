@@ -144,7 +144,7 @@ SDL_Rect afficheTexte(SDL_Renderer *renderer,char *texte, int y, int titre) {
 }
 
 
-void afficheMenuPrincipalSDL(view *v, actions *act){
+void afficheMenuPrincipalSDL(view *v, int *act){
     
     SDL_Renderer *renderer = v->sdl->renderer;
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -218,7 +218,7 @@ void get_action_menu_principal_sdl(view *v, actions *act, int *selected_option) 
 
 
 
-void afficheMenuSoloSDL(view *v, actions *act){
+void afficheMenuSoloSDL(view *v, int *act){
     SDL_Renderer *renderer = v->sdl->renderer;
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
@@ -289,7 +289,7 @@ void get_action_menu_solo_sdl(view *v, actions *act, int *selected_option) {
 }
 
 
-void afficheMenuMultiplayerSDL(view *v, actions *act){
+void afficheMenuMultiplayerSDL(view *v, int *act){
     SDL_Renderer *renderer = v->sdl->renderer;
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
