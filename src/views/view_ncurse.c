@@ -23,7 +23,7 @@ view *init_view_ncurse(){
     initscr();
     v->type = 'n';
     getmaxyx(stdscr, v->height, v->width);
-    v->width -= 20;
+    v->width -= 40;
     v->height -= 2;
 
     v->ncurse = vn;
@@ -61,7 +61,7 @@ void destroy_view_ncurses(view *v){
     endwin();
     clear();
     echo();
-    free(v->ncurse);
+    // free(v->ncurse);
     free(v);
 }
 
