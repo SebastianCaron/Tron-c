@@ -173,10 +173,12 @@ void go_to_menu(controller *c){
                 break;
             case PLAY_BOT_ALGO:
                 controller_play_solo_j_vs_random(c);
-                nbMenu = 0; 
+                nbMenu = 0;
+                act = NO_ACTION;
                 break;
             case PLAY_MULTI:
                 controller_play_multi(c);
+                act = NO_ACTION;
                 nbMenu = 0; 
                 break;
             case RETOUR:
