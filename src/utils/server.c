@@ -14,7 +14,7 @@ server *init_serveur(int port, int nb_connect){
         exit(EXIT_FAILURE);
     }
 
-    int server_fd, new_socket;
+    int server_fd;
     s->address = calloc(1, sizeof(struct sockaddr_in));
     if(!s->address){
         perror("ERREUR INITIALISATION STRUCT ADDRESS");

@@ -5,6 +5,7 @@
 #define PI 3.14159265358979323846
 
 #include "model.h"
+#include "../utils/hashmap.h"
 
 model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **grid){
     model *game = (model *) malloc(sizeof(model));
@@ -150,7 +151,7 @@ int est_fini(model *m){
     return (m->n_player_alive <= 1) ? 1 : 0;
 }
 
-position *get_nearest_point_available(model *m, int x, int y){
+position *create_position(int x, int y){
     position *p = calloc(1, sizeof(position));
     if(p == NULL){
         perror("[MODEL] ERREUR ALLOC Position");
@@ -158,9 +159,26 @@ position *get_nearest_point_available(model *m, int x, int y){
     }
     p->x = x;
     p->y = y;
+    return p;
+}
 
+int position_hash(void *v){
+    position *p = v;
+    return p->x * 1000 + p->y;
+}
+int position_equal(void *a, void *b){
+    position *v1 = a;
+    position *v2 = b;
+
+    return (v1->x == v2->x && v1->y == v2->y) ? 1 : 0;
+}
+
+position *get_nearest_point_available(model *m, int x, int y){
+    position *p = create_position(x, y);
     // TODO
+    hashmap *h = init_hashmap(-1, position_equal, position_hash);
 
+    destroy_hashmap(h);
     return p;
 }
 
@@ -190,5 +208,24 @@ void init_positions(model *m){
 }
 
 void init_directions(model *m, direction *dirs){
-
+    for(int i = 0; i < m->n_player; i++){
+        int d_x = (m->nb_colonnes_grid / 2) - m->players[i]->x;
+        int d_y = (m->nb_lignes_grid / 2) - m->players[i]->y;
+        // printf("(%d, %d) : %d, %d\n", m->players[i]->x, m->players[i]->y, d_x, d_y);
+        if((d_x  < 0 ? -d_x : d_x) > (d_y  < 0 ? -d_y : d_y)){
+            if(d_x > 0){
+                // printf("RIGHT\n");
+                dirs[i] = RIGHT;
+            }else{
+                // printf("LEFT\n");
+                dirs[i] = LEFT;
+            }
+        }else{
+            if(d_y > 0){
+                dirs[i] = DOWN;
+            }else{
+                dirs[i] = UP;
+            }
+        }
+    }
 }

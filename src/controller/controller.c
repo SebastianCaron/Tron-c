@@ -14,8 +14,9 @@ void controller_play_solo_j_vs_random(controller *c){
     create_model(c, 2);
     int i = 0;
     int *scores = calloc(2, sizeof(int));
-    direction *dirs = calloc(1, sizeof(direction));
-
+    direction *dirs = calloc(2, sizeof(direction));
+    // HANDLE ERROR
+    init_directions(c->m, dirs);
     clock_t start, end;
     double duration;
 
@@ -26,7 +27,7 @@ void controller_play_solo_j_vs_random(controller *c){
             c->views[i]->get_direction(c->views[i],1, dirs);
         }
         move_player(c->m, 0, dirs[0]);
-        move_player(c->m, 1, UP);
+        move_player(c->m, 1, dirs[1]);
 
         collision_player(c->m, 0);
         collision_player(c->m, 1);
@@ -50,7 +51,8 @@ void controller_play_multi(controller *c){
     int i = 0;
     int *scores = calloc(2, sizeof(int));
     direction *dirs = calloc(2, sizeof(direction));
-
+    // HANDLE ERROR
+    init_directions(c->m, dirs);
     clock_t start, end;
     double duration;
 
