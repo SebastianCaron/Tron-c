@@ -149,100 +149,41 @@ void destroy_controller(controller *c) {
     free(c);
 }
 
-void go_to_menu_principal(controller *c){
+
+void go_to_menu(controller *c){
+    int nbMenu = c->views[0]->nbMenu;
     actions act = NO_ACTION;
     int selected_option = 0;
-    // INIT SDL MENU PRINCIPAL
+
     while(1){
         for(int i = 0; i < c->nb_view; i++){
-            // MET A JOUR LES VUES
-            c->views[i]->affiche_menu_principal(c->views[i], &selected_option);
+            c->views[i]->affiche_menu(c->views[i], &selected_option, nbMenu);
         }
 
         for(int i = 0; i < c->nb_view; i++){
-            // RECUPERE LES ACTIONS
-            c->views[i]->get_action(c->views[i], &act, &selected_option);
+            c->views[i]->get_action(c->views[i], &act, &selected_option, nbMenu);
         }
 
-
-        switch (act)
-        {
-            // EFFECTUE L'ACTION
-            // DETRUIRE MENU & BUTTONS
+        switch (act) {
             case MENU_SOLO:
-                go_to_menu_solo(c);
-                return;
-            case MENU_MULTI:
-                go_to_menu_multijoueur(c);
-                return;
-            case QUITTER:
-                return;
-            default:
+                nbMenu = 1; 
                 break;
-        }
-
-        // POUR EVITER DE RAFFRAICHIR TROP SOUVENT
-        usleep(10000);
-    }
-}
-
-
-void go_to_menu_solo(controller *c){
-    actions act = NO_ACTION;
-    int selected_option = 0;
-    while(1){
-        for(int i = 0; i < c->nb_view; i++){
-            // MET A JOUR LES VUES
-            c->views[i]->affiche_menu_solo(c->views[i], &selected_option);
-        }
-
-        for(int i = 0; i < c->nb_view; i++){
-            // RECUPERE LES ACTIONS
-            c->views[i]->get_action(c->views[i], &act, &selected_option);
-        }
-
-
-        switch (act)
-        {
+            case MENU_MULTI:
+                nbMenu = 2; 
+                break;
             case PLAY_BOT_ALGO:
                 controller_play_solo_j_vs_random(c);
-                go_to_menu_principal(c);
-                return;
-            case RETOUR:
-                go_to_menu_principal(c);
-                return;
-            default:
+                nbMenu = 0; 
                 break;
-        }
-
-        // POUR EVITER DE RAFFRAICHIR TROP SOUVENT
-        usleep(10000);
-    }
-}
-void go_to_menu_multijoueur(controller *c){
-    actions act = NO_ACTION;
-    int selected_option = 0;
-    while(1){
-        for(int i = 0; i < c->nb_view; i++){
-            // MET A JOUR LES VUES
-            c->views[i]->affiche_menu_multijoueur(c->views[i], &selected_option);
-        }
-
-        for(int i = 0; i < c->nb_view; i++){
-            // RECUPERE LES ACTIONS
-            c->views[i]->get_action(c->views[i], &act, &selected_option);
-        }
-
-
-        switch (act)
-        {
             case PLAY_MULTI:
                 controller_play_multi(c);
-                go_to_menu_principal(c);
-                return;
+                nbMenu = 0; 
+                break;
             case RETOUR:
-                go_to_menu_principal(c);
-                return;
+                nbMenu = 0; 
+                break;
+            case QUITTER:
+                return; 
             default:
                 break;
         }
@@ -251,3 +192,106 @@ void go_to_menu_multijoueur(controller *c){
         usleep(10000);
     }
 }
+
+// void go_to_menu_principal(controller *c){
+//     actions act = NO_ACTION;
+//     int selected_option = 0;
+//     // INIT SDL MENU PRINCIPAL
+//     while(1){
+//         for(int i = 0; i < c->nb_view; i++){
+//             // MET A JOUR LES VUES
+//             c->views[i]->affiche_menu_principal(c->views[i], &selected_option);
+//         }
+
+//         for(int i = 0; i < c->nb_view; i++){
+//             // RECUPERE LES ACTIONS
+//             c->views[i]->get_action(c->views[i], &act, &selected_option);
+//         }
+
+
+//         switch (act)
+//         {
+//             // EFFECTUE L'ACTION
+//             // DETRUIRE MENU & BUTTONS
+//             case MENU_SOLO:
+//                 go_to_menu_solo(c);
+//                 return;
+//             case MENU_MULTI:
+//                 go_to_menu_multijoueur(c);
+//                 return;
+//             case QUITTER:
+//                 return;
+//             default:
+//                 break;
+//         }
+
+//         // POUR EVITER DE RAFFRAICHIR TROP SOUVENT
+//         usleep(10000);
+//     }
+// }
+
+
+// void go_to_menu_solo(controller *c){
+//     actions act = NO_ACTION;
+//     int selected_option = 0;
+//     while(1){
+//         for(int i = 0; i < c->nb_view; i++){
+//             // MET A JOUR LES VUES
+//             c->views[i]->affiche_menu_solo(c->views[i], &selected_option);
+//         }
+
+//         for(int i = 0; i < c->nb_view; i++){
+//             // RECUPERE LES ACTIONS
+//             c->views[i]->get_action(c->views[i], &act, &selected_option);
+//         }
+
+
+//         switch (act)
+//         {
+//             case PLAY_BOT_ALGO:
+//                 controller_play_solo_j_vs_random(c);
+//                 go_to_menu_principal(c);
+//                 return;
+//             case RETOUR:
+//                 go_to_menu_principal(c);
+//                 return;
+//             default:
+//                 break;
+//         }
+
+//         // POUR EVITER DE RAFFRAICHIR TROP SOUVENT
+//         usleep(10000);
+//     }
+// // }
+// void go_to_menu_multijoueur(controller *c){
+//     actions act = NO_ACTION;
+//     int selected_option = 0;
+//     while(1){
+//         for(int i = 0; i < c->nb_view; i++){
+//             // MET A JOUR LES VUES
+//             c->views[i]->affiche_menu_multijoueur(c->views[i], &selected_option);
+//         }
+
+//         for(int i = 0; i < c->nb_view; i++){
+//             // RECUPERE LES ACTIONS
+//             c->views[i]->get_action(c->views[i], &act, &selected_option);
+//         }
+
+
+//         switch (act)
+//         {
+//             case PLAY_MULTI:
+//                 controller_play_multi(c);
+//                 go_to_menu_principal(c);
+//                 return;
+//             case RETOUR:
+//                 go_to_menu_principal(c);
+//                 return;
+//             default:
+//                 break;
+//         }
+
+//         // POUR EVITER DE RAFFRAICHIR TROP SOUVENT
+//         usleep(10000);
+//     }
+// }

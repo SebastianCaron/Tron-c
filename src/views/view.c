@@ -6,4 +6,3 @@
 #include "./view_sdl.h"
 #include "../model/model.h"
 #include "../controller/controller.h"
-

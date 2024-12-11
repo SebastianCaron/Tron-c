@@ -64,8 +64,11 @@ int main(int argc, char **argv){
         c = init_controller(vncr);
     }
 
-    go_to_menu_principal(c);
+
+    go_to_menu(c);
     destroy_controller(c);
+    // c->views[0]->nbMenu = 0;
+    // c->views[1]->nbMenu = 0;
 
     return EXIT_SUCCESS;
 }
