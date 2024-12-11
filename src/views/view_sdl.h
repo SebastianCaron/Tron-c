@@ -12,7 +12,7 @@ view *init_view_sdl();
 
 void destroy_view_sdl(view *);
 
-direction get_direction_sdl(view *v, direction *dir);
+direction get_direction_sdl(view *v, int nb_player_on_keyboard, direction *dirs);
 
 void update_screen_sdl(view *, int, int *, int **, int , int);
 

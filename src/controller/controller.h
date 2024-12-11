@@ -6,6 +6,8 @@
 #include "../views/view.h"
 #include "../utils/utils.h"
 
+#define SPEED_FRM 100000
+
 
 typedef struct {
     model *m;

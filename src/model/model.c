@@ -184,3 +184,7 @@ void init_positions(model *m){
         m->players[k] = get_nearest_point_available(m, round(x), round(y));
     }
 }
+
+void init_directions(model *m, direction *dirs){
+    
+}

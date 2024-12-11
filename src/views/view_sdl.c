@@ -86,7 +86,7 @@ void quitter(SDL_Window *window, SDL_Renderer *renderer){
 
 
 // J'ai mis l'ecoute d'évenement pour quitter ici parce que je sais pas ou le mettre sinon a part dans le main
-direction get_direction_sdl(view *v, direction *dir){    
+direction get_direction_sdl(view *v, int nb_player_on_keyboard, direction *dirs){    
     SDL_Event event;
     while (SDL_PollEvent(&event) > 0){
         if (event.type == SDL_QUIT){
@@ -94,16 +94,28 @@ direction get_direction_sdl(view *v, direction *dir){
         }else if(event.type == SDL_KEYDOWN){
             switch(event.key.keysym.sym){
                 case SDLK_UP:
-                    if((*dir) != DOWN) (*dir) = UP;
+                    if((dirs[0]) != DOWN) (dirs[0]) = UP;
                     return UP;
                 case SDLK_DOWN:
-                    if((*dir) != UP) (*dir) = DOWN;
+                    if((dirs[0]) != UP) (dirs[0]) = DOWN;
                     return DOWN;
                 case SDLK_LEFT :
-                    if((*dir) != RIGHT) (*dir) = LEFT;
+                    if((dirs[0]) != RIGHT) (dirs[0]) = LEFT;
                     return LEFT;
                 case SDLK_RIGHT:
-                    if((*dir) != LEFT) (*dir) = RIGHT;
+                    if((dirs[0]) != LEFT) (dirs[0]) = RIGHT;
+                    return RIGHT;
+                case SDLK_z:
+                    if((dirs[nb_player_on_keyboard-1]) != DOWN) (dirs[nb_player_on_keyboard-1]) = UP;
+                    return UP;
+                case SDLK_q:
+                    if((dirs[nb_player_on_keyboard-1]) != RIGHT) (dirs[nb_player_on_keyboard-1]) = LEFT;
+                    return LEFT;
+                case SDLK_s:
+                    if((dirs[nb_player_on_keyboard-1]) != UP) (dirs[nb_player_on_keyboard-1]) = DOWN;
+                    return DOWN;
+                case SDLK_d:
+                    if((dirs[nb_player_on_keyboard-1]) != LEFT) (dirs[nb_player_on_keyboard-1]) = RIGHT;
                     return RIGHT;
                 default:
                     return NODIRECTION;

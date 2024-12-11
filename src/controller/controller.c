@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "../model/model.h"
 #include "../views/view.h"
@@ -13,13 +14,18 @@ void controller_play_solo_j_vs_random(controller *c){
     create_model(c, 2);
     int i = 0;
     int *scores = calloc(2, sizeof(int));
-    direction dir = LEFT;
+    direction *dirs = calloc(1, sizeof(direction));
+
+    clock_t start, end;
+    double duration;
+
     while(!est_fini(c->m)){
+        start = clock();
         for(i = 0; i < c->nb_view; i++){
             // RECUPERE LES INPUTS VIA LES VIEWS
-            c->views[i]->get_direction(c->views[i], &dir);
+            c->views[i]->get_direction(c->views[i],1, dirs);
         }
-        move_player(c->m, 0, dir);
+        move_player(c->m, 0, dirs[0]);
         move_player(c->m, 1, UP);
 
         collision_player(c->m, 0);
@@ -30,7 +36,42 @@ void controller_play_solo_j_vs_random(controller *c){
             // MET A JOUR LES VIEWS
             c->views[i]->update_screen(c->views[i],2, scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
         }
-        usleep(100000);
+        end = clock();
+        duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
+        usleep(SPEED_FRM - duration);
+    }
+    // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+}
+void controller_play_multi(controller *c){
+    create_model(c, 2);
+    int i = 0;
+    int *scores = calloc(2, sizeof(int));
+    direction *dirs = calloc(2, sizeof(direction));
+
+    clock_t start, end;
+    double duration;
+
+    while(!est_fini(c->m)){
+        start = clock();
+        for(i = 0; i < c->nb_view; i++){
+            // RECUPERE LES INPUTS VIA LES VIEWS
+            c->views[i]->get_direction(c->views[i],2, dirs);
+        }
+        move_player(c->m, 0, dirs[0]);
+        move_player(c->m, 1, dirs[1]);
+
+        collision_player(c->m, 0);
+        collision_player(c->m, 1);
+
+
+        for(i = 0; i < c->nb_view; i++){
+            // MET A JOUR LES VIEWS
+            c->views[i]->update_screen(c->views[i],2, scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+        }
+        
+        end = clock();
+        duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
+        usleep(SPEED_FRM - duration);
     }
     // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
 }
@@ -160,6 +201,7 @@ void go_to_menu_solo(controller *c){
         {
             case PLAY_BOT_ALGO:
                 controller_play_solo_j_vs_random(c);
+                go_to_menu_principal(c);
                 return;
             case RETOUR:
                 go_to_menu_principal(c);
@@ -189,6 +231,10 @@ void go_to_menu_multijoueur(controller *c){
 
         switch (act)
         {
+            case PLAY_MULTI:
+                controller_play_multi(c);
+                go_to_menu_principal(c);
+                return;
             case RETOUR:
                 go_to_menu_principal(c);
                 return;
