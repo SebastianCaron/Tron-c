@@ -13,7 +13,6 @@
 void controller_play_solo_j_vs_random(controller *c){
     create_model(c, 2);
     int i = 0;
-    int *scores = calloc(2, sizeof(int));
     direction *dirs = calloc(2, sizeof(direction));
     // HANDLE ERROR
     init_directions(c->m, dirs);
@@ -35,21 +34,18 @@ void controller_play_solo_j_vs_random(controller *c){
 
         for(i = 0; i < c->nb_view; i++){
             // MET A JOUR LES VIEWS
-            c->views[i]->update_screen(c->views[i],2, scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+            c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
         }
         end = clock();
         duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
         usleep(SPEED_FRM - duration);
     }
-
-    free(scores);
     free(dirs);
     // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
 }
 void controller_play_multi(controller *c){
     create_model(c, 2);
     int i = 0;
-    int *scores = calloc(2, sizeof(int));
     direction *dirs = calloc(2, sizeof(direction));
     // HANDLE ERROR
     init_directions(c->m, dirs);
@@ -71,14 +67,13 @@ void controller_play_multi(controller *c){
 
         for(i = 0; i < c->nb_view; i++){
             // MET A JOUR LES VIEWS
-            c->views[i]->update_screen(c->views[i],2, scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+            c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
         }
         
         end = clock();
         duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
         usleep(SPEED_FRM - duration);
     }
-    free(scores);
     free(dirs);
     // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
 }
