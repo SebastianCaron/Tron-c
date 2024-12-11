@@ -63,12 +63,14 @@ view *init_view_ncurse(){
 void destroy_view_ncurses(view *v){
     if(v == NULL) return;
     getch();
-    endwin();
-    clear();
-    echo();
     free(v->ncurse->grid_w);
     free(v->ncurse);
     free(v);
+    clear();
+    echo();
+    endwin();
+    
+
 }
 
 direction get_direction_ncurses(view *v, int nb_player_on_keyboard, direction *dirs){

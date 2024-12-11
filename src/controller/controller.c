@@ -78,7 +78,13 @@ void controller_play_multi(controller *c){
         duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
         usleep(SPEED_FRM - duration);
     }
+    free(scores);
+    free(dirs);
     // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+}
+
+void controller_play_online(controller *c){
+
 }
 
 controller *init_controller(view *v, ...){

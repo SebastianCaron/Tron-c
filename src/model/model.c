@@ -29,19 +29,6 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **
     game->n_player= nb_player;
     game->n_player_alive = nb_player;
 
-
-    // game->grid = calloc(nb_lignes_grid, sizeof(int *));
-    // if(!game->grid){
-    //     perror("[MODEL] erreur allocation des lignes de la grille de jeu.");
-    //     exit(EXIT_FAILURE);
-    // }
-    // for(int i = 0; i < nb_lignes_grid; i++){
-    //     game->grid[i] = (int *) calloc(nb_colonnes_grid, sizeof(int));
-    //     if(!game->grid[i]){
-    //         perror("[MODEL] erreur allocation d'une colonne de la grille de jeu.");
-    //         exit(EXIT_FAILURE);
-    //     }
-    // }
     game->grid = grid;
     game->nb_lignes_grid = nb_lignes_grid;
     game->nb_colonnes_grid = nb_colonnes_grid;
