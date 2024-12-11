@@ -186,7 +186,7 @@ void go_to_menu(controller *c){
                 break;
             case QUITTER:
                 return; 
-            default:
+            default:    
                 break;
         }
 
