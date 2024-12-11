@@ -61,7 +61,8 @@ void destroy_view_ncurses(view *v){
     endwin();
     clear();
     echo();
-    // free(v->ncurse);
+    free(v->ncurse->grid_w);
+    free(v->ncurse);
     free(v);
 }
 

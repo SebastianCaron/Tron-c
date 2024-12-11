@@ -12,11 +12,6 @@
 
 int test(){
 
-    view *vncr = init_view_sdl();
-    controller *c = init_controller(vncr);
-    go_to_menu_principal(c);
-
-    destroy_controller(c);
     return EXIT_SUCCESS;
 }
 
@@ -28,10 +23,7 @@ int main(int argc, char **argv){
     view *vncr = NULL;
     view *vsdl = NULL;
     if(argc == 1){
-        // INIT LE JEU AVEC NCURSE
-        // system("printf '\\e[8;40;100t'"); // CHANGE SIZE TO 40L, 100C
-        vncr = init_view_ncurse();
-        vncr->destroy_self(vncr);
+        // INIT JEU AVEC SDL OU NCURSE ?
         return EXIT_SUCCESS;
     }
 
