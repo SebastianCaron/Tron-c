@@ -21,11 +21,5 @@ SDL_Rect *createRect(int h, int w, int x, int y);
 SDL_Rect afficheTexte(SDL_Renderer *renderer,char *texte, int y, int titre);
 
 void affiche_menu_sdl(view *v, int *act, int nbMenu);
-// void afficheMenuPrincipalSDL(view *v, int *act);
-// void afficheMenuSoloSDL(view *v, int *act);
-// void afficheMenuMultiplayerSDL(view *v, int *act);
 
 void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu);
-// void get_action_menu_principal_sdl(view *v, actions *act, int *selected_option);
-// void get_action_menu_solo_sdl(view *v, actions *act, int *selected_option);
-// void get_action_menu_multi_sdl(view *v, actions *act, int *selected_option);
