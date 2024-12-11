@@ -23,6 +23,9 @@ typedef struct v{
     view_ncurse *ncurse;
     view_sdl *sdl;
 
+    int nbMenu;
+    
+
     unsigned width;
     unsigned height;
 
@@ -32,10 +35,13 @@ typedef struct v{
     direction (*get_direction)(struct v *, int nb_player_on_keyboard, direction *dirs);
     void (*destroy_self)(struct v *);
 
-    void (*affiche_menu_principal)(struct v *, int *);
-    void (*affiche_menu_solo)(struct v *, int *);
-    void (*affiche_menu_multijoueur)(struct v *, int *);
+    void (*affiche_menu)(struct v *, int *, int );
+    // void (*affiche_menu_principal)(struct v *, int *);
+    // void (*affiche_menu_solo)(struct v *, int *);
+    // void (*affiche_menu_multijoueur)(struct v *, int *);
 
-    void (*get_action)(struct v *, actions *, int *);
+    // void (*get_action)(struct v *, actions *, int *);
+    void (*get_action)(struct v *, actions *, int *, int);
 } view;
+
 

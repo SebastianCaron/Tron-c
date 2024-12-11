@@ -46,9 +46,14 @@ view *init_view_ncurse(){
     v->get_direction = get_direction_ncurses;
     // v->update_change_screen = ;
     v->update_screen = update_screen_ncurses;
-    v->affiche_menu_principal = afficheMenuPrincipalNC;
-    v->affiche_menu_multijoueur = afficheMenuMultiplayerNC;
-    v->affiche_menu_solo = afficheMenuSoloNC;
+
+
+    v->affiche_menu = afficheMenuNC;
+    // v->affiche_menu_principal = afficheMenuPrincipalNC;
+    // v->affiche_menu_multijoueur = afficheMenuMultiplayerNC;
+    // v->affiche_menu_solo = afficheMenuSoloNC;
+
+    v->nbMenu = 0;
 
     refresh();
 
@@ -119,42 +124,54 @@ void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int 
     wrefresh(v->ncurse->grid_w);
 }
 
-void afficheMenuPrincipalNC(view *v, int *selected_option){
-    v->get_action = get_action_menu_principal_ncurses;
+void afficheMenuNC(view *v, int *selected_option, int nbMenu){
+    v->get_action = get_action_menu_ncurses;
 
-    const char *options[] = {"SOLO", "MULTIPLAYER", "QUIT"};
-    int n_options = 3;
-    if(*selected_option < 0) *selected_option = n_options-1;
-    if(*selected_option >= n_options) *selected_option = 0;
+    const char *options[3][4] = {
+        {"TRON", "solo", "multiplayer", "EXIT"},       
+        {"SOLO", "vs Algo", "vs Q-Learning", "BACK"},     
+        {"MULTIPLAYER", "on this machine (2 players)", "with others", "BACK"}      
+    };
+
+    int n_options = 4;
+    if(*selected_option < 1) *selected_option = n_options-1;
+    if(*selected_option >= n_options) *selected_option = 1;
 
     int choix = *selected_option;
 
     int hauteur, largeur;
     getmaxyx(stdscr, hauteur, largeur);
 
-    const char *titre = "TRON";
-    int titre_x = (largeur - strlen(titre)) / 2;
+    int titre_x = (largeur - strlen(options[nbMenu][0])) / 2;
 
     int options_y = hauteur / 2;
     int options_x = (largeur - 10) / 2;
 
     clear();
-    mvprintw(hauteur / 4, titre_x, "%s", titre);
+    mvprintw(hauteur / 4, titre_x, "%s", options[nbMenu][0]);
 
-    for (int i = 0; i < n_options; i++) {
+    for (int i = 1; i < n_options; i++) {
         if (i == choix) {
-            mvprintw(options_y + i, options_x, "< %s >", options[i]);
+            mvprintw(options_y + i, options_x, "< %s >", options[nbMenu][i]);
         } else {
-            mvprintw(options_y + i, options_x, "  %s  ", options[i]);
+            mvprintw(options_y + i, options_x, "  %s  ", options[nbMenu][i]);
         }
     }
 
     refresh();
 }
 
-void get_action_menu_principal_ncurses(view *v, actions *act, int *selected_option){
+
+void get_action_menu_ncurses(view *v, actions *act, int *selected_option, int nbMenu){
     refresh();
     int ch = getch();
+
+    const actions menuActions[3][3] = {
+        {MENU_SOLO, MENU_MULTI, QUITTER},       
+        {PLAY_BOT_ALGO, PLAY_BOT_Q, RETOUR},    
+        {PLAY_MULTI, PLAY_ONLINE, RETOUR}       
+    };
+
     switch (ch) {
         case KEY_UP:
             (*selected_option) = (*selected_option) - 1;
@@ -163,150 +180,199 @@ void get_action_menu_principal_ncurses(view *v, actions *act, int *selected_opti
             (*selected_option) = (*selected_option) + 1;
             break;
         case '\n':
-            if((*selected_option) == 0){
-                (*act) = MENU_SOLO;
-                return;
-            }
-            if((*selected_option) == 1){
-                (*act) = MENU_MULTI;
-                return;
-            }
-            if((*selected_option) == 2){
-                (*act) = QUITTER;
-                return;
-            }
+            (*act) = menuActions[nbMenu][*selected_option-1];
             return;
-        // default:
-        //     (*act) = NO_ACTION;
-        //     return;
     }
 }
 
-void afficheMenuSoloNC(view *v, int *selected_option){
-    v->get_action = get_action_menu_solo_ncurses;
+// void afficheMenuPrincipalNC(view *v, int *selected_option){
+//     v->get_action = get_action_menu_principal_ncurses;
 
-    const char *options[] = {"VS ALGO", "VS Q-LEARNING", "BACK"};
-    int n_options = 3;
-    if(*selected_option < 0) *selected_option = n_options-1;
-    if(*selected_option >= n_options) *selected_option = 0;
+//     const char *options[] = {"SOLO", "MULTIPLAYER", "QUIT"};
+//     int n_options = 3;
+//     if(*selected_option < 0) *selected_option = n_options-1;
+//     if(*selected_option >= n_options) *selected_option = 0;
 
-    int choix = *selected_option;
+//     int choix = *selected_option;
 
-    int hauteur, largeur;
-    getmaxyx(stdscr, hauteur, largeur);
+//     int hauteur, largeur;
+//     getmaxyx(stdscr, hauteur, largeur);
 
-    const char *titre = "SOLO";
-    int titre_x = (largeur - strlen(titre)) / 2;
+//     const char *titre = "TRON";
+//     int titre_x = (largeur - strlen(titre)) / 2;
 
-    int options_y = hauteur / 2;
-    int options_x = (largeur - 10) / 2;
+//     int options_y = hauteur / 2;
+//     int options_x = (largeur - 10) / 2;
 
-    clear();
-    mvprintw(hauteur / 4, titre_x, "%s", titre);
+//     clear();
+//     mvprintw(hauteur / 4, titre_x, "%s", titre);
 
-    for (int i = 0; i < n_options; i++) {
-        if (i == choix) {
-            mvprintw(options_y + i, options_x, "< %s >", options[i]);
-        } else {
-            mvprintw(options_y + i, options_x, "  %s  ", options[i]);
-        }
-    }
+//     for (int i = 0; i < n_options; i++) {
+//         if (i == choix) {
+//             mvprintw(options_y + i, options_x, "< %s >", options[i]);
+//         } else {
+//             mvprintw(options_y + i, options_x, "  %s  ", options[i]);
+//         }
+//     }
 
-    refresh();
-}
+//     refresh();
+// }
 
-void get_action_menu_solo_ncurses(view *v, actions *act, int *selected_option){
-    refresh();
-    int ch = getch();
-    switch (ch) {
-        case KEY_UP:
-            (*selected_option) = (*selected_option) - 1;
-            break;
-        case KEY_DOWN:
-            (*selected_option) = (*selected_option) + 1;
-            break;
-        case '\n':
-            if((*selected_option) == 0){
-                (*act) = PLAY_BOT_ALGO;
-                return;
-            }
-            if((*selected_option) == 1){
-                (*act) = PLAY_BOT_Q;
-                return;
-            }
-            if((*selected_option) == 2){
-                (*act) = RETOUR;
-                return;
-            }
-            return;
-        // default:
-        //     (*act) = NO_ACTION;
-        //     return;
-    }
-}
+// void get_action_menu_principal_ncurses(view *v, actions *act, int *selected_option){
+//     refresh();
+//     int ch = getch();
+//     switch (ch) {
+//         case KEY_UP:
+//             (*selected_option) = (*selected_option) - 1;
+//             break;
+//         case KEY_DOWN:
+//             (*selected_option) = (*selected_option) + 1;
+//             break;
+//         case '\n':
+//             if((*selected_option) == 0){
+//                 (*act) = MENU_SOLO;
+//                 return;
+//             }
+//             if((*selected_option) == 1){
+//                 (*act) = MENU_MULTI;
+//                 return;
+//             }
+//             if((*selected_option) == 2){
+//                 (*act) = QUITTER;
+//                 return;
+//             }
+//             return;
+//         // default:
+//         //     (*act) = NO_ACTION;
+//         //     return;
+//     }
+// }
 
-void afficheMenuMultiplayerNC(view *v, int *selected_option){
-    v->get_action = get_action_menu_multi_ncurses;
+// void afficheMenuSoloNC(view *v, int *selected_option){
+//     v->get_action = get_action_menu_solo_ncurses;
 
-    const char *options[] = {"ON THIS MACHINE", "ONLINE", "BACK"};
-    int n_options = 3;
-    if(*selected_option < 0) *selected_option = n_options-1;
-    if(*selected_option >= n_options) *selected_option = 0;
+//     const char *options[] = {"VS ALGO", "VS Q-LEARNING", "BACK"};
+//     int n_options = 3;
+//     if(*selected_option < 0) *selected_option = n_options-1;
+//     if(*selected_option >= n_options) *selected_option = 0;
 
-    int choix = *selected_option;
+//     int choix = *selected_option;
 
-    int hauteur, largeur;
-    getmaxyx(stdscr, hauteur, largeur);
+//     int hauteur, largeur;
+//     getmaxyx(stdscr, hauteur, largeur);
 
-    const char *titre = "MULTIPLAYER";
-    int titre_x = (largeur - strlen(titre)) / 2;
+//     const char *titre = "SOLO";
+//     int titre_x = (largeur - strlen(titre)) / 2;
 
-    int options_y = hauteur / 2;
-    int options_x = (largeur - 10) / 2;
+//     int options_y = hauteur / 2;
+//     int options_x = (largeur - 10) / 2;
 
-    clear();
-    mvprintw(hauteur / 4, titre_x, "%s", titre);
+//     clear();
+//     mvprintw(hauteur / 4, titre_x, "%s", titre);
 
-    for (int i = 0; i < n_options; i++) {
-        if (i == choix) {
-            mvprintw(options_y + i, options_x, "< %s >", options[i]);
-        } else {
-            mvprintw(options_y + i, options_x, "  %s  ", options[i]);
-        }
-    }
+//     for (int i = 0; i < n_options; i++) {
+//         if (i == choix) {
+//             mvprintw(options_y + i, options_x, "< %s >", options[i]);
+//         } else {
+//             mvprintw(options_y + i, options_x, "  %s  ", options[i]);
+//         }
+//     }
 
-    refresh();
-}
+//     refresh();
+// }
 
-void get_action_menu_multi_ncurses(view *v, actions *act, int *selected_option){
-    refresh();
-    int ch = getch();
-    switch (ch) {
-        case KEY_UP:
-            (*selected_option) = (*selected_option) - 1;
-            break;
-        case KEY_DOWN:
-            (*selected_option) = (*selected_option) + 1;
-            break;
-        case '\n':
-            if((*selected_option) == 0){
-                (*act) = PLAY_MULTI;
-                return;
-            }
-            if((*selected_option) == 1){
-                (*act) = PLAY_ONLINE;
-                return;
-            }
-            if((*selected_option) == 2){
-                (*act) = RETOUR;
-                return;
-            }
-            return;
-        // default:
-        //     (*act) = NO_ACTION;
-        //     return;
-    }
-}
+// void get_action_menu_solo_ncurses(view *v, actions *act, int *selected_option){
+//     refresh();
+//     int ch = getch();
+//     switch (ch) {
+//         case KEY_UP:
+//             (*selected_option) = (*selected_option) - 1;
+//             break;
+//         case KEY_DOWN:
+//             (*selected_option) = (*selected_option) + 1;
+//             break;
+//         case '\n':
+//             if((*selected_option) == 0){
+//                 (*act) = PLAY_BOT_ALGO;
+//                 return;
+//             }
+//             if((*selected_option) == 1){
+//                 (*act) = PLAY_BOT_Q;
+//                 return;
+//             }
+//             if((*selected_option) == 2){
+//                 (*act) = RETOUR;
+//                 return;
+//             }
+//             return;
+//         // default:
+//         //     (*act) = NO_ACTION;
+//         //     return;
+//     }
+// }
+
+// void afficheMenuMultiplayerNC(view *v, int *selected_option){
+//     v->get_action = get_action_menu_multi_ncurses;
+
+//     const char *options[] = {"ON THIS MACHINE", "ONLINE", "BACK"};
+//     int n_options = 3;
+//     if(*selected_option < 0) *selected_option = n_options-1;
+//     if(*selected_option >= n_options) *selected_option = 0;
+
+//     int choix = *selected_option;
+
+//     int hauteur, largeur;
+//     getmaxyx(stdscr, hauteur, largeur);
+
+//     const char *titre = "MULTIPLAYER";
+//     int titre_x = (largeur - strlen(titre)) / 2;
+
+//     int options_y = hauteur / 2;
+//     int options_x = (largeur - 10) / 2;
+
+//     clear();
+//     mvprintw(hauteur / 4, titre_x, "%s", titre);
+
+//     for (int i = 0; i < n_options; i++) {
+//         if (i == choix) {
+//             mvprintw(options_y + i, options_x, "< %s >", options[i]);
+//         } else {
+//             mvprintw(options_y + i, options_x, "  %s  ", options[i]);
+//         }
+//     }
+
+//     refresh();
+// }
+
+// void get_action_menu_multi_ncurses(view *v, actions *act, int *selected_option){
+//     refresh();
+//     int ch = getch();
+//     switch (ch) {
+//         case KEY_UP:
+//             (*selected_option) = (*selected_option) - 1;
+//             break;
+//         case KEY_DOWN:
+//             (*selected_option) = (*selected_option) + 1;
+//             break;
+//         case '\n':
+//             if((*selected_option) == 0){
+//                 (*act) = PLAY_MULTI;
+//                 return;
+//             }
+//             if((*selected_option) == 1){
+//                 (*act) = PLAY_ONLINE;
+//                 return;
+//             }
+//             if((*selected_option) == 2){
+//                 (*act) = RETOUR;
+//                 return;
+//             }
+//             return;
+//         // default:
+//         //     (*act) = NO_ACTION;
+//         //     return;
+//     }
+// }
 
 
 // -lncurses
