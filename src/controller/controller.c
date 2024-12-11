@@ -40,6 +40,9 @@ void controller_play_solo_j_vs_random(controller *c){
         duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
         usleep(SPEED_FRM - duration);
     }
+
+    free(scores);
+    free(dirs);
     // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
 }
 void controller_play_multi(controller *c){
@@ -122,6 +125,7 @@ void create_model(controller *c, int nb_player){
         if(c->views[i]->type == 'n'){
             grid *g = load_map("./maps/map1.txt", c->views[i]->height, c->views[i]->width);
             c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
+            free(g);
             return;
         }else{
             best = c->views[i];
@@ -129,10 +133,8 @@ void create_model(controller *c, int nb_player){
     }
 
     grid *g = load_map("./maps/map1.txt", best->height, best->width);
-    // printf("G : %d %d\n", best->width, best->height);
-    // display_grid(g);
-
     c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
+    free(g);
 }
 
 void destroy_controller(controller *c) {
@@ -140,6 +142,7 @@ void destroy_controller(controller *c) {
     for(int i = 0; i < c->nb_view; i++){
         c->views[i]->destroy_self(c->views[i]);
     }
+    free(c->views);
     destroy_model(c->m);
     free(c);
 }

@@ -60,7 +60,11 @@ void destroy_model(model *m){
     if(!m) return;
 
     free(m->dead);
+    for(int i = 0; i < m->n_player; i++){
+        free(m->players[i]);
+    }
     free(m->players);
+    free(m->scores);
 
     for(int i = 0; i < m->nb_lignes_grid; i++){
         free(m->grid[i]);
@@ -186,5 +190,5 @@ void init_positions(model *m){
 }
 
 void init_directions(model *m, direction *dirs){
-    
+
 }
