@@ -149,11 +149,11 @@ void destroy_controller(controller *c) {
 
 
 void go_to_menu(controller *c){
-    int nbMenu = c->views[0]->nbMenu;
+    int nbMenu = c->views[0]->nbMenu || c->views[0]->nbMenu; //Si jamais y'a qu'une seule vue qui est lancée, à voir si c'est vraiment util de mettre les deux 
+    
     actions act = NO_ACTION;
     int selected_option = 0;
-
-    while(1){
+    while(1){  
         for(int i = 0; i < c->nb_view; i++){
             c->views[i]->affiche_menu(c->views[i], &selected_option, nbMenu);
         }

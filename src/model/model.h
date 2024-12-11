@@ -44,7 +44,8 @@ int est_fini(model *m);
 // Initialize positions of players
 void init_positions(model *m);
 
-
+// Initialize direction of players
+void init_directions(model *m, direction *dirs);
 
 
 

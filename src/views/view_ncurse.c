@@ -135,6 +135,7 @@ void afficheMenuNC(view *v, int *selected_option, int nbMenu){
     };
 
     int n_options = 4;
+    
     if(*selected_option < 1) *selected_option = n_options-1;
     if(*selected_option >= n_options) *selected_option = 1;
 
