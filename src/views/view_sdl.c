@@ -155,10 +155,10 @@ SDL_Rect *createRect(int h, int w, int x, int y){
 }
 
 SDL_Rect afficheTexte(SDL_Renderer *renderer,char *texte, int y, int titre) {
-    TTF_Font *font = TTF_OpenFont("./res/arial.ttf", 40);
+    TTF_Font *font = TTF_OpenFont("./res/game.ttf", 40);
     SDL_Color color = {0, 0, 0, 255}; 
     if(titre==1){
-        font = TTF_OpenFont("./res/arial.ttf", 50);
+        font = TTF_OpenFont("./res/game.ttf", 50);
         color = (SDL_Color) {255, 255, 255, 255};
     }
     SDL_Surface *surfaceTexte = TTF_RenderText_Solid(font, texte, color);
@@ -176,6 +176,34 @@ SDL_Rect afficheTexte(SDL_Renderer *renderer,char *texte, int y, int titre) {
     return destRect;   
 }
 
+void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores) {
+
+    int posX[8] = {10, 200, 400, 600,10, 100, 200, 300};
+    int posY[8] = {5, 5, 5, 5, 30,30,30,30};
+
+    TTF_Font *font = TTF_OpenFont("./res/game.ttf", 20);
+    SDL_Color color = {0, 0, 0, 255}; 
+    SDL_Surface *surfaceTexte;
+    SDL_Texture *textureTexte; 
+    SDL_Rect destRect;
+
+    for(int i = 0; i<nbPlayer; i++){
+        char score[20];
+        snprintf(score, sizeof(score), "Player %d: %d", i + 1, scores[i]);
+
+        surfaceTexte = TTF_RenderText_Solid(font, score, color);
+        textureTexte = SDL_CreateTextureFromSurface(renderer, surfaceTexte);
+
+        destRect = (SDL_Rect) { posX[i], posY[i], surfaceTexte->w, surfaceTexte->h};
+        SDL_RenderCopy(renderer, textureTexte, NULL, &destRect);
+    }
+
+    SDL_DestroyTexture(textureTexte);
+    SDL_FreeSurface(surfaceTexte);
+    TTF_CloseFont(font);
+}
+
+
 void affiche_menu_sdl(view *v, int *act, int nbMenu){
     // MODFIIER SI HOVER EFFECT
     // NE RAFFRAICHI PAS LE MENU SI DEJA INIT
@@ -184,9 +212,9 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu){
     free_buttons(v->sdl);
 
     char *menuText[3][4] = {
-        {"TRON", "Solo", "Multiplayer", "EXIT"},       
-        {"SOLO", "Vs Algo", "Vs Q-Learning", "BACK"},     
-        {"MULTIPLAYER", "On this machine (2 players)", "With Others", "BACK"}      
+        {"TRON", "  solo  ", "  multiplayer  ", "  EXIT  "},       
+        {"SOLO", "  vs Algo  ", "  vs Q-Learning  ", "  BACK  "},     
+        {"MULTIPLAYER", "  on this machine (2 players)  ", "  with others  ", "  BACK  "}      
     };
 
     SDL_Renderer *renderer = v->sdl->renderer;
@@ -257,48 +285,6 @@ void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu
     }
 }
 
-void get_action_menu_multi_sdl(view *v, actions *act, int *selected_option) {
-    SDL_Event event;
-
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-            case SDL_QUIT:
-                *act = QUITTER;
-                return;
-
-            case SDL_MOUSEBUTTONDOWN: {
-                int x = event.button.x;
-                int y = event.button.y;
-                // printf("X : %d, Y : %d\n", x, y);
-                for (unsigned i = 0; i < v->sdl->nb_buttons; i++) {
-                    if (x >= v->sdl->buttons[i]->x &&
-                        x <= (v->sdl->buttons[i]->x + v->sdl->buttons[i]->w) &&
-                        y >= v->sdl->buttons[i]->y &&
-                        y <= (v->sdl->buttons[i]->y + v->sdl->buttons[i]->h)) {
-                        switch (i) {
-                            case 0:
-                                *act = PLAY_MULTI;
-                                return;
-                            case 1:
-                                *act = PLAY_ONLINE;
-                                return;
-                            case 2:
-                                *act = RETOUR;
-                                return;
-                            default:
-                                break;
-                        }
-                    }
-                }
-                break;
-            }
-
-            default:
-                break;
-        }
-    }
-}
-
 
 void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes){
 
@@ -346,14 +332,16 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
     }
 
     // Afficher les scores 
-    int decalageY = 10;
+    // int decalageY = 10;
 
-    for (int i = 0; i < nb_player; i++) {
-        char score[20];
-        snprintf(score, sizeof(score), "Player %d: %d", i + 1, scores[i]);
-        afficheTexte(renderer, score, decalageY, 0); // IL FAUT VOIR L'AFFICHAGE DES SCORES
-        decalageY += 10;
-    }
+    // for (int i = 0; i < nb_player; i++) {
+    //     char score[20];
+    //     snprintf(score, sizeof(score), "Player %d: %d", i + 1, scores[i]);
+    //     afficheTexte(renderer, score, decalageY, 0); // IL FAUT VOIR L'AFFICHAGE DES SCORES
+    //     decalageY += 10;
+    // }
+
+    afficheScore(renderer, nb_player, scores);
     SDL_RenderPresent(renderer);
 
 }
