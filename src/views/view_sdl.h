@@ -22,5 +22,6 @@ SDL_Rect afficheTexte(SDL_Renderer *renderer,char *texte, int y, int titre);
 void afficheScore(SDL_Renderer *, int, int *);
 
 void affiche_menu_sdl(view *v, int *act, int nbMenu);
+void free_buttons(view_sdl *sdl);
 
 void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu);
