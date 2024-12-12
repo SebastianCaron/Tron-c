@@ -209,7 +209,7 @@ void affiche_win_sdl(view *v, SDL_Renderer *renderer, int indexPlayer, int score
     snprintf(gagnant, sizeof(gagnant), "Player %d win with %d points !", indexPlayer, score);
 
     SDL_Rect *bg = createRect(300, 500, LARGEUR/2-500/2, HAUTEUR/2-300/2);
-    SDL_SetRenderDrawColor(renderer, 255,0,0,255);
+    SDL_SetRenderDrawColor(renderer, 0,0,0,255);
     SDL_RenderFillRect(renderer, bg);
     SDL_SetRenderDrawColor(renderer, 255,255,255,255);
     SDL_RenderDrawRect(renderer, bg);
@@ -224,7 +224,7 @@ void affiche_win_sdl(view *v, SDL_Renderer *renderer, int indexPlayer, int score
     SDL_Rect destRect = (SDL_Rect) {LARGEUR/2-surfaceTexte->w/2, HAUTEUR/2-surfaceTexte->h/2, surfaceTexte->w, surfaceTexte->h};
     SDL_RenderCopy(renderer, textureTexte, NULL, &destRect);
 
-    SDL_Rect ok = afficheButton(renderer, "  OK !  ", 300, 0);
+    SDL_Rect ok = afficheButton(renderer, "  OK  ", 370, 0);
 
     SDL_DestroyTexture(textureTexte);
     SDL_FreeSurface(surfaceTexte);
@@ -373,6 +373,7 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
     }
 
     afficheScore(renderer, nb_player, scores);
+    affiche_win_sdl(v, renderer, 0, 0);
     SDL_RenderPresent(renderer);
 
 }
