@@ -204,7 +204,7 @@ void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores) {
 }   
 
 
-void afficheGagnant(SDL_Renderer *renderer, int indexPlayer, int score){
+void affiche_win_sdl(view *v, SDL_Renderer *renderer, int indexPlayer, int score){
     char gagnant[50];
     snprintf(gagnant, sizeof(gagnant), "Player %d win with %d points !", indexPlayer, score);
 
@@ -224,11 +224,23 @@ void afficheGagnant(SDL_Renderer *renderer, int indexPlayer, int score){
     SDL_Rect destRect = (SDL_Rect) {LARGEUR/2-surfaceTexte->w/2, HAUTEUR/2-surfaceTexte->h/2, surfaceTexte->w, surfaceTexte->h};
     SDL_RenderCopy(renderer, textureTexte, NULL, &destRect);
 
+    SDL_Rect ok = afficheButton(renderer, "  OK !  ", 300, 0);
+
     SDL_DestroyTexture(textureTexte);
     SDL_FreeSurface(surfaceTexte);
     TTF_CloseFont(font);
-    SDL_RenderPresent(renderer);
+    
 
+    v->sdl->buttons[0] = malloc(sizeof(SDL_Rect));
+    v->sdl->nb_buttons = 1;
+    if (!v->sdl->buttons[0]) {
+        perror("[VIEW SDL] erreur allocation de mémoire pour les boutons.");
+        quitter(v->sdl->window, v->sdl->renderer);
+    }
+
+    *(v->sdl->buttons[0]) = ok;
+
+    SDL_RenderPresent(renderer);
 }
 
 

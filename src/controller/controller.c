@@ -180,7 +180,11 @@ void go_to_menu(controller *c){
                 break;
             case PLAY_MULTI:
                 controller_play_multi(c);
-                act = NO_ACTION;
+                // A VOIR
+                // afficheGagnant();
+                // act = MENU_PRINCIPAL;
+
+                act= NO_ACTION;
                 nbMenu = 0; 
                 break;
             case RETOUR:
