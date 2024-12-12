@@ -16,7 +16,7 @@ typedef struct{
     SDL_Renderer *renderer;
     SDL_Rect *buttons[20];
     unsigned nb_buttons;
-    unsigned is_init_menu[3];
+    unsigned menu_current;
 } view_sdl;
 
 typedef struct v{
