@@ -373,7 +373,6 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
     }
 
     afficheScore(renderer, nb_player, scores);
-    affiche_win_sdl(v, renderer, 0, 0);
     SDL_RenderPresent(renderer);
 
 }
