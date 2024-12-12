@@ -48,6 +48,7 @@ view *init_view_sdl(){
         exit(EXIT_FAILURE);
     }
     v->sdl = viewSdl; 
+    v->sdl->menu_current = 1000;
 
     v->sdl->renderer = NULL;
     v->sdl->window = NULL;
@@ -63,6 +64,7 @@ view *init_view_sdl(){
         fprintf(stderr, "Erreur SDL_CreateWindow : %s\n", SDL_GetError());
         quitter(v->sdl->window, v->sdl->renderer);
     }
+    
     SDL_SetRenderDrawBlendMode(v->sdl->renderer, SDL_BLENDMODE_BLEND);
     return v;
 }
@@ -70,28 +72,27 @@ view *init_view_sdl(){
 
 void destroy_view_sdl(view *v){
     if(v == NULL) return;
-    if(v->sdl != NULL){
+    if(v->sdl){
         SDL_DestroyRenderer(v->sdl->renderer);
         SDL_DestroyWindow(v->sdl->window);
     }
     TTF_Quit();
     SDL_Quit();
-    // free(v->sdl);
+    free_buttons(v->sdl);
+    free(v->sdl);
     free(v);
 }
 
 
-// void free_buttons(view_sdl *sdl) {
-//     if (sdl->buttons != NULL) {
-//         for (int i = 0; i < sdl->nb_buttons; i++) {
-//             if (sdl->buttons[i] != NULL) {
-//                 free(sdl->buttons[i]);
-//                 sdl->buttons[i] = NULL;
-//             }
-//         }
-//         sdl->nb_buttons = 0;
-//     }
-// }
+void free_buttons(view_sdl *sdl) {
+    for (int i = 0; i < sdl->nb_buttons; i++) {
+        if (sdl->buttons[i] != NULL) {
+            free(sdl->buttons[i]);
+            sdl->buttons[i] = NULL;
+        }
+    }
+    sdl->nb_buttons = 0;
+}
 
 
 void quitter(SDL_Window *window, SDL_Renderer *renderer){
@@ -204,6 +205,11 @@ void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores) {
 
 
 void affiche_menu_sdl(view *v, int *act, int nbMenu){
+    // MODFIIER SI HOVER EFFECT
+    // NE RAFFRAICHI PAS LE MENU SI DEJA INIT
+    if(v->sdl->menu_current == nbMenu) return;
+    v->sdl->menu_current = nbMenu;
+    free_buttons(v->sdl);
 
     char *menuText[3][4] = {
         {"TRON", "  solo  ", "  multiplayer  ", "  EXIT  "},       

@@ -19,7 +19,11 @@ void update_screen_sdl(view *, int, int *, int **, int , int);
 void quitter(SDL_Window *window, SDL_Renderer *renderer);
 SDL_Rect *createRect(int h, int w, int x, int y);
 SDL_Rect afficheTexte(SDL_Renderer *renderer,char *texte, int y, int titre);
+<<<<<<< HEAD
+void free_buttons(view_sdl *sdl);
+=======
 void afficheScore(SDL_Renderer *, int, int *);
+>>>>>>> 10caab896b87b80f2aa63d8e6093d8c6d9de6de7
 
 void affiche_menu_sdl(view *v, int *act, int nbMenu);
 

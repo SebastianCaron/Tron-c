@@ -152,6 +152,7 @@ void destroy_controller(controller *c) {
 
 
 void go_to_menu(controller *c){
+    // ??????
     int nbMenu = c->views[0]->nbMenu || c->views[0]->nbMenu; //Si jamais y'a qu'une seule vue qui est lancée, à voir si c'est vraiment util de mettre les deux 
     
     actions act = NO_ACTION;
