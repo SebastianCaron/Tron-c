@@ -24,13 +24,14 @@ int main(int argc, char **argv){
     view *vsdl = NULL;
     char *ip = NULL;
     char *port = NULL;
-    if(argc == 1){
-        // INIT JEU AVEC SDL OU NCURSE ?
-        return EXIT_SUCCESS;
-    }
-
     char with_sdl = 0;
     char with_ncurse = 0;
+
+
+    if(argc == 1){
+        with_sdl = 1;
+    }
+
 
     for(int i = 1; i < argc; i++){
         if(string_equal(argv[i],"-sdl") == 1){
@@ -74,8 +75,5 @@ int main(int argc, char **argv){
 
     go_to_menu(c);
     destroy_controller(c);
-    // c->views[0]->nbMenu = 0;
-    // c->views[1]->nbMenu = 0;
-
     return EXIT_SUCCESS;
 }
