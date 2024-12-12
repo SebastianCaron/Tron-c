@@ -154,10 +154,10 @@ SDL_Rect *createRect(int h, int w, int x, int y){
 }
 
 SDL_Rect afficheTexte(SDL_Renderer *renderer,char *texte, int y, int titre) {
-    TTF_Font *font = TTF_OpenFont("./res/arial.ttf", 40);
+    TTF_Font *font = TTF_OpenFont("./res/game.ttf", 40);
     SDL_Color color = {0, 0, 0, 255}; 
     if(titre==1){
-        font = TTF_OpenFont("./res/arial.ttf", 50);
+        font = TTF_OpenFont("./res/game.ttf", 50);
         color = (SDL_Color) {255, 255, 255, 255};
     }
     SDL_Surface *surfaceTexte = TTF_RenderText_Solid(font, texte, color);
@@ -180,7 +180,7 @@ void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores) {
     int posX[8] = {10, 200, 400, 600,10, 100, 200, 300};
     int posY[8] = {5, 5, 5, 5, 30,30,30,30};
 
-    TTF_Font *font = TTF_OpenFont("./res/arial.ttf", 20);
+    TTF_Font *font = TTF_OpenFont("./res/game.ttf", 20);
     SDL_Color color = {0, 0, 0, 255}; 
     SDL_Surface *surfaceTexte;
     SDL_Texture *textureTexte; 
@@ -206,9 +206,9 @@ void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores) {
 void affiche_menu_sdl(view *v, int *act, int nbMenu){
 
     char *menuText[3][4] = {
-        {"TRON", "solo", "multiplayer", "EXIT"},       
-        {"SOLO", "vs Algo", "vs Q-Learning", "BACK"},     
-        {"MULTIPLAYER", "on this machine (2 players)", "with others", "BACK"}      
+        {"TRON", "  solo  ", "  multiplayer  ", "  EXIT  "},       
+        {"SOLO", "  vs Algo  ", "  vs Q-Learning  ", "  BACK  "},     
+        {"MULTIPLAYER", "  on this machine (2 players)  ", "  with others  ", "  BACK  "}      
     };
 
     SDL_Renderer *renderer = v->sdl->renderer;
