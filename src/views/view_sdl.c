@@ -154,7 +154,7 @@ SDL_Rect *createRect(int h, int w, int x, int y){
     return ret;
 }
 
-SDL_Rect afficheTexte(SDL_Renderer *renderer,char *texte, int y, int titre) {
+SDL_Rect afficheButton(SDL_Renderer *renderer,char *texte, int y, int titre) {
     TTF_Font *font = TTF_OpenFont("./res/game.ttf", 40);
     SDL_Color color = {0, 0, 0, 255}; 
     if(titre==1){
@@ -204,6 +204,34 @@ void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores) {
 }   
 
 
+void afficheGagnant(SDL_Renderer *renderer, int indexPlayer, int score){
+    char gagnant[50];
+    snprintf(gagnant, sizeof(gagnant), "Player %d win with %d points !", indexPlayer, score);
+
+    SDL_Rect *bg = createRect(300, 500, LARGEUR/2-500/2, HAUTEUR/2-300/2);
+    SDL_SetRenderDrawColor(renderer, 255,0,0,255);
+    SDL_RenderFillRect(renderer, bg);
+    SDL_SetRenderDrawColor(renderer, 255,255,255,255);
+    SDL_RenderDrawRect(renderer, bg);
+    
+
+    TTF_Font *font = TTF_OpenFont("./res/game.ttf", 20);
+    SDL_Color color = {255, 255, 255, 255}; 
+
+    SDL_Surface *surfaceTexte = TTF_RenderText_Solid(font, gagnant, color);
+    SDL_Texture *textureTexte = SDL_CreateTextureFromSurface(renderer, surfaceTexte);
+
+    SDL_Rect destRect = (SDL_Rect) {LARGEUR/2-surfaceTexte->w/2, HAUTEUR/2-surfaceTexte->h/2, surfaceTexte->w, surfaceTexte->h};
+    SDL_RenderCopy(renderer, textureTexte, NULL, &destRect);
+
+    SDL_DestroyTexture(textureTexte);
+    SDL_FreeSurface(surfaceTexte);
+    TTF_CloseFont(font);
+    SDL_RenderPresent(renderer);
+
+}
+
+
 void affiche_menu_sdl(view *v, int *act, int nbMenu){
     // MODFIIER SI HOVER EFFECT
     // NE RAFFRAICHI PAS LE MENU SI DEJA INIT
@@ -222,15 +250,15 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu){
     SDL_RenderClear(renderer);
     v->get_action = get_action_menu_sdl;
     
-    afficheTexte(renderer, menuText[nbMenu][0], 100, 1);
+    afficheButton(renderer, menuText[nbMenu][0], 100, 1);
 
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
 
-    SDL_Rect c1 = afficheTexte(renderer, menuText[nbMenu][1],300, 0);
+    SDL_Rect c1 = afficheButton(renderer, menuText[nbMenu][1],300, 0);
 
-    SDL_Rect c2 = afficheTexte(renderer, menuText[nbMenu][2],400, 0);
+    SDL_Rect c2 = afficheButton(renderer, menuText[nbMenu][2],400, 0);
 
-    SDL_Rect c3 = afficheTexte(renderer, menuText[nbMenu][3],500, 0);
+    SDL_Rect c3 = afficheButton(renderer, menuText[nbMenu][3],500, 0);
 
     v->sdl->nb_buttons = 3;
     v->sdl->buttons[0] = malloc(sizeof(SDL_Rect));
@@ -248,6 +276,7 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu){
 
     SDL_RenderPresent(renderer);
 }
+
 
 void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu) {
     SDL_Event event;
