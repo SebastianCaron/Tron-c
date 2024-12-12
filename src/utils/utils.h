@@ -20,6 +20,7 @@ int **allocate_grid(int nb_lignes, int nb_colonnes);
 void destroy_grid(grid *g);
 
 int string_equal(char *a, char *b);
+int start_with(char *a, char *pattern);
 
 void display_grid(grid *g);
 void display_grid_i(int **tab, int nb_lignes, int nb_colonnes);

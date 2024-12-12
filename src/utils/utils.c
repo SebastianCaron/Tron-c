@@ -180,6 +180,18 @@ int string_equal(char *a, char *b){
     return 0;
 }
 
+int start_with(char *a, char *pattern){
+    if(a == NULL || pattern == NULL) return 0;
+    int i = 0;
+    while(1){
+        if(a[i] == '\0' && pattern[i] == '\0') return 1;
+        if(pattern[i] == '\0') return 0;
+        if(a[i] != pattern[i]) return 0;
+
+        i += 1;
+    }
+}
+
 
 void display_grid(grid *g){
     for(int i = 0; i < g->nb_lignes; i++){
