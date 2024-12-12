@@ -200,7 +200,7 @@ void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores) {
     SDL_DestroyTexture(textureTexte);
     SDL_FreeSurface(surfaceTexte);
     TTF_CloseFont(font);
-}
+}   
 
 
 void affiche_menu_sdl(view *v, int *act, int nbMenu){
@@ -324,16 +324,6 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
             SDL_RenderFillRect(renderer, &pixel);
         }
     }
-
-    // Afficher les scores 
-    // int decalageY = 10;
-
-    // for (int i = 0; i < nb_player; i++) {
-    //     char score[20];
-    //     snprintf(score, sizeof(score), "Player %d: %d", i + 1, scores[i]);
-    //     afficheTexte(renderer, score, decalageY, 0); // IL FAUT VOIR L'AFFICHAGE DES SCORES
-    //     decalageY += 10;
-    // }
 
     afficheScore(renderer, nb_player, scores);
     SDL_RenderPresent(renderer);
