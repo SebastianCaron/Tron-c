@@ -31,10 +31,7 @@ view *init_view_sdl(){
     v->update_screen = update_screen_sdl;
 
     v->affiche_menu = affiche_menu_sdl;
-
-    // v->affiche_menu_principal = afficheMenuPrincipalSDL;
-    // v->affiche_menu_multijoueur = afficheMenuMultiplayerSDL;
-    // v->affiche_menu_solo = afficheMenuSoloSDL;
+    v->affiche_winner = affiche_win_sdl;
 
 
     v->type = 's';
@@ -155,10 +152,10 @@ SDL_Rect *createRect(int h, int w, int x, int y){
 }
 
 SDL_Rect afficheButton(SDL_Renderer *renderer,char *texte, int y, int titre) {
-    TTF_Font *font = TTF_OpenFont("./res/game.ttf", 40);
+    TTF_Font *font = TTF_OpenFont("./res/nextg.ttf", 40);
     SDL_Color color = {0, 0, 0, 255}; 
     if(titre==1){
-        font = TTF_OpenFont("./res/game.ttf", 50);
+        font = TTF_OpenFont("./res/nextg.ttf", 70);
         color = (SDL_Color) {255, 255, 255, 255};
     }
     SDL_Surface *surfaceTexte = TTF_RenderText_Solid(font, texte, color);
@@ -181,7 +178,7 @@ void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores) {
     int posX[8] = {10, 200, 400, 600,10, 100, 200, 300};
     int posY[8] = {5, 5, 5, 5, 30,30,30,30};
 
-    TTF_Font *font = TTF_OpenFont("./res/game.ttf", 20);
+    TTF_Font *font = TTF_OpenFont("./res/nextg.ttf", 20);
     SDL_Color color = {0, 0, 0, 255}; 
     SDL_Surface *surfaceTexte;
     SDL_Texture *textureTexte; 
@@ -189,7 +186,7 @@ void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores) {
 
     for(int i = 0; i<nbPlayer; i++){
         char score[20];
-        snprintf(score, sizeof(score), "Player %d: %d", i + 1, scores[i]);
+        snprintf(score, sizeof(score), "Player %d : %d", i + 1, scores[i]);
 
         surfaceTexte = TTF_RenderText_Solid(font, score, color);
         textureTexte = SDL_CreateTextureFromSurface(renderer, surfaceTexte);
@@ -204,27 +201,27 @@ void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores) {
 }   
 
 
-void affiche_win_sdl(view *v, SDL_Renderer *renderer, int indexPlayer, int score){
+void affiche_win_sdl(view *v, int indexPlayer){
     char gagnant[50];
-    snprintf(gagnant, sizeof(gagnant), "Player %d win with %d points !", indexPlayer, score);
+    snprintf(gagnant, sizeof(gagnant), "Player %d win", indexPlayer+1);
 
     SDL_Rect *bg = createRect(300, 500, LARGEUR/2-500/2, HAUTEUR/2-300/2);
-    SDL_SetRenderDrawColor(renderer, 0,0,0,255);
-    SDL_RenderFillRect(renderer, bg);
-    SDL_SetRenderDrawColor(renderer, 255,255,255,255);
-    SDL_RenderDrawRect(renderer, bg);
+    SDL_SetRenderDrawColor(v->sdl->renderer, 0,0,0,255);
+    SDL_RenderFillRect(v->sdl->renderer, bg);
+    SDL_SetRenderDrawColor(v->sdl->renderer, 255,255,255,255);
+    SDL_RenderDrawRect(v->sdl->renderer, bg);
     
 
-    TTF_Font *font = TTF_OpenFont("./res/game.ttf", 20);
+    TTF_Font *font = TTF_OpenFont("./res/game.ttf", 30);
     SDL_Color color = {255, 255, 255, 255}; 
 
     SDL_Surface *surfaceTexte = TTF_RenderText_Solid(font, gagnant, color);
-    SDL_Texture *textureTexte = SDL_CreateTextureFromSurface(renderer, surfaceTexte);
+    SDL_Texture *textureTexte = SDL_CreateTextureFromSurface(v->sdl->renderer, surfaceTexte);
 
     SDL_Rect destRect = (SDL_Rect) {LARGEUR/2-surfaceTexte->w/2, HAUTEUR/2-surfaceTexte->h/2, surfaceTexte->w, surfaceTexte->h};
-    SDL_RenderCopy(renderer, textureTexte, NULL, &destRect);
+    SDL_RenderCopy(v->sdl->renderer, textureTexte, NULL, &destRect);
 
-    SDL_Rect ok = afficheButton(renderer, "  OK  ", 370, 0);
+    SDL_Rect ok = afficheButton(v->sdl->renderer, "  OK  ", 370, 0);
 
     SDL_DestroyTexture(textureTexte);
     SDL_FreeSurface(surfaceTexte);
@@ -240,7 +237,7 @@ void affiche_win_sdl(view *v, SDL_Renderer *renderer, int indexPlayer, int score
 
     *(v->sdl->buttons[0]) = ok;
 
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(v->sdl->renderer);
 }
 
 
@@ -308,7 +305,6 @@ void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu
             case SDL_MOUSEBUTTONDOWN: {
                 int x = event.button.x;
                 int y = event.button.y;
-                // printf("X : %d, Y : %d\n", x, y);
                 for (unsigned i = 0; i < v->sdl->nb_buttons; i++) {
                     if (x >= v->sdl->buttons[i]->x &&
                         x <= (v->sdl->buttons[i]->x + v->sdl->buttons[i]->w) &&
@@ -316,12 +312,11 @@ void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu
                         y <= (v->sdl->buttons[i]->y + v->sdl->buttons[i]->h)) {
                         *act = menuActions[nbMenu][i];
                         return;
-                        }
+                    }
                 }
-                
             }
             default:
-                    break;
+                break;
         }
     }
 }

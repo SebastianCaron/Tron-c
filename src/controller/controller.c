@@ -175,8 +175,17 @@ void go_to_menu(controller *c){
                 break;
             case PLAY_BOT_ALGO:
                 controller_play_solo_j_vs_random(c);
-                nbMenu = 0;
+                int winner;
+                for(int indexPlayer =0; indexPlayer<c->m->n_player;indexPlayer++){
+                    if(!c->m->dead[indexPlayer]) winner = indexPlayer;
+                }
+                for(int i = 0; i < c->nb_view;i++){
+                    c->views[i]->affiche_winner(c->views[i], winner);
+                    printf("%d\n", winner);
+                }
+                
                 act = NO_ACTION;
+                // nbMenu = 0;
                 break;
             case PLAY_MULTI:
                 controller_play_multi(c);

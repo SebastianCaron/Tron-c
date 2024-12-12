@@ -38,6 +38,7 @@ typedef struct v{
 
     void (*affiche_menu)(struct v *, int *, int );
     void (*get_action)(struct v *, actions *, int *, int);
+    void (*affiche_winner)(struct v *, int);
 
 } view;
 

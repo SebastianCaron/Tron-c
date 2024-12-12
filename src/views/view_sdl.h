@@ -22,7 +22,7 @@ SDL_Rect afficheButton(SDL_Renderer *renderer,char *texte, int y, int titre);
 void afficheScore(SDL_Renderer *, int, int *);
 
 
-void affiche_win_sdl(view *v, SDL_Renderer *renderer, int indexPlayer, int score);
+void affiche_win_sdl(view *v, int indexPlayer);
 
 void affiche_menu_sdl(view *v, int *act, int nbMenu);
 void free_buttons(view_sdl *sdl);
