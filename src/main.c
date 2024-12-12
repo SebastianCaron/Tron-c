@@ -23,6 +23,7 @@ int main(int argc, char **argv){
     view *vncr = NULL;
     view *vsdl = NULL;
     char *ip = NULL;
+    char *port = NULL;
     if(argc == 1){
         // INIT JEU AVEC SDL OU NCURSE ?
         return EXIT_SUCCESS;
@@ -38,6 +39,8 @@ int main(int argc, char **argv){
             with_ncurse = 1;
         }else if(start_with(argv[i],"-ip") == 1){
             ip = argv[i] + 3;
+        }else if(start_with(argv[i],"-port") == 1){
+            port = argv[i] + 5;
         }
         else{
             printf("INCORRECT PARAMETER %s\n", argv[i]);
