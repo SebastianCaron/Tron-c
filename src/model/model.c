@@ -15,13 +15,19 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **
     }
 
     game->players = (position**) malloc(sizeof(position*) * nb_player);
-    if(!game->players){
+    if(game->players == NULL){
         perror("[MODEL] erreur allocation des positions pour les joueurs.");
         exit(EXIT_FAILURE);
     }
 
+    game->directions = (direction *) calloc(nb_player, sizeof(direction));
+    if(game->directions == NULL){
+        perror("[MODEL] erreur allocation des directions pour les joueurs.");
+        exit(EXIT_FAILURE);
+    }
+
     game->dead = (char *) calloc(nb_player, sizeof(char));
-    if(!game->dead){
+    if(game->dead == NULL){
         perror("[MODEL] erreur allocation des etats de vie des joueurs.");
         exit(EXIT_FAILURE);
     }
@@ -40,6 +46,7 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **
     }
 
     init_positions(game);
+    init_directions(game);
 
     return game;
 }
@@ -53,6 +60,7 @@ void destroy_model(model *m){
     }
     free(m->players);
     free(m->scores);
+    free(m->directions);
 
     for(int i = 0; i < m->nb_lignes_grid; i++){
         free(m->grid[i]);
@@ -62,7 +70,7 @@ void destroy_model(model *m){
     free(m);
 }
 
-int move_player(model *m, int player, direction dir){
+int move_player(model *m, int player, direction new_direction){
     if(!m){
         perror("[MODEL] deplacement joueur sur model NULL");
         exit(EXIT_FAILURE);
@@ -77,7 +85,13 @@ int move_player(model *m, int player, direction dir){
     position *player_position = m->players[player];
     m->grid[player_position->y][player_position->x] = -(player+1); // Mur representé par -(joueur+1) 
 
-    switch (dir)
+    if((new_direction != NODIRECTION) && ((m->directions[player] & 1) != (new_direction & 1))){
+        // printf("JOUEUR %d : DIRECTION : %d : NEW_DIR : %d\n", player, m->directions[player], new_direction);
+        m->directions[player] = new_direction; // Change la direction si n'est pas opposé à la précèdente
+
+    }
+
+    switch (m->directions[player])
     {
         case UP:
             m->players[player]->y--;
@@ -201,24 +215,21 @@ void init_positions(model *m){
     }
 }
 
-void init_directions(model *m, direction *dirs){
+void init_directions(model *m){
     for(int i = 0; i < m->n_player; i++){
         int d_x = (m->nb_colonnes_grid / 2) - m->players[i]->x;
         int d_y = (m->nb_lignes_grid / 2) - m->players[i]->y;
-        // printf("(%d, %d) : %d, %d\n", m->players[i]->x, m->players[i]->y, d_x, d_y);
         if((d_x  < 0 ? -d_x : d_x) > (d_y  < 0 ? -d_y : d_y)){
             if(d_x > 0){
-                // printf("RIGHT\n");
-                dirs[i] = RIGHT;
+                m->directions[i] = RIGHT;
             }else{
-                // printf("LEFT\n");
-                dirs[i] = LEFT;
+                m->directions[i] = LEFT;
             }
         }else{
             if(d_y > 0){
-                dirs[i] = DOWN;
+                m->directions[i] = DOWN;
             }else{
-                dirs[i] = UP;
+                m->directions[i] = UP;
             }
         }
     }

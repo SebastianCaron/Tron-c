@@ -17,26 +17,30 @@ int aleaEntreBornes(int min, int max){
 
 void controller_play_solo_j_vs_random(controller *c){
     int XY[4][2]={{0,-1}, {0,1},{1,0},{-1,0}};
+    direction converted[4] = {DOWN, UP, RIGHT, LEFT};
     create_model(c, 2);
     int i = 0;
     direction *dirs = calloc(2, sizeof(direction));
-    // HANDLE ERROR
-    init_directions(c->m, dirs);
+    if(dirs == NULL){
+        perror("[CONTROLLER] erreur allocation directions\n");
+        return;
+    }
+    
     clock_t start, end;
     double duration;
-
+    int posPossible[4] = {0};
     while(!est_fini(c->m)){
         start = clock();
         // Recupérer les directions possibles du bot
-        int posPossible[3];
         int cptPosPossible = 0;
         position *bot_position = c->m->players[1];
-        for(int i = 0; i<4; i++){
-            int x = bot_position->x+XY[i][0];
-            int y = bot_position->y+XY[i][1];
-            if (x >= 0 && x < c->m->nb_lignes_grid && y >= 0 && y < c->m->nb_colonnes_grid && c->m->grid[x][y] == 0) {
-                posPossible[cptPosPossible] = i;
-                cptPosPossible++;
+        for(int k = 0; k<4; k++){
+            int x = (bot_position->x)+XY[k][0];
+            int y = (bot_position->y)+XY[k][1];
+            if (x >= 0 && x < c->m->nb_lignes_grid && y >= 0 && y < c->m->nb_colonnes_grid && c->m->grid[y][x] == EMPTY) {
+                if((converted[k]&1) != (c->m->directions[1]&1)){ // VERIFIE DIRECTIONS OPPOSEE
+                    posPossible[cptPosPossible++] = converted[k];
+                } 
             }
         }
         for(i = 0; i < c->nb_view; i++){
@@ -44,7 +48,8 @@ void controller_play_solo_j_vs_random(controller *c){
             c->views[i]->get_direction(c->views[i],1, dirs);
         }
         move_player(c->m, 0, dirs[0]);
-        move_player(c->m, 1, dirs[posPossible[aleaEntreBornes(0,cptPosPossible)]]);
+        // printf("%d : [%d, %d, %d]\n", cptPosPossible, posPossible[0], posPossible[1], posPossible[2]);
+        move_player(c->m, 1, posPossible[aleaEntreBornes(0,cptPosPossible)]);
 
         collision_player(c->m, 0);
         collision_player(c->m, 1);
@@ -64,8 +69,10 @@ void controller_play_multi(controller *c){
     create_model(c, 2);
     int i = 0;
     direction *dirs = calloc(2, sizeof(direction));
-    // HANDLE ERROR
-    init_directions(c->m, dirs);
+    if(dirs == NULL){
+        perror("[CONTROLLER] erreur allocation directions\n");
+        return;
+    }
     clock_t start, end;
     double duration;
 

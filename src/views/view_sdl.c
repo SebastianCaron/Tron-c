@@ -109,28 +109,28 @@ direction get_direction_sdl(view *v, int nb_player_on_keyboard, direction *dirs)
         }else if(event.type == SDL_KEYDOWN){
             switch(event.key.keysym.sym){
                 case SDLK_UP:
-                    if((dirs[0]) != DOWN) (dirs[0]) = UP;
+                    dirs[0] = UP;
                     return UP;
                 case SDLK_DOWN:
-                    if((dirs[0]) != UP) (dirs[0]) = DOWN;
+                    dirs[0] = DOWN;
                     return DOWN;
                 case SDLK_LEFT :
-                    if((dirs[0]) != RIGHT) (dirs[0]) = LEFT;
+                    dirs[0] = LEFT;
                     return LEFT;
                 case SDLK_RIGHT:
-                    if((dirs[0]) != LEFT) (dirs[0]) = RIGHT;
+                    dirs[0] = RIGHT;
                     return RIGHT;
                 case SDLK_z:
-                    if((dirs[nb_player_on_keyboard-1]) != DOWN) (dirs[nb_player_on_keyboard-1]) = UP;
+                    dirs[nb_player_on_keyboard-1] = UP;
                     return UP;
                 case SDLK_q:
-                    if((dirs[nb_player_on_keyboard-1]) != RIGHT) (dirs[nb_player_on_keyboard-1]) = LEFT;
+                    dirs[nb_player_on_keyboard-1] = LEFT;
                     return LEFT;
                 case SDLK_s:
-                    if((dirs[nb_player_on_keyboard-1]) != UP) (dirs[nb_player_on_keyboard-1]) = DOWN;
+                    dirs[nb_player_on_keyboard-1] = DOWN;
                     return DOWN;
                 case SDLK_d:
-                    if((dirs[nb_player_on_keyboard-1]) != LEFT) (dirs[nb_player_on_keyboard-1]) = RIGHT;
+                    dirs[nb_player_on_keyboard-1] = RIGHT;
                     return RIGHT;
                 default:
                     return NODIRECTION;

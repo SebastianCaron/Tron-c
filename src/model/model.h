@@ -1,5 +1,12 @@
 #pragma once
 
+#define SCORE_INCREMENT 10
+
+typedef enum {UP = 1, DOWN = 3, LEFT = 2, RIGHT = 4, NODIRECTION = 5} direction;
+
+typedef enum { WALL = 100, EMPTY = 0 } cases;
+
+
 typedef struct {
     int x;
     int y;
@@ -7,9 +14,10 @@ typedef struct {
 
 typedef struct {
     position **players;
+    direction *directions;
     char *dead;
-    int n_player;
 
+    int n_player;
     int n_player_alive;
 
     int **grid;
@@ -18,12 +26,6 @@ typedef struct {
 
     int *scores;
 } model;
-
-typedef enum {UP, DOWN, LEFT, RIGHT, NODIRECTION} direction;
-
-typedef enum { WALL = 100, EMPTY = 0 } cases;
-
-#define SCORE_INCREMENT 10
 
 // Initialize the model with the correct amount of player
 model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **grid);
@@ -47,7 +49,7 @@ int est_fini(model *m);
 void init_positions(model *m);
 
 // Initialize direction of players
-void init_directions(model *m, direction *dirs);
+void init_directions(model *m);
 
 
 
