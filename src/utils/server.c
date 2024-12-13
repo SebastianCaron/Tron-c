@@ -117,22 +117,46 @@ char *grid_to_buffer(int nb_lignes, int nb_colonnes, int **grid){
 
     for(int i = 0; i < nb_lignes; i++){
         for(int j = 0; j < nb_colonnes; j++){
-            res[i*nb_colonnes + j] = grid[i][j];
+            res[i*nb_colonnes + j +3] = grid[i][j];
         }
     }
 
     return (char *) res;
 }
 
-
 void send_grid_to(server *s, int connect, int nb_lignes, int nb_colonnes, int **grid){
     int size = (3 + nb_lignes * nb_colonnes) * sizeof(int);
     char *buffer = grid_to_buffer(nb_lignes, nb_colonnes, grid);
     if(buffer == NULL) return;
     write(s->clients_fd[connect], buffer, size);
+    free(buffer);
 }
 
-void send_positions_to(server *s, int connect, position **positions);
+char *positions_to_buffer(int nb_position, position **positions){
+    int *res = calloc(2 + nb_position*2, sizeof(int));
+    if(res == NULL){
+        perror("[SERVER] ERREUR ALLOC GRID BUFFER\n");
+        return NULL;
+    }
+
+    res[0] = POSITIONS;
+    res[1] = nb_position;
+
+    for(int i = 0; i < nb_position; i++){
+        res[2 * i + 2] = positions[i]->x;
+        res[2 * i + 3] = positions[i]->y;
+    }
+    return (char *) res;
+}
+
+void send_positions_to(server *s, int connect, int nb_position, position **positions){
+    int size = (2 + nb_position*2) * sizeof(int);
+    char *buffer = positions_to_buffer(nb_position, positions);
+    if(buffer == NULL) return;
+    write(s->clients_fd[connect], buffer, size);
+    free(buffer);
+}
+
 void send_is_over_to(server *s, int connect, int est_fini);
 void send_start_signal_to(server *s, int connect);
 void send_names_to(server *s, int connect);
