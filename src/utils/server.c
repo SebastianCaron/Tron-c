@@ -6,6 +6,7 @@
 #include <errno.h>
 
 #include "server.h"
+#include "utils.h"
 
 server *init_serveur(int port, int nb_connect){
     server *s = calloc(1, sizeof(server));
@@ -104,7 +105,23 @@ int wait_for_connections(server *s, void (*on_connect)(char *)){
 }
 
 char *grid_to_buffer(int nb_lignes, int nb_colonnes, int **grid){
-    
+    int *res = calloc(3 + nb_lignes * nb_colonnes, sizeof(int));
+    if(res == NULL){
+        perror("[SERVER] ERREUR ALLOC GRID BUFFER\n");
+        return NULL;
+    }
+
+    res[0] = GRID;
+    res[1] = nb_lignes;
+    res[2] = nb_colonnes;
+
+    for(int i = 0; i < nb_lignes; i++){
+        for(int j = 0; j < nb_colonnes; j++){
+            res[i*nb_colonnes + j] = grid[i][j];
+        }
+    }
+
+    return (char *) res;
 }
 
 
