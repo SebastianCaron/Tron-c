@@ -290,10 +290,11 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu){
 void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu) {
     SDL_Event event;
 
-    const actions menuActions[3][3] = {
+    const actions menuActions[4][3] = {
         {MENU_SOLO, MENU_MULTI, QUITTER},       
         {PLAY_BOT_ALGO, PLAY_BOT_Q, RETOUR},    
-        {PLAY_MULTI, PLAY_ONLINE, RETOUR}       
+        {PLAY_MULTI, PLAY_ONLINE, RETOUR},
+        {RETOUR}
     };
 
     while (SDL_PollEvent(&event)) {

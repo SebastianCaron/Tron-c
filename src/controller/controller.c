@@ -152,7 +152,9 @@ void destroy_controller(controller *c) {
 
 
 void go_to_menu(controller *c){
-    int nbMenu = c->views[0]->nbMenu;
+    // ??????
+    int nbMenu = c->views[0]->nbMenu || c->views[0]->nbMenu;
+    
     actions act = NO_ACTION;
     int selected_option = 0;
     while(1){  
@@ -172,13 +174,16 @@ void go_to_menu(controller *c){
                 nbMenu = 2; 
                 break;
             case PLAY_BOT_ALGO:
+                
                 controller_play_solo_j_vs_random(c);
                 int winner;
                 for(int indexPlayer =0; indexPlayer<c->m->n_player;indexPlayer++){
                     if(!c->m->dead[indexPlayer]) winner = indexPlayer;
                 }
                 for(int i = 0; i < c->nb_view;i++){
+                    c->views[i]->nbMenu = 3;
                     c->views[i]->affiche_winner(c->views[i], winner);
+                    printf("%d\n", winner);
                 }
                 
                 act = NO_ACTION;
