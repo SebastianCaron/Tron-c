@@ -142,7 +142,7 @@ int get_winner(model *m){
     for(int i =0; i<m->n_player;i++){
         if(!m->dead[i]) return i;
     }
-    return 0;
+    return -1;
 }
 
 position *create_position(int x, int y){
