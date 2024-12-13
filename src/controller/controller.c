@@ -152,9 +152,7 @@ void destroy_controller(controller *c) {
 
 
 void go_to_menu(controller *c){
-    // ??????
-    int nbMenu = c->views[0]->nbMenu || c->views[0]->nbMenu;
-    
+    int nbMenu = c->views[0]->nbMenu;
     actions act = NO_ACTION;
     int selected_option = 0;
     while(1){  
@@ -181,7 +179,6 @@ void go_to_menu(controller *c){
                 }
                 for(int i = 0; i < c->nb_view;i++){
                     c->views[i]->affiche_winner(c->views[i], winner);
-                    printf("%d\n", winner);
                 }
                 
                 act = NO_ACTION;
