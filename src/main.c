@@ -20,6 +20,8 @@ int main(int argc, char **argv){
 
     if(TEST) return test();
 
+    srand(time(NULL));
+
     view *vncr = NULL;
     view *vsdl = NULL;
     char *ip = NULL;
