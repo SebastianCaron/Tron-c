@@ -38,6 +38,8 @@ int move_player(model *m, int player, direction dir);
 // dead[player]
 int collision_player(model *m, int player);
 
+int get_winner(model *);
+
 // Return 1 if the game is over
 int est_fini(model *m);
 

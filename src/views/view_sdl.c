@@ -306,6 +306,10 @@ void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu
             case SDL_MOUSEBUTTONDOWN: {
                 int x = event.button.x;
                 int y = event.button.y;
+                if(v->sdl->nb_buttons==1){
+                    *act = RETOUR;
+                    return;
+                }
                 for (unsigned i = 0; i < v->sdl->nb_buttons; i++) {
                     if (x >= v->sdl->buttons[i]->x &&
                         x <= (v->sdl->buttons[i]->x + v->sdl->buttons[i]->w) &&

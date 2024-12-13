@@ -154,9 +154,9 @@ void destroy_controller(controller *c) {
 void go_to_menu(controller *c){
     // ??????
     int nbMenu = c->views[0]->nbMenu;
-    
+    int winner;
     actions act = NO_ACTION;
-    int selected_option = 0;
+    int selected_option = 1;
     while(1){  
         for(int i = 0; i < c->nb_view; i++){
             c->views[i]->affiche_menu(c->views[i], &selected_option, nbMenu);
@@ -174,31 +174,26 @@ void go_to_menu(controller *c){
                 nbMenu = 2; 
                 break;
             case PLAY_BOT_ALGO:
-                
                 controller_play_solo_j_vs_random(c);
-                int winner;
+                winner= get_winner(c->m);    
 
-                // FAIRE GET WINNER DANS MODEL
-                for(int indexPlayer =0; indexPlayer<c->m->n_player;indexPlayer++){
-                    if(!c->m->dead[indexPlayer]) winner = indexPlayer;
-                }
                 for(int i = 0; i < c->nb_view;i++){
+                    c->views[i]->nbMenu = 3; //JSP SI CEST UTIL
+                    c->views[i]->affiche_winner(c->views[i], winner);
+                }
+                
+                act = NO_ACTION;
+                break;
+            case PLAY_MULTI:
+                controller_play_multi(c);
+                winner= get_winner(c->m);    
 
+                for(int i = 0; i < c->nb_view;i++){
                     c->views[i]->nbMenu = 3;
                     c->views[i]->affiche_winner(c->views[i], winner);
                 }
                 
                 act = NO_ACTION;
-                // nbMenu = 0;
-                break;
-            case PLAY_MULTI:
-                controller_play_multi(c);
-                // A VOIR
-                // afficheGagnant();
-                // act = MENU_PRINCIPAL;
-
-                act= NO_ACTION;
-                nbMenu = 0; 
                 break;
             case RETOUR:
                 nbMenu = 0; 
