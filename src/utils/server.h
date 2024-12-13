@@ -30,7 +30,7 @@ direction get_direction_from(server *s, int connect);
 
 
 void send_grid_to(server *s, int connect, int nb_lignes, int nb_colonnes, int **grid);
-void send_positions_to(server *s, int connect, position **positions);
+void send_positions_to(server *s, int connect,int nb_position, position **positions);
 void send_is_over_to(server *s, int connect, int est_fini);
 void send_start_signal_to(server *s, int connect);
 void send_names_to(server *s, int connect);
