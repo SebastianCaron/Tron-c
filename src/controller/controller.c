@@ -183,7 +183,6 @@ void go_to_menu(controller *c){
                 for(int i = 0; i < c->nb_view;i++){
                     c->views[i]->nbMenu = 3;
                     c->views[i]->affiche_winner(c->views[i], winner);
-                    printf("%d\n", winner);
                 }
                 
                 act = NO_ACTION;
