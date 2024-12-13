@@ -185,7 +185,7 @@ int start_with(char *a, char *pattern){
     int i = 0;
     while(1){
         if(a[i] == '\0' && pattern[i] == '\0') return 1;
-        if(pattern[i] == '\0') return 0;
+        if(pattern[i] == '\0') return 1;
         if(a[i] != pattern[i]) return 0;
 
         i += 1;

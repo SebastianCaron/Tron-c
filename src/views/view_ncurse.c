@@ -63,7 +63,7 @@ view *init_view_ncurse(){
 void destroy_view_ncurses(view *v){
     if(v == NULL) return;
     getch();
-    free(v->ncurse->grid_w);
+    // free(v->ncurse->grid_w);
     free(v->ncurse);
     free(v);
     clear();
