@@ -177,10 +177,13 @@ void go_to_menu(controller *c){
                 
                 controller_play_solo_j_vs_random(c);
                 int winner;
+
+                // FAIRE GET WINNER DANS MODEL
                 for(int indexPlayer =0; indexPlayer<c->m->n_player;indexPlayer++){
                     if(!c->m->dead[indexPlayer]) winner = indexPlayer;
                 }
                 for(int i = 0; i < c->nb_view;i++){
+
                     c->views[i]->nbMenu = 3;
                     c->views[i]->affiche_winner(c->views[i], winner);
                 }
