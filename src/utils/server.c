@@ -126,7 +126,10 @@ char *grid_to_buffer(int nb_lignes, int nb_colonnes, int **grid){
 
 
 void send_grid_to(server *s, int connect, int nb_lignes, int nb_colonnes, int **grid){
-
+    int size = (3 + nb_lignes * nb_colonnes) * sizeof(int);
+    char *buffer = grid_to_buffer(nb_lignes, nb_colonnes, grid);
+    if(buffer == NULL) return;
+    write(s->clients_fd[connect], buffer, size);
 }
 
 void send_positions_to(server *s, int connect, position **positions);
