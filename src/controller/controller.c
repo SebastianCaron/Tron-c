@@ -16,7 +16,7 @@ int aleaEntreBornes(int min, int max){
 }
 
 void controller_play_solo_j_vs_random(controller *c){
-    int XY[4][2]={{0,-1}, {0,1},{1,0},{-1,0}};
+    int XY[4][2]={{0,1},{0,-1},{1,0},{-1,0}};
     direction converted[4] = {DOWN, UP, RIGHT, LEFT};
     create_model(c, 2);
     int i = 0;
@@ -28,29 +28,44 @@ void controller_play_solo_j_vs_random(controller *c){
     
     clock_t start, end;
     double duration;
-    int posPossible[4] = {0};
+    int posPossible[4] = {};
     while(!est_fini(c->m)){
         start = clock();
-        // Recupérer les directions possibles du bot
         int cptPosPossible = 0;
         position *bot_position = c->m->players[1];
+
+        // Checkk possibilité =>
         for(int k = 0; k<4; k++){
             int x = (bot_position->x)+XY[k][0];
             int y = (bot_position->y)+XY[k][1];
-            if (x >= 0 && x < c->m->nb_lignes_grid && y >= 0 && y < c->m->nb_colonnes_grid && c->m->grid[y][x] == EMPTY) {
+            // printf("x : %d; y : %d\n", x, y);
+            if (x >= 1 && x <= c->m->nb_lignes_grid-1 && y >= 1 && y <= c->m->nb_colonnes_grid-1 && c->m->grid[y][x] == EMPTY) {
                 if((converted[k]&1) != (c->m->directions[1]&1)){ // VERIFIE DIRECTIONS OPPOSEE
-                    posPossible[cptPosPossible++] = converted[k];
+                    posPossible[cptPosPossible++] = k;
                 } 
             }
+            
         }
         for(i = 0; i < c->nb_view; i++){
             // RECUPERE LES INPUTS VIA LES VIEWS
             c->views[i]->get_direction(c->views[i],1, dirs);
         }
         move_player(c->m, 0, dirs[0]);
-        // printf("%d : [%d, %d, %d]\n", cptPosPossible, posPossible[0], posPossible[1], posPossible[2]);
-        move_player(c->m, 1, posPossible[aleaEntreBornes(0,cptPosPossible)]);
+        
 
+        if (cptPosPossible == 1) {
+            int mm =0; 
+            // printf("mm : %d, posPossible[mm] : %d\n", mm, posPossible[mm]);
+            move_player(c->m, 1, converted[posPossible[mm]]);
+        }else if( cptPosPossible > 1){
+            int mm= aleaEntreBornes(0, cptPosPossible);
+            // printf("mm : %d, posPossible[mm] : %d\n", mm, posPossible[mm]);
+            move_player(c->m, 1, converted[posPossible[mm]]);
+        }
+        else if( cptPosPossible == 0){
+            move_player(c->m, 1, converted[0]);
+        }
+            
         collision_player(c->m, 0);
         collision_player(c->m, 1);
 
@@ -63,6 +78,7 @@ void controller_play_solo_j_vs_random(controller *c){
         usleep(SPEED_FRM - duration);
     }
     free(dirs);
+    
     // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
 }
 void controller_play_multi(controller *c){
