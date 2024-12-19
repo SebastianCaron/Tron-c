@@ -6,6 +6,7 @@
 
 #include "model.h"
 #include "../utils/hashmap.h"
+#include "../utils/QStack.h"
 
 model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **grid){
     model *game = (model *) malloc(sizeof(model));
@@ -172,7 +173,7 @@ position *create_position(int x, int y){
 
 int position_hash(void *v){
     position *p = v;
-    return p->x * 1000 + p->y;
+    return p->x * 100 + p->y;
 }
 int position_equal(void *a, void *b){
     position *v1 = a;
@@ -182,12 +183,45 @@ int position_equal(void *a, void *b){
 }
 
 position *get_nearest_point_available(model *m, int x, int y){
-    position *p = create_position(x, y);
+    position *pos_depart = create_position(x, y);
     // TODO
-    hashmap *h = init_hashmap(-1, position_equal, position_hash);
+    hashmap *visited = init_hashmap(-1, position_equal, position_hash);
+    queue *q = QS_init();
+    while(q->size > 0){
+        position *pos = QS_get_first(q);
 
-    destroy_hashmap(h);
-    return p;
+        if(m->grid[pos->y][pos->x] == EMPTY){
+            destroy_hashmap(visited);
+            QS_destroy(q);
+            return pos;
+        }
+        position *north, *south, *east, *west;
+        north = create_position(pos->x, pos->y-1);
+        south = create_position(pos->x, pos->y+1);
+        east = create_position(pos->x+1, pos->y);
+        west = create_position(pos->x-1, pos->y);
+        if(!hashmap_is_in(visited, north)){
+            hashmap_add(visited, north);
+            QS_add(q, north);
+        }
+        if(!hashmap_is_in(visited, south)){
+            hashmap_add(visited, south);
+            QS_add(q, south);
+        }
+        if(!hashmap_is_in(visited, east)){
+            hashmap_add(visited, east);
+            QS_add(q, east);
+        }
+        if(!hashmap_is_in(visited, west)){
+            hashmap_add(visited, west);
+            QS_add(q, west);
+        }
+
+        free(pos);
+    }
+    destroy_hashmap(visited);
+    QS_destroy(q);
+    return pos_depart;
 }
 
 void init_positions(model *m){
