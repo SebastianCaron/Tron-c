@@ -11,7 +11,7 @@ typedef struct {
 } client;
 
 client *init_client(char *ip, int port);
-void destroy_clien(client *c);
+void destroy_client(client *c);
 
 int **get_grid(client *c);
 int is_over(client *c);

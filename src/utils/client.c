@@ -11,8 +11,8 @@
 client *init_client(char *ip, int port){
     
 }
-void destroy_clien(client *c){
-    
+void destroy_client(client *c){
+
 }
 
 int **get_grid(client *c);
