@@ -34,7 +34,7 @@ void send_positions_to(server *s, int connect,int nb_position, position **positi
 void send_is_over_to(server *s, int connect, int est_fini);
 void send_start_signal_to(server *s, int connect);
 void send_names_to(server *s, int connect);
-void send_winners_to(server *s, int connect, int *winners);
+void send_winners_to(server *s, int connect, int winners);
 
 
 direction *get_directions_all(server *s);

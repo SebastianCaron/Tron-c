@@ -157,10 +157,44 @@ void send_positions_to(server *s, int connect, int nb_position, position **posit
     free(buffer);
 }
 
-void send_is_over_to(server *s, int connect, int est_fini);
-void send_start_signal_to(server *s, int connect);
-void send_names_to(server *s, int connect);
-void send_winners_to(server *s, int connect, int *winners);
+void send_is_over_to(server *s, int connect, int est_fini){
+    int size = 2 * sizeof(int);
+    int *buffer = calloc(2, sizeof(int));
+    if(buffer == NULL) return;
+
+    buffer[0] = ISOVER;
+    buffer[1] = est_fini;
+
+    write(s->clients_fd[connect], (char *) buffer, size);
+    free(buffer);
+}
+
+void send_start_signal_to(server *s, int connect){
+    int size = sizeof(int);
+    int *buffer = calloc(1, sizeof(int));
+    if(buffer == NULL) return;
+
+    buffer[0] = START;
+
+    write(s->clients_fd[connect], (char *) buffer, size);
+    free(buffer);
+}
+
+void send_names_to(server *s, int connect){
+    
+}
+
+void send_winners_to(server *s, int connect, int winner){
+    int size = 2 * sizeof(int);
+    int *buffer = calloc(2, sizeof(int));
+    if(buffer == NULL) return;
+
+    buffer[0] = WINNER;
+    buffer[1] = winner;
+
+    write(s->clients_fd[connect], (char *) buffer, size);
+    free(buffer);
+}
 
 
 direction *get_directions_all(server *s);
