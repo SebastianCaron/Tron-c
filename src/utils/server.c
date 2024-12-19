@@ -197,12 +197,43 @@ void send_winners_to(server *s, int connect, int winner){
 }
 
 
-direction *get_directions_all(server *s);
-void send_grid_all(server *s, int **grid);
-void send_positions_all(server *s, position **positions);
-void send_is_over_all(server *s, int est_fini);
-void send_start_signal_all(server *s);
-void send_names_all(server *s);
-void send_winners_all(server *s, int *winners);
+direction *get_directions_all(server *s){
+    direction *dirs = calloc(s->nb_connect, sizeof(direction));
+    if(dirs == NULL) return NULL;
+
+    for(int i = 0; i < s->nb_connect; i++){
+        dirs[i] = get_direction_from(s, i);
+    }
+
+    return dirs;
+}
+void send_grid_all(server *s, int nb_lignes, int nb_colonnes, int **grid){
+    for(int i = 0; i < s->nb_connect; i++){
+        send_grid_to(s, i, nb_lignes, nb_colonnes, grid);
+    }
+}
+void send_positions_all(server *s, int nb_position, position **positions){
+    for(int i = 0; i < s->nb_connect; i++){
+        send_positions_to(s, i, nb_position, positions);
+    }
+}
+void send_is_over_all(server *s, int est_fini){
+    for(int i = 0; i < s->nb_connect; i++){
+        send_is_over_to(s, i, est_fini);
+    }
+}
+void send_start_signal_all(server *s){
+    for(int i = 0; i < s->nb_connect; i++){
+        send_start_signal_to(s, i);
+    }
+}
+void send_names_all(server *s){
+
+}
+void send_winner_all(server *s, int winner){
+    for(int i = 0; i < s->nb_connect; i++){
+        send_winners_to(s, i, winner);
+    }
+}
 
 
