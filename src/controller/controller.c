@@ -54,13 +54,13 @@ void controller_play_solo_j_vs_random(controller *c){
         
 
         if (cptPosPossible == 1) {
-            int mm =0; 
+            int index =0; 
             // printf("mm : %d, posPossible[mm] : %d\n", mm, posPossible[mm]);
-            move_player(c->m, 1, converted[posPossible[mm]]);
+            move_player(c->m, 1, converted[posPossible[index]]);
         }else if( cptPosPossible > 1){
-            int mm= aleaEntreBornes(0, cptPosPossible);
+            int index= aleaEntreBornes(0, cptPosPossible);
             // printf("mm : %d, posPossible[mm] : %d\n", mm, posPossible[mm]);
-            move_player(c->m, 1, converted[posPossible[mm]]);
+            move_player(c->m, 1, converted[posPossible[index]]);
         }
         else if( cptPosPossible == 0){
             move_player(c->m, 1, converted[0]);
