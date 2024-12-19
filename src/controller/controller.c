@@ -55,15 +55,17 @@ void controller_play_solo_j_vs_random(controller *c){
 
         if (cptPosPossible == 1) {
             int index =0; 
-            // printf("mm : %d, posPossible[mm] : %d\n", mm, posPossible[mm]);
+            printf("index : %d, posPossible[index] : %d\n", index, posPossible[index]);
             move_player(c->m, 1, converted[posPossible[index]]);
         }else if( cptPosPossible > 1){
-            int index= aleaEntreBornes(0, cptPosPossible);
-            // printf("mm : %d, posPossible[mm] : %d\n", mm, posPossible[mm]);
+            int index= aleaEntreBornes(0, cptPosPossible-1);
+            printf("index : %d, posPossible[index] : %d\n", index, posPossible[index]);
             move_player(c->m, 1, converted[posPossible[index]]);
         }
         else if( cptPosPossible == 0){
             move_player(c->m, 1, converted[0]);
+            printf("Pas de possibilité, c'est la mort\n");
+
         }
             
         collision_player(c->m, 0);
