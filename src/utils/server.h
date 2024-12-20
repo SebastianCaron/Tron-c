@@ -17,7 +17,6 @@ typedef struct {
     struct sockaddr_in *address;
 } server;
 
-#define MAX_CLIENT 7
 
 
 server *init_serveur(int port, int nb_connect);

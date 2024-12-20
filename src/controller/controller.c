@@ -9,15 +9,10 @@
 #include "../utils/utils.h"
 #include "./controller.h"
 
-
-
-int aleaEntreBornes(int min, int max){
-    return rand() % (max - min + 1) + min;
-}
+// AGENTS
+#include "../agents/random.h"
 
 void controller_play_solo_j_vs_random(controller *c){
-    int XY[4][2]={{0,1},{0,-1},{1,0},{-1,0}};
-    direction converted[4] = {DOWN, UP, RIGHT, LEFT};
     create_model(c, 2);
     int i = 0;
     direction *dirs = calloc(2, sizeof(direction));
@@ -28,45 +23,16 @@ void controller_play_solo_j_vs_random(controller *c){
     
     clock_t start, end;
     double duration;
-    int posPossible[4] = {};
+
     while(!est_fini(c->m)){
         start = clock();
-        int cptPosPossible = 0;
-        position *bot_position = c->m->players[1];
-
-        // Checkk possibilité =>
-        for(int k = 0; k<4; k++){
-            int x = (bot_position->x)+XY[k][0];
-            int y = (bot_position->y)+XY[k][1];
-            // printf("x : %d; y : %d\n", x, y);
-            if (x >= 1 && x <= c->m->nb_lignes_grid-1 && y >= 1 && y <= c->m->nb_colonnes_grid-1 && c->m->grid[y][x] == EMPTY) {
-                if((converted[k]&1) != (c->m->directions[1]&1)){ // VERIFIE DIRECTIONS OPPOSEE
-                    posPossible[cptPosPossible++] = k;
-                } 
-            }
-            
-        }
+        
         for(i = 0; i < c->nb_view; i++){
             // RECUPERE LES INPUTS VIA LES VIEWS
             c->views[i]->get_direction(c->views[i],1, dirs);
         }
         move_player(c->m, 0, dirs[0]);
-        
-
-        if (cptPosPossible == 1) {
-            int index =0; 
-            printf("index : %d, posPossible[index] : %d\n", index, posPossible[index]);
-            move_player(c->m, 1, converted[posPossible[index]]);
-        }else if( cptPosPossible > 1){
-            int index= aleaEntreBornes(0, cptPosPossible-1);
-            printf("index : %d, posPossible[index] : %d\n", index, posPossible[index]);
-            move_player(c->m, 1, converted[posPossible[index]]);
-        }
-        else if( cptPosPossible == 0){
-            move_player(c->m, 1, converted[0]);
-            printf("Pas de possibilité, c'est la mort\n");
-
-        }
+        move_player(c->m, 1, random_get_direction(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, dirs));
             
         collision_player(c->m, 0);
         collision_player(c->m, 1);
@@ -75,6 +41,7 @@ void controller_play_solo_j_vs_random(controller *c){
             // MET A JOUR LES VIEWS
             c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
         }
+
         end = clock();
         duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
         usleep(SPEED_FRM - duration);

@@ -109,7 +109,7 @@ int wait_for_connections(server *s, void (*on_connect)(char *)){
 }
 
 char *grid_to_buffer(int nb_lignes, int nb_colonnes, int **grid){
-    int *res = calloc(3 + nb_lignes * nb_colonnes, sizeof(int));
+    int *res = calloc(4 + nb_lignes * nb_colonnes, sizeof(int));
     if(res == NULL){
         perror("[SERVER] ERREUR ALLOC GRID BUFFER\n");
         return NULL;
@@ -125,6 +125,8 @@ char *grid_to_buffer(int nb_lignes, int nb_colonnes, int **grid){
         }
     }
 
+    res[nb_lignes * nb_colonnes + 3] = ENDPACKET;
+
     return (char *) res;
 }
 
@@ -137,7 +139,7 @@ void send_grid_to(server *s, int connect, int nb_lignes, int nb_colonnes, int **
 }
 
 char *positions_to_buffer(int nb_position, position **positions){
-    int *res = calloc(2 + nb_position*2, sizeof(int));
+    int *res = calloc(3 + nb_position*2, sizeof(int));
     if(res == NULL){
         perror("[SERVER] ERREUR ALLOC GRID BUFFER\n");
         return NULL;
@@ -150,6 +152,9 @@ char *positions_to_buffer(int nb_position, position **positions){
         res[2 * i + 2] = positions[i]->x;
         res[2 * i + 3] = positions[i]->y;
     }
+
+    res[nb_position*2 + 2] = ENDPACKET;
+
     return (char *) res;
 }
 
@@ -163,11 +168,12 @@ void send_positions_to(server *s, int connect, int nb_position, position **posit
 
 void send_is_over_to(server *s, int connect, int est_fini){
     int size = 2 * sizeof(int);
-    int *buffer = calloc(2, sizeof(int));
+    int *buffer = calloc(3, sizeof(int));
     if(buffer == NULL) return;
 
     buffer[0] = ISOVER;
     buffer[1] = est_fini;
+    buffer[2] = ENDPACKET;
 
     write(s->clients_fd[connect], (char *) buffer, size);
     free(buffer);
@@ -175,10 +181,11 @@ void send_is_over_to(server *s, int connect, int est_fini){
 
 void send_start_signal_to(server *s, int connect){
     int size = sizeof(int);
-    int *buffer = calloc(1, sizeof(int));
+    int *buffer = calloc(2, sizeof(int));
     if(buffer == NULL) return;
 
     buffer[0] = START;
+    buffer[1] = ENDPACKET;
 
     write(s->clients_fd[connect], (char *) buffer, size);
     free(buffer);
@@ -190,11 +197,12 @@ void send_names_to(server *s, int connect){
 
 void send_winners_to(server *s, int connect, int winner){
     int size = 2 * sizeof(int);
-    int *buffer = calloc(2, sizeof(int));
+    int *buffer = calloc(3, sizeof(int));
     if(buffer == NULL) return;
 
     buffer[0] = WINNER;
     buffer[1] = winner;
+    buffer[2] = ENDPACKET;
 
     write(s->clients_fd[connect], (char *) buffer, size);
     free(buffer);
