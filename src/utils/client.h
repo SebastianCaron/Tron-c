@@ -8,6 +8,8 @@ typedef struct {
     int port;
 
     int serveur_fd;
+
+    int id_on_serv;
 } client;
 
 client *init_client(char *ip, int port);

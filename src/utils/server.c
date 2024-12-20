@@ -99,6 +99,10 @@ int wait_for_connections(server *s, void (*on_connect)(char *)){
             // TODO : TRANSFORM address to char *
             on_connect("CLIENT CONNECTE ! ");
         }
+        s->clients_fd[s->nb_connect] = new_socket;
+        int buffer[2] = {IDSERV, s->nb_connect};
+        write(new_socket, (char *) buffer, 2 * sizeof(int));
+        s->nb_connect++;
         return 1;
     }
     return 0;
