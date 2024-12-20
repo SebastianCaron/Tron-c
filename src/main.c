@@ -68,11 +68,11 @@ int main(int argc, char **argv){
     }
 
     if(with_sdl == 1 && with_ncurse == 1){
-        c = init_controller(vncr, vsdl);
+        c = init_controller(2, vncr, vsdl);
     }else if(with_sdl){
-        c = init_controller(vsdl);
+        c = init_controller(1, vsdl);
     }else{
-        c = init_controller(vncr);
+        c = init_controller(1, vncr);
     }
 
 

@@ -92,7 +92,7 @@ void controller_play_online(controller *c){
 
 }
 
-controller *init_controller(view *v, ...){
+controller *init_controller(int nb_views, ...){
     controller *c = calloc(1, sizeof(controller));
     if(c == NULL){
         perror("[CONTROLLER] erreur allocation de la structure controller.");
@@ -100,40 +100,26 @@ controller *init_controller(view *v, ...){
     }
 
     va_list args;
-    va_start(args, v);
+    va_start(args, nb_views);
 
-    c->nb_view = 1;
-    c->views = realloc(c->views, sizeof(view *) * c->nb_view);
+    c->nb_view = nb_views;
+    c->views = calloc(nb_views, sizeof(view *));
     if (c->views == NULL) {
         perror("[CONTROLLER] erreur allocation liste views.");
         free(c);
         exit(EXIT_FAILURE);
     }
-    c->views[c->nb_view-1] = v;
-
-    while (1) {
+    int i = 0;
+    while (i < nb_views) {
         view *nv = va_arg(args, view *);
 
         if (nv == NULL) {
             break;
         }
 
-        c->nb_view += 1;
-
-        c->views = realloc(c->views, sizeof(view *) * c->nb_view);
-        if(c->views == NULL){
-            perror("[CONTROLLER] erreur allocation liste views.");
-            free(c->views);
-            free(c);
-            exit(EXIT_FAILURE);
-        }
-
-        c->views[c->nb_view-1] = nv;
+        c->views[i] = nv;
+        i++;
     }
-
-    c->nb_view -= 1;
-    // printf("%d\n", c->nb_view);
-    // exit(EXIT_SUCCESS);
     va_end(args);
     return c;
 }
