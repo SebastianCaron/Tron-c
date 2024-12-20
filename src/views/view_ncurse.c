@@ -1,11 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
+#include <locale.h>
+#include <wchar.h>
 
 #include "view_ncurse.h"
 #include "view.h"
 #include "../controller/controller.h"
 
+int ncurses_tabColors[10][4] = { {0,0,0,255}, {255,255,0,255}, {255,0,255,255}, //Sol, J1, J2
+                            {0,255,255,255}, {255,0,0,255}, {0,255,0,255}, //J3, J4, J5
+                            {0,0,255,255}, {0,140,140,255}, {140,0,0,255}, //J6, J7, J8
+                            {255,255,255,255}}; // Mur de la map
 
 
 view *init_view_ncurse(){
@@ -114,15 +120,15 @@ void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int 
     // fprintf(stderr, "C : %d, L : %d\n", nb_colonnes, nb_lignes);
     for(int i = 0; i < nb_lignes; i++){
         for(int j = 0; j < nb_colonnes; j++){
-            char s = ' ';
+            char *s = " ";
             if(grid[i][j] == WALL){
-                s = '#';
+                s = "█";
             }else if(grid[i][j] < 0){
-                s = '#';
+                s = "▒▒";
             }else if(grid[i][j] > 0){
-                s = '-';
+                s = "-";
             }
-            mvwprintw(v->ncurse->grid_w, i, j, "%c", s);
+            mvwprintw(v->ncurse->grid_w, i, j, "%s", s);
         }
     }
     wrefresh(v->ncurse->grid_w);
@@ -135,6 +141,8 @@ void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int 
 }
 
 void affiche_win_ncurses(view *v, int indexPlayer) {
+
+
     int win_height = 10;
     int win_width = v->width - 20;
 
@@ -142,11 +150,17 @@ void affiche_win_ncurses(view *v, int indexPlayer) {
     int start_x = (v->width - win_width) / 2 + 25;
 
     v->ncurse->win = subwin(stdscr, win_height, win_width, start_y, start_x);
-
+    werase(v->ncurse->win);
+    wrefresh(v->ncurse->win);
     box(v->ncurse->win, ACS_VLINE, ACS_HLINE);
+    
 
     char msg[50];
-    snprintf(msg, sizeof(msg), "Le joueur %d a gagné !", indexPlayer);
+    if(indexPlayer == -1){
+        snprintf(msg, sizeof(msg), "Aucun Vainqueur");
+    }else{
+        snprintf(msg, sizeof(msg), "Le joueur %d a gagné !", indexPlayer+1);
+    }
 
     int msg_x = (win_width - strlen(msg)) / 2;
     mvwprintw(v->ncurse->win, 3, msg_x, "%s", msg);

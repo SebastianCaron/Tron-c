@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <locale.h>
 
 #include "utils/utils.h"
 #include "model/model.h"
@@ -21,6 +22,7 @@ int main(int argc, char **argv){
 
     if(TEST) return test();
 
+    setlocale(LC_ALL, "");
     srand(time(NULL));
 
     view *vncr = NULL;

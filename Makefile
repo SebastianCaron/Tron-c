@@ -9,7 +9,7 @@ else
 CFLAGS ?= -Wall -MMD -03 -DNDEBUG
 endif
 
-LDFLAGS = -lncurses $$(sdl2-config --cflags --libs) -lSDL2_ttf -lm
+LDFLAGS = -lncursesw $$(sdl2-config --cflags --libs) -lSDL2_ttf -lm
 
 OBJS := $(shell find $(SRC_DIR) -name "*.c" | sed 's/.c$$/.o/g' | sed 's/$(SRC_DIR)/$(BIN_DIR)/g')
 DEPS := $(OBJS:.o=.d)
