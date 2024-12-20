@@ -9,6 +9,8 @@
 
 typedef struct{
     WINDOW *grid_w;
+    WINDOW *scores;
+    WINDOW *win;
 } view_ncurse;
 
 typedef struct{

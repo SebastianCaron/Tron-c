@@ -184,7 +184,7 @@ int position_equal(void *a, void *b){
 
 position *get_nearest_point_available(model *m, int x, int y){
     position *pos_depart = create_position(x, y);
-    // TODO
+
     hashmap *visited = init_hashmap(-1, position_equal, position_hash);
     queue *q = QS_init();
     while(q->size > 0){

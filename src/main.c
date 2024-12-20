@@ -67,8 +67,8 @@ int main(int argc, char **argv){
         vncr = init_view_ncurse();
     }
 
-    if(with_sdl && with_ncurse){
-        c = init_controller(vsdl, vncr);
+    if(with_sdl == 1 && with_ncurse == 1){
+        c = init_controller(vncr, vsdl);
     }else if(with_sdl){
         c = init_controller(vsdl);
     }else{

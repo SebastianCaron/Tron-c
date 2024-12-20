@@ -35,7 +35,8 @@ view *init_view_ncurse(){
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
 
-    v->ncurse->grid_w = subwin(stdscr, v->height, v->width, 1, 20);
+    v->ncurse->grid_w = subwin(stdscr, v->height, v->width, 1, 25);
+    v->ncurse->scores = subwin(stdscr, v->height, 20, 1, 0);
 
     // vn->grid_w = subwin(stdscr, LINES-2, COLS-40, 1, 20); 
     // box(vn->grid_w, ACS_VLINE, ACS_HLINE);
@@ -49,9 +50,7 @@ view *init_view_ncurse(){
 
 
     v->affiche_menu = afficheMenuNC;
-    // v->affiche_menu_principal = afficheMenuPrincipalNC;
-    // v->affiche_menu_multijoueur = afficheMenuMultiplayerNC;
-    // v->affiche_menu_solo = afficheMenuSoloNC;
+    v->affiche_winner = affiche_win_ncurses;
 
     v->nbMenu = 0;
 
@@ -62,8 +61,8 @@ view *init_view_ncurse(){
 
 void destroy_view_ncurses(view *v){
     if(v == NULL) return;
-    getch();
-    // free(v->ncurse->grid_w);
+    delwin(v->ncurse->grid_w);
+    delwin(v->ncurse->scores);
     free(v->ncurse);
     free(v);
     clear();
@@ -125,7 +124,39 @@ void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int 
         }
     }
     wrefresh(v->ncurse->grid_w);
+
+    box(v->ncurse->scores, ACS_VLINE, ACS_HLINE);
+    for (int i = 0; i < nb_player; i++) {
+        mvwprintw(v->ncurse->scores, i + 1, 1, " Player %d: %d", i + 1, scores[i]);
+    }
+    wrefresh(v->ncurse->scores);
 }
+
+void affiche_win_ncurses(view *v, int indexPlayer) {
+    int win_height = 10;
+    int win_width = v->width - 20;
+
+    int start_y = (v->height - win_height) / 2;
+    int start_x = (v->width - win_width) / 2 + 25;
+
+    v->ncurse->win = subwin(stdscr, win_height, win_width, start_y, start_x);
+
+    box(v->ncurse->win, ACS_VLINE, ACS_HLINE);
+
+    char msg[50];
+    snprintf(msg, sizeof(msg), "Le joueur %d a gagné !", indexPlayer);
+
+    int msg_x = (win_width - strlen(msg)) / 2;
+    mvwprintw(v->ncurse->win, 3, msg_x, "%s", msg);
+
+    const char *ok_text = "< OK >";
+    int ok_x = (win_width - strlen(ok_text)) / 2;
+    mvwprintw(v->ncurse->win, 5, ok_x, "%s", ok_text);
+
+    wrefresh(v->ncurse->win);
+    delwin(v->ncurse->win);
+}
+
 
 void afficheMenuNC(view *v, int *selected_option, int nbMenu){
     v->get_action = get_action_menu_ncurses;

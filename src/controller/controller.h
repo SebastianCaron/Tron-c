@@ -25,5 +25,5 @@ void controller_play_solo_j_vs_random(controller *c);
 void destroy_controller(controller *);
 
 void go_to_menu(controller *);
-
+void display_winner(controller *c);
 

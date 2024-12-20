@@ -14,7 +14,7 @@ SDL_Color tabColors[10] = { {0,0,0,255}, {255,255,0,255}, {255,0,255,255}, //Sol
                             {255,255,255,255}}; // Mur de la map
 
 view *init_view_sdl(){
-    view *v = (view *)malloc(sizeof(view));
+    view *v = (view *) calloc(1, sizeof(view));
     if(!v){
         perror("[VIEW SDL] erreur allocation de la structure view.");
         exit(EXIT_FAILURE);
@@ -39,12 +39,19 @@ view *init_view_sdl(){
     v->height = 30;
     v->nbMenu = 0;
 
-    view_sdl *viewSdl =(view_sdl *)malloc(sizeof(view_sdl));
+    view_sdl *viewSdl =(view_sdl *) calloc(1, sizeof(view_sdl));
     if(!viewSdl){
         perror("[VIEW SDL] erreur allocation de la structure view_Sdl.");
         exit(EXIT_FAILURE);
     }
-    v->sdl = viewSdl; 
+    v->sdl = viewSdl;
+
+    // v->sdl->buttons = (SDL_Rect **) calloc(20, sizeof(SDL_Rect *));
+    // if(!v->sdl->buttons){
+    //     perror("[VIEW SDL] erreur allocation des boutons");
+    //     exit(EXIT_FAILURE);
+    // }
+
     v->sdl->menu_current = 1000;
 
     v->sdl->renderer = NULL;
@@ -76,8 +83,8 @@ void destroy_view_sdl(view *v){
     TTF_Quit();
     SDL_Quit();
     free_buttons(v->sdl);
-    free(v->sdl);
-    free(v);
+    // free(v->sdl);
+    // free(v);
 }
 
 

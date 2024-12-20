@@ -151,6 +151,7 @@ void create_model(controller *c, int nb_player){
 
 void destroy_controller(controller *c) {
     if(c == NULL) return;
+    printf("NB VIEW : %d\n", c->nb_view);
     for(int i = 0; i < c->nb_view; i++){
         c->views[i]->destroy_self(c->views[i]);
     }
@@ -162,7 +163,6 @@ void destroy_controller(controller *c) {
 
 void go_to_menu(controller *c){
     int nbMenu = c->views[0]->nbMenu;
-    int winner;
     actions act = NO_ACTION;
     int selected_option = 1;
     while(1){  
@@ -183,25 +183,14 @@ void go_to_menu(controller *c){
                 break;
             case PLAY_BOT_ALGO:
                 controller_play_solo_j_vs_random(c);
-                winner= get_winner(c->m);    
-
-                for(int i = 0; i < c->nb_view;i++){
-                    c->views[i]->nbMenu = 3; //JSP SI CEST UTIL
-                    c->views[i]->affiche_winner(c->views[i], winner);
-                }
+                display_winner(c);
                 
-                act = NO_ACTION;
+                act = RETOUR;
                 break;
             case PLAY_MULTI:
                 controller_play_multi(c);
-                winner= get_winner(c->m);    
-
-                for(int i = 0; i < c->nb_view;i++){
-                    c->views[i]->nbMenu = 3;
-                    c->views[i]->affiche_winner(c->views[i], winner);
-                }
-                
-                act = NO_ACTION;
+                display_winner(c);
+                act = RETOUR;
                 break;
             case RETOUR:
                 nbMenu = 0; 
@@ -217,3 +206,23 @@ void go_to_menu(controller *c){
     }
 }
 
+void display_winner(controller *c){
+    int winner = get_winner(c->m);    
+
+    for(int i = 0; i < c->nb_view;i++){
+        c->views[i]->nbMenu = MENU_PRINCIPAL; //JSP SI CEST UTIL
+        c->views[i]->affiche_winner(c->views[i], winner);
+    }
+    int nbMenu = c->views[0]->nbMenu;
+    actions act = NO_ACTION;
+    int selected_option = 1;
+
+    while(1){
+        for(int i = 0; i < c->nb_view; i++){
+            c->views[i]->get_action(c->views[i], &act, &selected_option, nbMenu);
+        }
+        if(act != NO_ACTION){
+            return;
+        }
+    }
+}

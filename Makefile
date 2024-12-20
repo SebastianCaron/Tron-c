@@ -26,7 +26,7 @@ $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(COMPILER) $(CFLAGS) -c $< -o $@
 
-.PHONY: clean mrpropre fr0 debug
+.PHONY: clean mrpropre fr0 debug nc
 clean:
 	rm -rf $(BIN_DIR)
 
@@ -44,7 +44,7 @@ debug: mrpropre all
 	clear
 	valgrind --log-file=val.txt --leak-check=full ./tron -sdl -ncurse
 
-ncurse: mrpropre all
+nc: mrpropre all
 	clear
 	./tron -ncurse 2> debug_ncurse.txt
 
