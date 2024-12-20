@@ -7,10 +7,10 @@ int aleaEntreBornes(int min, int max){
     return rand() % (max - min + 1) + min;
 }
 
-direction random_get_direction(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions){
-    int XY[4][2]={{0,1},{0,-1},{1,0},{-1,0}};
-    direction converted[4] = {DOWN, UP, RIGHT, LEFT};
+int XY[4][2]={{0,1},{0,-1},{1,0},{-1,0}};
+direction converted[4] = {DOWN, UP, RIGHT, LEFT};
 
+direction random_get_direction(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions){
     int cptPosPossible = 0;
     position *bot_position = players[1];
     int posPossible[4] = {NODIRECTION};

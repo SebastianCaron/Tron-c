@@ -23,9 +23,11 @@ view *init_view_ncurse(){
     initscr();
     v->type = 'n';
     getmaxyx(stdscr, v->height, v->width);
+    v->width = (v->width > 100) ? 100 : v->width;
     v->width -= 40;
     v->height -= 2;
-
+    // v->width = (v->width > 100) ? 100 : v->width-40;
+    // v->height = (v->height > 100) ? 100 : v->height-2;
     v->ncurse = vn;
 
     clear();

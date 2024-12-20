@@ -11,6 +11,7 @@
 
 // AGENTS
 #include "../agents/random.h"
+#include "../agents/rectiligne.h"
 
 void controller_play_solo_j_vs_random(controller *c){
     create_model(c, 2);
@@ -32,7 +33,7 @@ void controller_play_solo_j_vs_random(controller *c){
             c->views[i]->get_direction(c->views[i],1, dirs);
         }
         move_player(c->m, 0, dirs[0]);
-        move_player(c->m, 1, random_get_direction(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, dirs));
+        move_player(c->m, 1, rectiligne_get_direction(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, c->m->directions));
             
         collision_player(c->m, 0);
         collision_player(c->m, 1);
@@ -103,6 +104,11 @@ controller *init_controller(view *v, ...){
 
     c->nb_view = 1;
     c->views = realloc(c->views, sizeof(view *) * c->nb_view);
+    if (c->views == NULL) {
+        perror("[CONTROLLER] erreur allocation liste views.");
+        free(c);
+        exit(EXIT_FAILURE);
+    }
     c->views[c->nb_view-1] = v;
 
     while (1) {
@@ -117,6 +123,8 @@ controller *init_controller(view *v, ...){
         c->views = realloc(c->views, sizeof(view *) * c->nb_view);
         if(c->views == NULL){
             perror("[CONTROLLER] erreur allocation liste views.");
+            free(c->views);
+            free(c);
             exit(EXIT_FAILURE);
         }
 
@@ -126,7 +134,7 @@ controller *init_controller(view *v, ...){
     c->nb_view -= 1;
     // printf("%d\n", c->nb_view);
     // exit(EXIT_SUCCESS);
-
+    va_end(args);
     return c;
 }
 
@@ -151,10 +159,11 @@ void create_model(controller *c, int nb_player){
 
 void destroy_controller(controller *c) {
     if(c == NULL) return;
-    printf("NB VIEW : %d\n", c->nb_view);
+    // printf("NB VIEW : %d\n", c->nb_view);
     for(int i = 0; i < c->nb_view; i++){
         c->views[i]->destroy_self(c->views[i]);
     }
+    
     free(c->views);
     destroy_model(c->m);
     free(c);
