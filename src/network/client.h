@@ -2,6 +2,7 @@
 
 #include "network.h"
 #include "../utils/utils.h"
+#include "../utils/QStack.h"
 #include "../model/model.h"
 
 typedef struct {
@@ -20,6 +21,13 @@ typedef struct {
     int has_started;
     char **names;
     int winner;
+
+    char data_available[15];
+    unsigned size;
+
+    f_packet need_to_read_type;
+    int *need_to_read_nbytes;
+    
 } client;
 
 client *init_client(char *ip, int port);

@@ -100,8 +100,8 @@ int wait_for_connections(server *s, void (*on_connect)(char *)){
             on_connect("CLIENT CONNECTE ! ");
         }
         s->clients_fd[s->nb_connect] = new_socket;
-        int buffer[2] = {IDSERV, s->nb_connect};
-        write(new_socket, (char *) buffer, 2 * sizeof(int));
+        char buffer[3] = {IDSERV, s->nb_connect, ENDPACKET};
+        write(new_socket, (char *) buffer, 3 * sizeof(char));
         s->nb_connect++;
         return 1;
     }
@@ -131,7 +131,7 @@ char *grid_to_buffer(int nb_lignes, int nb_colonnes, int **grid){
 }
 
 void send_grid_to(server *s, int connect, int nb_lignes, int nb_colonnes, int **grid){
-    int size = (3 + nb_lignes * nb_colonnes) * sizeof(int);
+    int size = (4 + nb_lignes * nb_colonnes) * sizeof(int);
     char *buffer = grid_to_buffer(nb_lignes, nb_colonnes, grid);
     if(buffer == NULL) return;
     write(s->clients_fd[connect], buffer, size);
@@ -159,7 +159,7 @@ char *positions_to_buffer(int nb_position, position **positions){
 }
 
 void send_positions_to(server *s, int connect, int nb_position, position **positions){
-    int size = (2 + nb_position*2) * sizeof(int);
+    int size = (3 + nb_position*2) * sizeof(int);
     char *buffer = positions_to_buffer(nb_position, positions);
     if(buffer == NULL) return;
     write(s->clients_fd[connect], buffer, size);

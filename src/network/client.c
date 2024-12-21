@@ -10,10 +10,12 @@
 
 client *init_client(char *ip, int port){
     client *c = calloc(1, sizeof(client));
-    if(!c){
+    if(c == NULL){
         perror("ERREUR INITIALISATION CLIENT");
         exit(EXIT_FAILURE);
     }
+
+    c->need_to_read_type = -1;
 
     c->ip = ip;
     c->port = port;
@@ -44,7 +46,17 @@ void destroy_client(client *c){
     free(c);
 }
 
-void retrieve_data(){
+void add_to_buffer(client *c, char *buff, int size){
+    
+}
+
+grid *buffer_to_grid(int nb_lignes, int nb_colonnes, char *c){
+
+}
+
+void retrieve_data(client *c){
+    // SI PAS DANS LES DATAS AVAILABLES, ON READ ET ON AJOUTE AUX DATA AV
+    // TANT QUE PAS IN AVAILABLE ON RETRIEVE tant pis
     
 }
 
