@@ -17,7 +17,7 @@ void QS_destroy(struct _stack_queue *q){
     free(q);
 }
 
-void *QS_get_first(struct _stack_queue *q){
+void *QS_pop_first(struct _stack_queue *q){
     if(q == NULL) return NULL;
     if(q->start == NULL) return NULL;
     void *val = q->start->value;
@@ -55,5 +55,20 @@ void QS_add(struct _stack_queue *s, void *elt){
     s->end->next->prev = s->end;
     s->size += 1;
     return;
-
+}
+void QS_add_first(struct _stack_queue *s, void *elt){
+    if(s == NULL) return;
+    if(s->start == NULL || s->end == NULL){
+        maillon *m = init_maillon(elt);
+        s->start = m;
+        s->end = m;
+        s->size = 1;
+        return;
+    }
+    maillon *tmp = init_maillon(elt);
+    tmp->next = s->start;
+    s->start->prev = tmp;
+    s->start = tmp;
+    s->size += 1;
+    return;
 }
