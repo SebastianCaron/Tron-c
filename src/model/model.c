@@ -188,7 +188,7 @@ position *get_nearest_point_available(model *m, int x, int y){
     hashmap *visited = init_hashmap(-1, position_equal, position_hash);
     queue *q = QS_init();
     while(q->size > 0){
-        position *pos = QS_get_first(q);
+        position *pos = QS_pop_first(q);
 
         if(m->grid[pos->y][pos->x] == EMPTY){
             destroy_hashmap(visited);

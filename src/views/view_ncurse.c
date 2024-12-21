@@ -13,6 +13,22 @@ int ncurses_tabColors[10][4] = { {0,0,0,255}, {255,255,0,255}, {255,0,255,255}, 
                             {0,0,255,255}, {0,140,140,255}, {140,0,0,255}, //J6, J7, J8
                             {255,255,255,255}}; // Mur de la map
 
+void init_colors() {
+    start_color();
+
+    for (int i = 0; i < 10; i++) {
+        int r = ncurses_tabColors[i][0] * 1000 / 255;
+        int g = ncurses_tabColors[i][1] * 1000 / 255;
+        int b = ncurses_tabColors[i][2] * 1000 / 255;
+
+        init_color(COLOR_RED + i, r, g, b);
+    }
+
+    for (int i = 0; i < 10; i++) {
+        init_pair(i + 1, COLOR_RED + i, COLOR_BLACK);
+    }
+}
+
 
 view *init_view_ncurse(){
     view *v = (view *)malloc(sizeof(view));
@@ -45,6 +61,8 @@ view *init_view_ncurse(){
 
     v->ncurse->grid_w = subwin(stdscr, v->height, v->width, 1, 25);
     v->ncurse->scores = subwin(stdscr, v->height, 20, 1, 0);
+
+    init_colors();
 
     // vn->grid_w = subwin(stdscr, LINES-2, COLS-40, 1, 20); 
     // box(vn->grid_w, ACS_VLINE, ACS_HLINE);
@@ -115,29 +133,44 @@ direction get_direction_ncurses(view *v, int nb_player_on_keyboard, direction *d
 }
 
 void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes){
-    clear();
+    // clear();
     box(v->ncurse->grid_w, ACS_VLINE, ACS_HLINE);
     // fprintf(stderr, "C : %d, L : %d\n", nb_colonnes, nb_lignes);
     for(int i = 0; i < nb_lignes; i++){
         for(int j = 0; j < nb_colonnes; j++){
+            int color_pair = 1;
             char *s = " ";
             if(grid[i][j] == WALL){
                 s = "█";
             }else if(grid[i][j] < 0){
+                color_pair = -grid[i][j] + 1;
                 s = "▒▒";
             }else if(grid[i][j] > 0){
+                color_pair = grid[i][j] + 1;
                 s = "-";
             }
+
+
+            wattron(v->ncurse->grid_w, COLOR_PAIR(color_pair));
+
             mvwprintw(v->ncurse->grid_w, i, j, "%s", s);
+
+            wattroff(v->ncurse->grid_w, COLOR_PAIR(color_pair));
         }
     }
-    wrefresh(v->ncurse->grid_w);
+    wnoutrefresh(v->ncurse->grid_w);
+    // wrefresh(v->ncurse->grid_w);
 
     box(v->ncurse->scores, ACS_VLINE, ACS_HLINE);
     for (int i = 0; i < nb_player; i++) {
-        mvwprintw(v->ncurse->scores, i + 1, 1, " Player %d: %d", i + 1, scores[i]);
+        wattron(v->ncurse->scores, COLOR_PAIR(i + 2));
+        mvwprintw(v->ncurse->scores, i + 1, 1, "Player %d: %d", i + 1, scores[i]);
+        wattroff(v->ncurse->scores, COLOR_PAIR(i + 2));
     }
-    wrefresh(v->ncurse->scores);
+    // wrefresh(v->ncurse->scores);
+    wnoutrefresh(v->ncurse->scores);
+
+    doupdate(); 
 }
 
 void affiche_win_ncurses(view *v, int indexPlayer) {
