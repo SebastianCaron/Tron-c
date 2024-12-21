@@ -6,7 +6,7 @@
 #include <errno.h>
 
 #include "client.h"
-#include "utils.h"
+#include "network.h"
 
 client *init_client(char *ip, int port){
     client *c = calloc(1, sizeof(client));

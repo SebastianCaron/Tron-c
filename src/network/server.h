@@ -1,6 +1,7 @@
 #pragma once
 
-#include "utils.h"
+#include "network.h"
+#include "../utils/utils.h"
 #include "../model/model.h"
 
 typedef struct {

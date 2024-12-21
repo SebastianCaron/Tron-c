@@ -6,7 +6,7 @@
 #include <errno.h>
 
 #include "server.h"
-#include "utils.h"
+#include "network.h"
 
 server *init_serveur(int port, int nb_connect){
     server *s = calloc(1, sizeof(server));
