@@ -23,7 +23,7 @@ typedef struct {
     int winner;
 
     char data_available[15];
-    unsigned size;
+    unsigned size_available;
 
     f_packet need_to_read_type;
     int *need_to_read_nbytes;

@@ -2,6 +2,7 @@
 
 #define PORT 7604
 #define MAX_CLIENT 7
+#define TIMEOUT_RECEIVE 1000000
 
 #define BLOC_BUFFER_SIZE 2048
 

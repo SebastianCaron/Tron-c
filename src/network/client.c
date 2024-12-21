@@ -46,18 +46,61 @@ void destroy_client(client *c){
     free(c);
 }
 
-void add_to_buffer(client *c, char *buff, int size){
-    
-}
-
 grid *buffer_to_grid(int nb_lignes, int nb_colonnes, char *c){
 
 }
 
+// TODO CHECK ERRORS & TIMEOUT
+// SI TROP LENT PAS DE CHECK READY
 void retrieve_data(client *c){
     // SI PAS DANS LES DATAS AVAILABLES, ON READ ET ON AJOUTE AUX DATA AV
     // TANT QUE PAS IN AVAILABLE ON RETRIEVE tant pis
-    
+    char f_type = 0;
+    int rd_size = read(c->serveur_fd, &f_type, sizeof(char));
+    if(rd_size == 0) return;
+
+    switch (f_type)
+    {
+    case IDSERV:
+        int size = 2 * sizeof(char);
+        char buffer[2] = {0};
+        rd_size = read(c->serveur_fd, buffer, size);
+        while(rd_size < size){
+            rd_size += read(c->serveur_fd, buffer+rd_size, size);
+        }
+        c->id_on_serv = buffer[0];
+        break;
+    case NBJOUEUR:
+        break;
+    case START:
+        int size = 1 * sizeof(char);
+        char buffer = 0;
+        rd_size = read(c->serveur_fd, &buffer, size);
+        while(rd_size < size){
+            rd_size += read(c->serveur_fd, buffer+rd_size, size);
+        }
+        c->has_started = 1;
+        break;
+    case POSITIONS:
+        int size = (c->nb_player * 2 + 2) * sizeof(int);
+        char *buffer = calloc((c->nb_player * 2 + 2), sizeof(int));
+        rd_size = read(c->serveur_fd, &buffer, size);
+        while(rd_size < size){
+            rd_size += read(c->serveur_fd, buffer+rd_size, size);
+        }
+        int *c_buf = (int *) buffer;
+        int nb_pos = c_buf[0];
+        c_buf++;
+        for(int i = 0; i < nb_pos; i++){
+            c->pos[i].x = c_buf[2 * i];
+            c->pos[i].y = c_buf[2 * i + 1];
+        }
+        c->data_available[c->size_available++] = POSITIONS;
+        free(buffer);
+        break;
+    default:
+        break;
+    }
 }
 
 grid *client_get_grid(client *c);
