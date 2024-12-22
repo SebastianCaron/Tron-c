@@ -59,7 +59,7 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
     // Regarder position suivante du joueur en fonction de sa direction
     // Prendre la direction du bot qui se rapproche le plus du joueur 
 
-    // direction directionsBot[4] = {UP, DOWN, LEFT, RIGHT};
+    // direction directionsBot[4] = {UP, DOWN, RIGHT, LEFT};
     int directionBotTest[4][2] = {{0,1},{0,-1}, {1,0},{-1,0}};
     
     create_model(c, 2);
@@ -101,8 +101,8 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
         //     move_player(c->m, 1, UP);
         // }
 
-        int x = c->m->players[1]->x+ directionBotTest[1][1];
-        int y = c->m->players[1]->y+directionBotTest[1][0];
+        int x = c->m->players[1]->x+ directionBotTest[3][0];
+        int y = c->m->players[1]->y+directionBotTest[3][1];
         printf("%d test\n", c->m->grid[x][y]); 
         if(c->m->grid[x][y] == 0 ){
                 move_player(c->m, 1, RIGHT);
@@ -110,7 +110,7 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
         }else{
                 printf("%d pasgood\n", i);
         }
-    
+
         // A garder 
         collision_player(c->m, 0);
         collision_player(c->m, 1);
