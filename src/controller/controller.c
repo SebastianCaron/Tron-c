@@ -51,6 +51,51 @@ void controller_play_solo_j_vs_random(controller *c){
     
     // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
 }
+
+void controller_play_solo_j_vs_hara_kiri(controller *c){
+
+    // Faire une liste des directions possible du bot
+    // Regarder position suivante du joueur en fonction de sa direction
+    // Prendre la direction du bot qui se rapproche le plus du joueur 
+
+    create_model(c, 2);
+    int i = 0;
+    direction *dirs = calloc(2, sizeof(direction));
+    if(dirs == NULL){
+        perror("[CONTROLLER] erreur allocation directions\n");
+        return;
+    }
+    clock_t start, end;
+    double duration;
+
+    while(!est_fini(c->m)){
+        start = clock();
+        // A garder
+        for(i = 0; i < c->nb_view; i++){
+            c->views[i]->get_direction(c->views[i],1, dirs);
+        }
+        move_player(c->m, 0, dirs[0]);
+
+        // A changer
+        move_player(c->m, 1, dirs[0]); 
+            
+
+        // A garder 
+        collision_player(c->m, 0);
+        collision_player(c->m, 1);
+
+        for(i = 0; i < c->nb_view; i++){
+            c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+        }
+
+        end = clock();
+        duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
+        usleep(SPEED_FRM - duration);
+    }
+    free(dirs);
+}  
+
+
 void controller_play_multi(controller *c){
     create_model(c, 2);
     int i = 0;
