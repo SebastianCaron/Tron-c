@@ -52,12 +52,16 @@ void controller_play_solo_j_vs_random(controller *c){
     // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
 }
 
+
 void controller_play_solo_j_vs_hara_kiri(controller *c){
 
     // Faire une liste des directions possible du bot
     // Regarder position suivante du joueur en fonction de sa direction
     // Prendre la direction du bot qui se rapproche le plus du joueur 
 
+    // direction directionsBot[4] = {UP, DOWN, LEFT, RIGHT};
+    int directionBotTest[4][2] = {{0,1},{0,-1}, {1,0},{-1,0}};
+    
     create_model(c, 2);
     int i = 0;
     direction *dirs = calloc(2, sizeof(direction));
@@ -69,6 +73,9 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
     double duration;
 
     while(!est_fini(c->m)){
+        // direction directionPossibles[3]={0,0,0};
+        // int cptPossible=0;
+
         start = clock();
         // A garder
         for(i = 0; i < c->nb_view; i++){
@@ -77,9 +84,33 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
         move_player(c->m, 0, dirs[0]);
 
         // A changer
-        move_player(c->m, 1, dirs[0]); 
+        // for(int i=0; i<4;i++){
+        //     int x = c->m->players[1]->x+ directionBotTest[i][0] ;
+        //     int y = c->m->players[1]->y+ directionBotTest[i][1];
+        //     if(c->m->grid[x][y] == EMPTY ){
+        //         directionPossibles[cptPossible++] = directionsBot[i];
+        //         printf("%d good\n", i);   
+        //     }else{
+        //         printf("%d pasgood\n", i);
+        //     }
             
+        // }
+        // if(cptPossible>=1){
+        //     move_player(c->m, 1, directionsBot[aleaEntreBornes(0, cptPossible-1)]);
+        // }else{
+        //     move_player(c->m, 1, UP);
+        // }
 
+        int x = c->m->players[1]->x+ directionBotTest[1][1];
+        int y = c->m->players[1]->y+directionBotTest[1][0];
+        printf("%d test\n", c->m->grid[x][y]); 
+        if(c->m->grid[x][y] == 0 ){
+                move_player(c->m, 1, RIGHT);
+                printf("%d good\n", i);   
+        }else{
+                printf("%d pasgood\n", i);
+        }
+    
         // A garder 
         collision_player(c->m, 0);
         collision_player(c->m, 1);
@@ -93,6 +124,7 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
         usleep(SPEED_FRM - duration);
     }
     free(dirs);
+    
 }  
 
 
@@ -223,6 +255,12 @@ void go_to_menu(controller *c){
                 break;
             case PLAY_BOT_ALGO:
                 controller_play_solo_j_vs_random(c);
+                display_winner(c);
+                
+                act = RETOUR;
+                break;
+            case PLAY_BOT_Q:
+                controller_play_solo_j_vs_hara_kiri(c);
                 display_winner(c);
                 
                 act = RETOUR;
