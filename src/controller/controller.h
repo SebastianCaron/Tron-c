@@ -13,6 +13,10 @@ typedef struct {
     model *m;
     unsigned nb_view;
     view **views;
+
+    char *ip;
+    int port;
+    char marker;
 } controller;
 
 
@@ -27,4 +31,8 @@ void destroy_controller(controller *);
 void go_to_menu(controller *);
 void display_winner(controller *c);
 
+void set_ip(controller *c, char *ip);
+void set_port(controller *c, char *port);
 
+void controller_play_online_join(controller *c);
+void controller_play_online_host(controller *c, int nb_connect);

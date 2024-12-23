@@ -48,5 +48,18 @@ nc: mrpropre all
 	clear
 	./tron -ncurse 2> debug_ncurse.txt
 
+network: mrpropre all
+	clear
+	./tron -sdl -h &
+	./tron -sdl -ip127.0.0.1 &
+
+client: all
+	clear
+	./tron -sdl -ip127.0.0.1
+
+server: all
+	clear
+	./tron -sdl -h
+	
 -include $(DEPS)
 

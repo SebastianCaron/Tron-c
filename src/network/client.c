@@ -72,37 +72,37 @@ void retrieve_data_client(client *c){
     switch (f_type)
     {
     case IDSERV:
-        int size = 2 * sizeof(char);
+        {int size = 2 * sizeof(char);
         char buffer[2] = {0};
         rd_size = read(c->serveur_fd, buffer, size);
         while(rd_size < size){
             rd_size += read(c->serveur_fd, buffer+rd_size, size);
         }
         c->id_on_serv = buffer[0];
-        c->data_available[c->size_available++] = IDSERV;
+        c->data_available[c->size_available++] = IDSERV;}
         break;
     case NBJOUEUR:
-        int size = 2 * sizeof(char);
+        {int size = 2 * sizeof(char);
         char buffer[2] = {0};
         rd_size = read(c->serveur_fd, buffer, size);
         while(rd_size < size){
             rd_size += read(c->serveur_fd, buffer+rd_size, size);
         }
         c->nb_player = buffer[0];
-        c->data_available[c->size_available++] = NBJOUEUR;
+        c->data_available[c->size_available++] = NBJOUEUR;}
         break;
     case START:
-        int size = 1 * sizeof(char);
+        {int size = 1 * sizeof(char);
         char buffer = 0;
         rd_size = read(c->serveur_fd, &buffer, size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, buffer+rd_size, size);
+            rd_size += read(c->serveur_fd, ((char *) &buffer)+rd_size, size);
         }
         c->has_started = 1;
-        c->data_available[c->size_available++] = START;
+        c->data_available[c->size_available++] = START;}
         break;
     case POSITIONS:
-        int size = (c->nb_player * 2 + 2) * sizeof(int);
+        {int size = (c->nb_player * 2 + 2) * sizeof(int);
         char *buffer = calloc((c->nb_player * 2 + 2), sizeof(int));
         rd_size = read(c->serveur_fd, &buffer, size);
         while(rd_size < size){
@@ -116,10 +116,10 @@ void retrieve_data_client(client *c){
             c->pos[i].y = c_buf[2 * i + 1];
         }
         c->data_available[c->size_available++] = POSITIONS;
-        free(buffer);
+        free(buffer);}
         break;
     case GRID:
-        int size = 2 * sizeof(int);
+        {int size = 2 * sizeof(int);
         int buffer[2] = {0};
         rd_size = read(c->serveur_fd, &buffer, size);
         while(rd_size < size){
@@ -151,10 +151,10 @@ void retrieve_data_client(client *c){
                 rd_size += read(c->serveur_fd, grid_buff+rd_size, size);
             }
         }
-
+        }
         break;
     case SCORES:
-        int size = sizeof(int);
+        {int size = sizeof(int);
         int nb_p = 0;
         rd_size = read(c->serveur_fd, ((char *) &nb_p), size);
         while(rd_size < size){
@@ -171,17 +171,17 @@ void retrieve_data_client(client *c){
         for(int i = 0; i < nb_p; i++){
             c->scores[i] = scores_buff[i];
         }
-        c->data_available[c->size_available++] = SCORES;
+        c->data_available[c->size_available++] = SCORES;}
         break;
     case WINNER:
-        int size = 2 * sizeof(int);
+        {int size = 2 * sizeof(int);
         int buffer[2] = {0};
         rd_size = read(c->serveur_fd, ((char *) buffer), size);
         while(rd_size < size){
             rd_size += read(c->serveur_fd, ((char *) buffer)+rd_size, size);
         }
         c->winner = buffer[0];
-        c->data_available[c->size_available++] = WINNER;
+        c->data_available[c->size_available++] = WINNER;}
         break;
     case NAME:
         break;

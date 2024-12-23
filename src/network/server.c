@@ -74,7 +74,7 @@ direction get_direction_from(server *s, int connect){
     return s->directions[connect];
 }
 
-int wait_for_connections(server *s, void (*on_connect)(char *)){
+int wait_for_connections(server *s, void (*on_connect)(char *message)){
     int new_socket = 0;
     if ((new_socket = accept(s->serveur_fd, (struct sockaddr *)&(s->address), (socklen_t*)&(s->addrlen))) < 0) {
         perror("Erreur lors de l'acceptation de la connexion");
@@ -85,6 +85,8 @@ int wait_for_connections(server *s, void (*on_connect)(char *)){
         if(on_connect != NULL){
             // TODO : TRANSFORM address to char *
             on_connect("CLIENT CONNECTE ! ");
+        }else{
+            printf("CLIENT CONNECTE !\n");
         }
         s->clients_fd[s->nb_connect] = new_socket;
         char buffer[3] = {IDSERV, s->nb_connect, ENDPACKET};
@@ -206,22 +208,22 @@ void retrieve_data_server(server *s){
     switch (f_type)
     {
     case MOUVEMENT:
-        int size = 3 * sizeof(char);
+        {int size = 3 * sizeof(char);
         char buffer[3] = {0};
         rd_size = read(s->serveur_fd, buffer, size);
         while(rd_size < size){
             rd_size += read(s->serveur_fd, ((char *) buffer) + rd_size, size);
         }
-        s->directions[buffer[0]] = buffer[1];
+        s->directions[(int)buffer[0]] = buffer[1];}
         break;
     case GRID:
-        int size = 2 * sizeof(char);
+        {int size = 2 * sizeof(char);
         char buffer[2] = {0};
         rd_size = read(s->serveur_fd, ((char *) buffer), size);
         while(rd_size < size){
             rd_size += read(s->serveur_fd, ((char *) buffer) + rd_size, size);
         }
-        send_grid_to(s, buffer[0],s->m->nb_lignes_grid, s->m->nb_colonnes_grid, s->m->grid);
+        send_grid_to(s, buffer[0],s->m->nb_lignes_grid, s->m->nb_colonnes_grid, s->m->grid);}
         break;
     default:
         break;
@@ -266,7 +268,7 @@ void send_names_all(server *s){
 }
 void send_winner_all(server *s, int winner){
     for(int i = 0; i < s->nb_connect; i++){
-        send_winners_to(s, i, winner);
+        send_winner_to(s, i, winner);
     }
 }
 

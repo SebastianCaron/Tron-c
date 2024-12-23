@@ -39,6 +39,7 @@ int move_player(model *m, int player, direction dir);
 // Check if player has collided with something and update
 // dead[player]
 int collision_player(model *m, int player);
+void collision_all(model *m);
 
 int get_winner(model *);
 

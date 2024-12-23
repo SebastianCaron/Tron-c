@@ -53,8 +53,9 @@ void controller_play_solo_j_vs_random(controller *c){
         usleep(SPEED_FRM - duration);
     }
     free(dirs);
-    
-    // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+    destroy_model(c->m);
+    c->m = NULL;
+
 }
 
 
@@ -129,6 +130,8 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
         usleep(SPEED_FRM - duration);
     }
     free(dirs);
+    destroy_model(c->m);
+    c->m = NULL;
     
 }  
 
@@ -167,12 +170,10 @@ void controller_play_multi(controller *c){
         usleep(SPEED_FRM - duration);
     }
     free(dirs);
-    // display_grid_i(c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+    destroy_model(c->m);
+    c->m = NULL;
 }
 
-void controller_play_online(controller *c){
-
-}
 
 controller *init_controller(int nb_views, ...){
     controller *c = calloc(1, sizeof(controller));
@@ -221,6 +222,10 @@ void create_model(controller *c, int nb_player){
     }
 
     grid *g = load_map("./maps/map1.txt", best->height, best->width);
+    c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
+    free(g);
+}
+void create_model_with_grid(controller *c, int nb_player, grid *g){
     c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
     free(g);
 }
@@ -275,6 +280,12 @@ void go_to_menu(controller *c){
                 display_winner(c);
                 act = RETOUR;
                 break;
+            case PLAY_ONLINE:
+                if(c->marker == 1){
+                    controller_play_online_host(c, 2);
+                }else{
+                    controller_play_online_join(c);
+                }
             case RETOUR:
                 nbMenu = 0; 
                 break;
@@ -307,5 +318,101 @@ void display_winner(controller *c){
         if(act != NO_ACTION){
             return;
         }
+    }
+}
+
+// NETWORK
+
+void set_ip(controller *c, char *ip){
+    c->ip = ip;
+}
+void set_port(controller *c, char *port){
+    if(port == NULL){
+        c->port = PORT;
+        return;
+    }
+    int rport = 0;
+    int i = 0;
+    while(port[i] != '\0'){
+        rport = rport * 10 + (port[i] - '0');
+        i++;
+    }
+    c->port = rport;
+}
+
+
+// TODO : CHECK ERRORS & READY
+
+void controller_play_online_host(controller *c, int nb_connect){
+    server *s = init_serveur(c->port, nb_connect);
+
+    int nb_player_connected = 1;
+    while(nb_player_connected < nb_connect){
+        if(wait_for_connections(s, NULL) == 1){
+            nb_player_connected++;
+        }
+    }
+
+    create_model(c, nb_player_connected);
+    send_nb_player_all(s, nb_player_connected);
+    send_grid_all(s, c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid);
+
+    // WAIT FOR EVERYONE TO BE READY
+
+    send_start_signal_all(s);
+
+    direction *dirs = calloc(nb_player_connected, sizeof(direction));
+    if(dirs == NULL){
+        perror("[CONTROLLER] erreur allocation directions\n");
+        return;
+    }
+    direction *dirso;
+    clock_t start, end;
+    double duration;
+    int i = 0;
+    int is_over = 0;
+
+    while(!is_over){
+        start = clock();
+        for(i = 0; i < c->nb_view; i++){
+            // RECUPERE LES INPUTS VIA LES VIEWS
+            c->views[i]->get_direction(c->views[i],1, dirs);
+        }
+        move_player(c->m, 0, dirs[0]);
+        dirso = get_directions_all(s);
+        for(int i = 0; i < nb_player_connected; i++){
+            move_player(c->m, i+2, dirso[i]);
+        }
+
+        collision_all(c->m);
+
+        for(i = 0; i < c->nb_view; i++){
+            // MET A JOUR LES VIEWS
+            c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+        }
+
+        send_positions_all(s, nb_player_connected, c->m->players);
+        
+        end = clock();
+        duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
+        usleep(SPEED_FRM - duration);
+
+        is_over = est_fini(c->m);
+        send_is_over_all(s, is_over);
+
+        // WAIT FOR EVERYONE TO BE READY
+    }
+    free(dirs);
+    close_connections(s);
+    destroy_server(s);
+}
+
+void controller_play_online_join(controller *c){
+    client *client = init_client(c->ip, c->port);
+
+    if(client == NULL){
+        printf("IMPOSSIBLE DE SE CONNECTER A %s:%d\n", c->ip, c->port);
+    }else{
+        printf("CONNECTE OK !\n");
     }
 }

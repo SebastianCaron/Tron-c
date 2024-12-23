@@ -31,7 +31,7 @@ int main(int argc, char **argv){
     char *port = NULL;
     char with_sdl = 0;
     char with_ncurse = 0;
-
+    char marker = 0;
 
     if(argc == 1){
         with_sdl = 1;
@@ -47,6 +47,8 @@ int main(int argc, char **argv){
             ip = argv[i] + 3;
         }else if(start_with(argv[i],"-port") == 1){
             port = argv[i] + 5;
+        }else if(string_equal(argv[i],"-h") == 1){
+            marker = 1;
         }
         else{
             printf("INCORRECT PARAMETER %s\n", argv[i]);
@@ -77,6 +79,9 @@ int main(int argc, char **argv){
         c = init_controller(1, vncr);
     }
 
+    set_ip(c, ip);
+    set_port(c, port);
+    c->marker = marker;
 
     go_to_menu(c);
     destroy_controller(c);

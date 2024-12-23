@@ -145,6 +145,12 @@ int collision_player(model *m, int indexPlayer){
     return 0;
 }
 
+void collision_all(model *m){
+    for(int i = 0; i < m->n_player; i++){
+        collision_player(m, i);
+    }
+}
+
 int est_fini(model *m){
     if(!m){
         perror("[MODEL] est_fini sur model NULL");
