@@ -144,6 +144,12 @@ void retrieve_data(client *c){
         }
         else{
             // READ LES DATAS POUR VIDER LE FD
+            char buffer[BLOC_BUFFER_SIZE];
+            int size = BLOC_BUFFER_SIZE * sizeof(char);
+            rd_size = read(c->serveur_fd, &buffer, size);
+            while(rd_size < g_size){
+                rd_size += read(c->serveur_fd, grid_buff+rd_size, size);
+            }
         }
 
         break;
