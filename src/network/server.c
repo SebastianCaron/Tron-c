@@ -138,6 +138,12 @@ void send_grid_to(server *s, int connect, int nb_lignes, int nb_colonnes, int **
     free(buffer);
 }
 
+void send_nb_player_to(server *s, int connect, char nb_player){
+    int size = 3 * sizeof(char);
+    char buffer[3] = {NBJOUEUR, nb_player, ENDPACKET};
+    write(s->clients_fd[connect], buffer, size);
+}
+
 char *positions_to_buffer(int nb_position, position **positions){
     int *res = calloc(3 + nb_position*2, sizeof(int));
     if(res == NULL){
@@ -167,46 +173,44 @@ void send_positions_to(server *s, int connect, int nb_position, position **posit
 }
 
 void send_is_over_to(server *s, int connect, int est_fini){
-    int size = 2 * sizeof(int);
-    int *buffer = calloc(3, sizeof(int));
-    if(buffer == NULL) return;
-
-    buffer[0] = ISOVER;
-    buffer[1] = est_fini;
-    buffer[2] = ENDPACKET;
+    int size = 3 * sizeof(int);
+    int buffer[3] = {ISOVER, est_fini, ENDPACKET};
 
     write(s->clients_fd[connect], (char *) buffer, size);
-    free(buffer);
 }
 
 void send_start_signal_to(server *s, int connect){
-    int size = sizeof(int);
-    int *buffer = calloc(2, sizeof(int));
-    if(buffer == NULL) return;
-
-    buffer[0] = START;
-    buffer[1] = ENDPACKET;
+    int size = 2 * sizeof(int);
+    int buffer[2] = {START, ENDPACKET};
 
     write(s->clients_fd[connect], (char *) buffer, size);
-    free(buffer);
 }
 
 void send_names_to(server *s, int connect){
     
 }
 
-void send_winners_to(server *s, int connect, int winner){
-    int size = 2 * sizeof(int);
-    int *buffer = calloc(3, sizeof(int));
-    if(buffer == NULL) return;
+void send_winner_to(server *s, int connect, int winner){
+    int size = 3 * sizeof(int);
+    int buffer[3] = {WINNER, winner, ENDPACKET};
 
-    buffer[0] = WINNER;
-    buffer[1] = winner;
-    buffer[2] = ENDPACKET;
+    write(s->clients_fd[connect], (char *) buffer, size);
+}
+
+void send_scores_to(server *s, int connect, int nb_players, int *scores){
+    int size = (2 + nb_players) * sizeof(int);
+    int *buffer = calloc(2 + nb_players, sizeof(int));
+    if(buffer == NULL) return;
+    buffer[0] = SCORES;
+    for(int i = 0; i < nb_players; i++){
+        buffer[i + 1] = scores[i];
+    }
+    buffer[nb_players + 1] = ENDPACKET;
 
     write(s->clients_fd[connect], (char *) buffer, size);
     free(buffer);
 }
+
 
 
 direction *get_directions_all(server *s){
@@ -222,6 +226,11 @@ direction *get_directions_all(server *s){
 void send_grid_all(server *s, int nb_lignes, int nb_colonnes, int **grid){
     for(int i = 0; i < s->nb_connect; i++){
         send_grid_to(s, i, nb_lignes, nb_colonnes, grid);
+    }
+}
+void send_nb_player_all(server *s, char nb_player){
+    for(int i = 0; i < s->nb_connect; i++){
+        send_nb_player_to(s, i, nb_player);
     }
 }
 void send_positions_all(server *s, int nb_position, position **positions){
@@ -248,4 +257,8 @@ void send_winner_all(server *s, int winner){
     }
 }
 
-
+void send_scores_all(server *s, int nb_players, int *scores){
+    for(int i = 0; i < s->nb_connect; i++){
+        send_scores_to(s, i, nb_players, scores);
+    }
+}

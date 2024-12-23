@@ -15,11 +15,11 @@ typedef struct {
 
     grid *g;
     int is_over;
-    int *scores;
+    int scores[MAX_CLIENT + 1];
     position pos[MAX_CLIENT + 1];
     int nb_player;
     int has_started;
-    char **names;
+    char *names[MAX_CLIENT + 1];
     int winner;
 
     char data_available[15];

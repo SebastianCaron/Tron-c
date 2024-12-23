@@ -136,6 +136,24 @@ grid *upscale_grid(grid *g, int nb_lignes, int nb_colonnes){
     return ng;
 }
 
+grid *init_grid(int nb_lignes, int nb_colonnes){
+    grid *ng = calloc(1, sizeof(grid));
+    if(!ng){
+        perror("[UTILS] ERREUR ALLOCATION GRID");
+        return NULL;
+    }
+    ng->nb_colonnes = nb_colonnes;
+    ng->nb_lignes = nb_lignes;
+
+
+    ng->grid = allocate_grid(ng->nb_lignes, ng->nb_colonnes);
+    if(ng->grid == NULL){
+        free(ng);
+        return NULL;
+    }
+    return ng;
+}
+
 int **allocate_grid(int nb_lignes, int nb_colonnes){
     int **res = calloc(nb_lignes, sizeof(int *));
     if(res == NULL){
