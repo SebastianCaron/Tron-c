@@ -2,7 +2,7 @@
 
 #define SCORE_INCREMENT 10
 
-typedef enum {UP = 1, DOWN = 3, LEFT = 2, RIGHT = 4, NODIRECTION = 5} direction;
+typedef enum {UP = 1, DOWN = 3, LEFT = 2, RIGHT = 4, NODIRECTION = 0} direction;
 
 typedef enum { WALL = 100, EMPTY = 0 } cases;
 

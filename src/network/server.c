@@ -71,20 +71,7 @@ void destroy_server(server *s){
 
 
 direction get_direction_from(server *s, int connect){
-    direction dir;
-    ssize_t bytes_read = read(s->clients_fd[connect], &dir, sizeof(dir));
-    if (bytes_read > 0) {
-        return dir;
-    } else if (bytes_read == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
-        // printf("NO DATA\n");
-        return NODIRECTION;
-    } else if (bytes_read == 0) {
-        // printf("CONNEXION CLIENT %d TERMINE\n", connect);
-        return NODIRECTION;
-    } else {
-        perror("ERREUR LECTURE");
-        return NODIRECTION;
-    }
+    return s->directions[connect];
 }
 
 int wait_for_connections(server *s, void (*on_connect)(char *)){
@@ -211,17 +198,43 @@ void send_scores_to(server *s, int connect, int nb_players, int *scores){
     free(buffer);
 }
 
+void retrieve_data_server(server *s){
+    char f_type = 0;
+    int rd_size = read(s->serveur_fd, &f_type, sizeof(char));
+    if(rd_size == 0) return;
 
+    switch (f_type)
+    {
+    case MOUVEMENT:
+        int size = 3 * sizeof(char);
+        char buffer[3] = {0};
+        rd_size = read(s->serveur_fd, buffer, size);
+        while(rd_size < size){
+            rd_size += read(s->serveur_fd, ((char *) buffer) + rd_size, size);
+        }
+        s->directions[buffer[0]] = buffer[1];
+        break;
+    case GRID:
+        int size = 2 * sizeof(char);
+        char buffer[2] = {0};
+        rd_size = read(s->serveur_fd, ((char *) buffer), size);
+        while(rd_size < size){
+            rd_size += read(s->serveur_fd, ((char *) buffer) + rd_size, size);
+        }
+        send_grid_to(s, buffer[0],s->m->nb_lignes_grid, s->m->nb_colonnes_grid, s->m->grid);
+        break;
+    default:
+        break;
+    }
+    retrieve_data_server(s);
+}
 
 direction *get_directions_all(server *s){
-    direction *dirs = calloc(s->nb_connect, sizeof(direction));
-    if(dirs == NULL) return NULL;
-
-    for(int i = 0; i < s->nb_connect; i++){
-        dirs[i] = get_direction_from(s, i);
+    for(int i = 0; i < MAX_CLIENT+1; i++){
+        s->directions[i] = NODIRECTION;
     }
-
-    return dirs;
+    retrieve_data_server(s);
+    return s->directions;
 }
 void send_grid_all(server *s, int nb_lignes, int nb_colonnes, int **grid){
     for(int i = 0; i < s->nb_connect; i++){

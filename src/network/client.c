@@ -62,7 +62,7 @@ grid *buffer_to_grid(int nb_lignes, int nb_colonnes, char *c){
 
 // TODO CHECK ERRORS & TIMEOUT
 // SI TROP LENT PAS DE CHECK READY
-void retrieve_data(client *c){
+void retrieve_data_client(client *c){
     // SI PAS DANS LES DATAS AVAILABLES, ON READ ET ON AJOUTE AUX DATA AV
     // TANT QUE PAS IN AVAILABLE ON RETRIEVE tant pis
     char f_type = 0;
@@ -205,7 +205,7 @@ grid *client_get_grid(client *c){
     if(pop_is_in_data_available(c, GRID)) return c->g;
 
     do{
-        retrieve_data(c);
+        retrieve_data_client(c);
     }while(!pop_is_in_data_available(c, GRID));
     return c->g;
 }

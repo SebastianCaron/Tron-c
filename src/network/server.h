@@ -13,7 +13,8 @@ typedef struct {
     int nb_connect;
     int *clients_fd;
     char *names[MAX_CLIENT + 1];
-
+    direction directions[MAX_CLIENT + 1];
+    model *m;
     int addrlen;
     struct sockaddr_in *address;
 } server;
