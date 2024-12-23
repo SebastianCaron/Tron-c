@@ -65,7 +65,6 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
     // Regarder position suivante du joueur en fonction de sa direction
     // Prendre la direction du bot qui se rapproche le plus du joueur 
 
-    // direction directionsBot[4] = {UP, LEFT,DOWN, RIGHT};
     int directionBotTest[4][2] = {{-1,0},{0,-1},{1,0},{0,1} };
     
     create_model(c, 2);
@@ -79,8 +78,6 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
     double duration;
 
     while(!est_fini(c->m)){
-        int directionPossibles[3]={0,0,0};
-        int cptPossible=0;
 
         start = clock();
         // A garder
@@ -89,24 +86,30 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
         }
         move_player(c->m, 0, dirs[0]);
 
-        // A changer
-        for(int i=0; i<4;i++){
-            int x = c->m->players[1]->x+ directionBotTest[i][1] ;
-            int y = c->m->players[1]->y+ directionBotTest[i][0];
-            if(c->m->grid[y][x] == EMPTY && cptPossible<3){
-                directionPossibles[cptPossible++] = i+1;
+        int xJ = c->m->players[0]->x;
+        int yJ = c->m->players[0]->y;
+        int distancePlusCourte = 100000;
+        int indexDistancePlusCourte = 0;
+
+        for (int i = 0; i < 4; i++) {
+            int xBot = c->m->players[1]->x + directionBotTest[i][1];
+            int yBot = c->m->players[1]->y + directionBotTest[i][0];
+
+            if (c->m->grid[yBot][xBot] == EMPTY) {
+                int distance = ((xBot - xJ) * (xBot - xJ)) + ((yBot - yJ) * (yBot - yJ));
+                if (distancePlusCourte > distance) {
+                    indexDistancePlusCourte = i+1;
+                    distancePlusCourte = distance;
+                }
             }
-            
         }
-        // printf("choixPos[0] : %d, choixPos[1]: %d, choixPos[2]: %d\n", directionPossibles[0],directionPossibles[1], directionPossibles[2]);
-        
-        int ch = aleaEntreBornes(0, cptPossible-1);
-        printf("il y a %d possibilités et c'est le choix %d qui est choisi : direction %d\n", cptPossible, ch , directionPossibles[ch]);
-        if(cptPossible>=1){
-            move_player(c->m, 1, directionPossibles[ch]);
-        }else{
+
+        if (distancePlusCourte == 100000) {
             move_player(c->m, 1, RIGHT);
+        } else {
+            move_player(c->m, 1, indexDistancePlusCourte);
         }
+
 
         // A garder 
         collision_player(c->m, 0);
