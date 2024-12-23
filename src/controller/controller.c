@@ -81,13 +81,11 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
     while(!est_fini(c->m)){
 
         start = clock();
-        // A garder
         for(i = 0; i < c->nb_view; i++){
             direction dir = c->views[i]->get_direction(c->views[i],1, dirs);
             if(dir!=0){
                 currentDir = dir;
             }
-            printf("%d\n", currentDir);
         }
         move_player(c->m, 0, dirs[0]);
 
@@ -119,8 +117,6 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
             move_player(c->m, 1, indexDistancePlusCourte);
         }
 
-
-        // A garder 
         collision_player(c->m, 0);
         collision_player(c->m, 1);
 
