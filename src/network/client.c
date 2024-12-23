@@ -190,17 +190,85 @@ void retrieve_data(client *c){
     }
 }
 
-grid *client_get_grid(client *c);
-int client_is_over(client *c);
-int *client_get_scores(client *c);
-position *client_get_positions(client *c);
-int client_get_nb_player(client *c);
-int client_get_start_signal(client *c);
-char **client_get_names(client *c);
-int client_get_winner(client *c);
+int pop_is_in_data_available(client *c, int DATA){
+    for(int i = 0; i < c->size_available; i++){
+        if(c->data_available[i] == DATA){
+            c->data_available[i] = c->data_available[c->size_available - 1];
+            c->size_available--;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+grid *client_get_grid(client *c){
+    if(pop_is_in_data_available(c, GRID)) return c->g;
+
+    do{
+        retrieve_data(c);
+    }while(!pop_is_in_data_available(c, GRID));
+    return c->g;
+}
+
+int client_is_over(client *c){
+    if(pop_is_in_data_available(c, ISOVER)) return c->is_over;
+
+    do{
+        retrieve_data(c);
+    }while(!pop_is_in_data_available(c, ISOVER));
+    return c->is_over;
+}
+int *client_get_scores(client *c){
+    if(pop_is_in_data_available(c, SCORES)) return c->scores;
+
+    do{
+        retrieve_data(c);
+    }while(!pop_is_in_data_available(c, SCORES));
+    return c->scores;
+}
+position *client_get_positions(client *c){
+    if(pop_is_in_data_available(c, POSITIONS)) return c->pos;
+
+    do{
+        retrieve_data(c);
+    }while(!pop_is_in_data_available(c, POSITIONS));
+    return c->pos;
+}
+int client_get_nb_player(client *c){
+    if(pop_is_in_data_available(c, NBJOUEUR)) return c->nb_player;
+
+    do{
+        retrieve_data(c);
+    }while(!pop_is_in_data_available(c, NBJOUEUR));
+    return c->nb_player;
+}
+int client_get_start_signal(client *c){
+    if(pop_is_in_data_available(c, START)) return c->has_started;
+
+    do{
+        retrieve_data(c);
+    }while(!pop_is_in_data_available(c, START));
+    return c->has_started;
+}
+char **client_get_names(client *c){
+    if(pop_is_in_data_available(c, NAME)) return c->names;
+
+    do{
+        retrieve_data(c);
+    }while(!pop_is_in_data_available(c, NAME));
+    return c->names;
+}
+int client_get_winner(client *c){
+    if(pop_is_in_data_available(c, WINNER)) return c->winner;
+
+    do{
+        retrieve_data(c);
+    }while(!pop_is_in_data_available(c, WINNER));
+    return c->winner;
+}
 
 
 void client_send_movement(client *s, direction d){
-
+    
 }
 void client_ask_for_grid(client *s);
