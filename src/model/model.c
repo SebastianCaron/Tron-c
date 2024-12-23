@@ -33,7 +33,7 @@ model *init_game(int nb_player, int nb_lignes_grid, int nb_colonnes_grid, int **
         exit(EXIT_FAILURE);
     }
 
-    game->n_player= nb_player;
+    game->n_player = nb_player;
     game->n_player_alive = nb_player;
 
     game->grid = grid;
@@ -160,8 +160,9 @@ int est_fini(model *m){
 }
 
 int get_winner(model *m){
-    for(int i =0; i<m->n_player;i++){
-        if(!m->dead[i]) return i;
+    if(m == NULL) return -1;
+    for(int i = 0; i < m->n_player;i++){
+        if(m->dead[i] != 0) return i;
     }
     return -1;
 }

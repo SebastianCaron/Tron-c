@@ -53,8 +53,6 @@ void controller_play_solo_j_vs_random(controller *c){
         usleep(SPEED_FRM - duration);
     }
     free(dirs);
-    destroy_model(c->m);
-    c->m = NULL;
 
 }
 
@@ -93,7 +91,7 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
         int yJ = c->m->players[0]->y;
         if(currentDir!=0){
             xJ = c->m->players[0]->x + directionBotTest[currentDir-1][1];
-            yJ = c->m->players[0]->y+ directionBotTest[currentDir-1][0];
+            yJ = c->m->players[0]->y + directionBotTest[currentDir-1][0];
         }
 
         int distancePlusCourte = 100000;
@@ -129,8 +127,6 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
         usleep(SPEED_FRM - duration);
     }
     free(dirs);
-    destroy_model(c->m);
-    c->m = NULL;
     
 }  
 
@@ -169,8 +165,6 @@ void controller_play_multi(controller *c){
         usleep(SPEED_FRM - duration);
     }
     free(dirs);
-    destroy_model(c->m);
-    c->m = NULL;
 }
 
 
@@ -265,18 +259,22 @@ void go_to_menu(controller *c){
             case PLAY_BOT_ALGO:
                 controller_play_solo_j_vs_random(c);
                 display_winner(c);
-                
+                destroy_model(c->m);
+                c->m = NULL;
                 act = RETOUR;
                 break;
             case PLAY_BOT_Q:
                 controller_play_solo_j_vs_hara_kiri(c);
                 display_winner(c);
-                
+                destroy_model(c->m);
+                c->m = NULL;
                 act = RETOUR;
                 break;
             case PLAY_MULTI:
                 controller_play_multi(c);
                 display_winner(c);
+                destroy_model(c->m);
+                c->m = NULL;
                 act = RETOUR;
                 break;
             case PLAY_ONLINE:
