@@ -93,18 +93,17 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
         for(int i=0; i<4;i++){
             int x = c->m->players[1]->x+ directionBotTest[i][1] ;
             int y = c->m->players[1]->y+ directionBotTest[i][0];
-            // printf("%d good\n", c->m->grid[y][x]);
-            if(c->m->grid[y][x] == EMPTY){
-                directionPossibles[cptPossible++] = i;
+            if(c->m->grid[y][x] == EMPTY && cptPossible<3){
+                directionPossibles[cptPossible++] = i+1;
             }
             
         }
         // printf("choixPos[0] : %d, choixPos[1]: %d, choixPos[2]: %d\n", directionPossibles[0],directionPossibles[1], directionPossibles[2]);
         
         int ch = aleaEntreBornes(0, cptPossible-1);
-        // printf("il y a %d possibilité et c'est le choix %d qui est choisi : direction %d\n", cptPossible, ch , directionsBot[0]);
-        if(cptPossible>=1 && cptPossible<4){
-            move_player(c->m, 1, directionPossibles[ch]+1);
+        printf("il y a %d possibilités et c'est le choix %d qui est choisi : direction %d\n", cptPossible, ch , directionPossibles[ch]);
+        if(cptPossible>=1){
+            move_player(c->m, 1, directionPossibles[ch]);
         }else{
             move_player(c->m, 1, RIGHT);
         }
