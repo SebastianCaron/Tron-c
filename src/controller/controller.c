@@ -344,7 +344,7 @@ void set_port(controller *c, char *port){
 // TODO : CHECK ERRORS & READY
 
 void controller_play_online_host(controller *c, int nb_connect){
-    server *s = init_serveur(c->port, nb_connect);
+    server *s = init_serveur(PORT, nb_connect);
 
     int nb_player_connected = 1;
     while(nb_player_connected < nb_connect){
@@ -352,10 +352,15 @@ void controller_play_online_host(controller *c, int nb_connect){
             nb_player_connected++;
         }
     }
+    printf("OK TOUT LE MONDE CONNECTE\n");
 
     create_model(c, nb_player_connected);
+    printf("MODEL OK\n");
     send_nb_player_all(s, nb_player_connected);
+    printf("NB PLAYER SEND TO EVERYONE\n");
     send_grid_all(s, c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid);
+    printf("GRID SEND TO EVERYONE\n");
+
 
     // WAIT FOR EVERYONE TO BE READY
 
@@ -415,4 +420,6 @@ void controller_play_online_join(controller *c){
     }else{
         printf("CONNECTE OK !\n");
     }
+
+    exit(EXIT_FAILURE);
 }

@@ -21,15 +21,26 @@ server *init_serveur(int port, int nb_connect){
         perror("ERREUR INITIALISATION STRUCT ADDRESS");
         exit(EXIT_FAILURE);
     }
-    s->addrlen = sizeof(s->address);
+    s->addrlen = sizeof(struct sockaddr_in);
 
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
         perror("ERREUR CREATION SOCKET");
         exit(EXIT_FAILURE);
     }
 
+    int opt = 1;
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+        perror("ERREUR SETSOCKOPT");
+        close(server_fd);
+        free(s->address);
+        free(s);
+        exit(EXIT_FAILURE);
+    }
+
     s->port = port;
     s->serveur_fd = server_fd;
+    s->act_connect = 0;
+    s->nb_connect = nb_connect;
 
     (*s->address).sin_family = AF_INET;
     (*s->address).sin_addr.s_addr = INADDR_ANY;
@@ -61,7 +72,7 @@ void close_connections(server *s){
 
 void destroy_server(server *s){
     free(s->ip);
-    free(s->clients_fd);
+    // free(s->clients_fd);
     for(int i = 0; i < s->nb_connect; i++){
         free(s->names[i]);
     }
@@ -88,10 +99,10 @@ int wait_for_connections(server *s, void (*on_connect)(char *message)){
         }else{
             printf("CLIENT CONNECTE !\n");
         }
-        s->clients_fd[s->nb_connect] = new_socket;
-        char buffer[3] = {IDSERV, s->nb_connect, ENDPACKET};
+        s->clients_fd[s->act_connect] = new_socket;
+        char buffer[3] = {IDSERV, s->act_connect, ENDPACKET};
         write(new_socket, (char *) buffer, 3 * sizeof(char));
-        s->nb_connect++;
+        s->act_connect++;
         return 1;
     }
     return 0;

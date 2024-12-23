@@ -10,8 +10,9 @@ typedef struct {
 
     int serveur_fd;
 
+    int act_connect;
     int nb_connect;
-    int *clients_fd;
+    int clients_fd[MAX_CLIENT + 1];
     char *names[MAX_CLIENT + 1];
     direction directions[MAX_CLIENT + 1];
     model *m;
