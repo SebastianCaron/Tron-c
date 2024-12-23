@@ -76,25 +76,34 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
     }
     clock_t start, end;
     double duration;
+    direction currentDir;
 
     while(!est_fini(c->m)){
 
         start = clock();
         // A garder
         for(i = 0; i < c->nb_view; i++){
-            c->views[i]->get_direction(c->views[i],1, dirs);
+            direction dir = c->views[i]->get_direction(c->views[i],1, dirs);
+            if(dir!=0){
+                currentDir = dir;
+            }
+            printf("%d\n", currentDir);
         }
         move_player(c->m, 0, dirs[0]);
 
         int xJ = c->m->players[0]->x;
         int yJ = c->m->players[0]->y;
+        if(currentDir!=0){
+            xJ = c->m->players[0]->x + directionBotTest[currentDir-1][1];
+            yJ = c->m->players[0]->y+ directionBotTest[currentDir-1][0];
+        }
+
         int distancePlusCourte = 100000;
         int indexDistancePlusCourte = 0;
 
         for (int i = 0; i < 4; i++) {
             int xBot = c->m->players[1]->x + directionBotTest[i][1];
             int yBot = c->m->players[1]->y + directionBotTest[i][0];
-
             if (c->m->grid[yBot][xBot] == EMPTY) {
                 int distance = ((xBot - xJ) * (xBot - xJ)) + ((yBot - yJ) * (yBot - yJ));
                 if (distancePlusCourte > distance) {
