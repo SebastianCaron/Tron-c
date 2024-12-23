@@ -214,7 +214,7 @@ int client_is_over(client *c){
     if(pop_is_in_data_available(c, ISOVER)) return c->is_over;
 
     do{
-        retrieve_data(c);
+        retrieve_data_client(c);
     }while(!pop_is_in_data_available(c, ISOVER));
     return c->is_over;
 }
@@ -222,7 +222,7 @@ int *client_get_scores(client *c){
     if(pop_is_in_data_available(c, SCORES)) return c->scores;
 
     do{
-        retrieve_data(c);
+        retrieve_data_client(c);
     }while(!pop_is_in_data_available(c, SCORES));
     return c->scores;
 }
@@ -230,7 +230,7 @@ position *client_get_positions(client *c){
     if(pop_is_in_data_available(c, POSITIONS)) return c->pos;
 
     do{
-        retrieve_data(c);
+        retrieve_data_client(c);
     }while(!pop_is_in_data_available(c, POSITIONS));
     return c->pos;
 }
@@ -238,7 +238,7 @@ int client_get_nb_player(client *c){
     if(pop_is_in_data_available(c, NBJOUEUR)) return c->nb_player;
 
     do{
-        retrieve_data(c);
+        retrieve_data_client(c);
     }while(!pop_is_in_data_available(c, NBJOUEUR));
     return c->nb_player;
 }
@@ -246,7 +246,7 @@ int client_get_start_signal(client *c){
     if(pop_is_in_data_available(c, START)) return c->has_started;
 
     do{
-        retrieve_data(c);
+        retrieve_data_client(c);
     }while(!pop_is_in_data_available(c, START));
     return c->has_started;
 }
@@ -254,7 +254,7 @@ char **client_get_names(client *c){
     if(pop_is_in_data_available(c, NAME)) return c->names;
 
     do{
-        retrieve_data(c);
+        retrieve_data_client(c);
     }while(!pop_is_in_data_available(c, NAME));
     return c->names;
 }
@@ -262,7 +262,7 @@ int client_get_winner(client *c){
     if(pop_is_in_data_available(c, WINNER)) return c->winner;
 
     do{
-        retrieve_data(c);
+        retrieve_data_client(c);
     }while(!pop_is_in_data_available(c, WINNER));
     return c->winner;
 }

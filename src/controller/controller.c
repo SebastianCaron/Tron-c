@@ -13,6 +13,11 @@
 #include "../agents/random.h"
 #include "../agents/rectiligne.h"
 
+// NETWORK
+#include "../network/network.h"
+#include "../network/server.h"
+#include "../network/client.h"
+
 void controller_play_solo_j_vs_random(controller *c){
     create_model(c, 2);
     int i = 0;
