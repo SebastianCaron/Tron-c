@@ -65,7 +65,7 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
     // Regarder position suivante du joueur en fonction de sa direction
     // Prendre la direction du bot qui se rapproche le plus du joueur 
 
-    // direction directionsBot[4] = {UP, DOWN, RIGHT, LEFT};
+    direction directionsBot[4] = {RIGHT, LEFT, DOWN, UP};
     int directionBotTest[4][2] = {{0,1},{0,-1}, {1,0},{-1,0}};
     
     create_model(c, 2);
@@ -79,8 +79,8 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
     double duration;
 
     while(!est_fini(c->m)){
-        // direction directionPossibles[3]={0,0,0};
-        // int cptPossible=0;
+        direction directionPossibles[3]={0,0,0};
+        int cptPossible=0;
 
         start = clock();
         // A garder
@@ -90,31 +90,27 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
         move_player(c->m, 0, dirs[0]);
 
         // A changer
-        // for(int i=0; i<4;i++){
-        //     int x = c->m->players[1]->x+ directionBotTest[i][0] ;
-        //     int y = c->m->players[1]->y+ directionBotTest[i][1];
-        //     if(c->m->grid[x][y] == EMPTY ){
-        //         directionPossibles[cptPossible++] = directionsBot[i];
-        //         printf("%d good\n", i);   
-        //     }else{
-        //         printf("%d pasgood\n", i);
-        //     }
+        for(int i=0; i<4;i++){
+            int x = c->m->players[1]->x+ directionBotTest[i][1] ;
+            int y = c->m->players[1]->y+ directionBotTest[i][0];
+            // printf("%d good\n", c->m->grid[y][x]);
+            if(c->m->grid[y][x] == EMPTY && c->m->grid[y][x] != WALL){
+                directionPossibles[cptPossible] = directionsBot[i];
+                cptPossible+=1;
+                // printf("%d good\n", i);   
+            }else{
+                // printf("%d pasgood\n", i);
+            }
             
-        // }
-        // if(cptPossible>=1){
-        //     move_player(c->m, 1, directionsBot[aleaEntreBornes(0, cptPossible-1)]);
-        // }else{
-        //     move_player(c->m, 1, UP);
-        // }
+        }
+        printf("choix 1 : %d, choix 2: %d, choix 3: %d\n", directionPossibles[0],directionPossibles[1], directionPossibles[2]);
 
-        int x = c->m->players[1]->x+ directionBotTest[3][0];
-        int y = c->m->players[1]->y+directionBotTest[3][1];
-        printf("%d test\n", c->m->grid[x][y]); 
-        if(c->m->grid[x][y] == 0 ){
-                move_player(c->m, 1, RIGHT);
-                printf("%d good\n", i);   
+        int ch = aleaEntreBornes(0, cptPossible-1);
+        printf("il y a %d possibilité et c'est le choix %d qui est choisi : direction %d\n", cptPossible, ch , directionsBot[ch]);
+        if(cptPossible>=1 && cptPossible<4){
+            move_player(c->m, 1, directionsBot[ch]);
         }else{
-                printf("%d pasgood\n", i);
+            move_player(c->m, 1, RIGHT);
         }
 
         // A garder 
