@@ -268,7 +268,14 @@ int client_get_winner(client *c){
 }
 
 
-void client_send_movement(client *s, direction d){
-    
+void client_send_movement(client *c, direction d){
+    int size = 4 * sizeof(char);
+    char buffer[4] = {MOUVEMENT, c->id_on_serv, d, ENDPACKET};
+    write(c->serveur_fd, (char *) buffer, size);
 }
-void client_ask_for_grid(client *s);
+
+void client_ask_for_grid(client *c){
+    int size = 3 * sizeof(char);
+    char buffer[3] = {GRID, c->id_on_serv, ENDPACKET};
+    write(c->serveur_fd, (char *) buffer, size);
+}
