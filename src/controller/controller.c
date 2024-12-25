@@ -283,6 +283,7 @@ void go_to_menu(controller *c){
                 }else{
                     controller_play_online_join(c);
                 }
+                display_winner(c);
                 destroy_model(c->m);
                 c->m = NULL;
                 act = RETOUR;
@@ -352,6 +353,7 @@ void controller_play_online_host(controller *c, int nb_connect){
         if(wait_for_connections(s, NULL) == 1){
             nb_player_connected++;
         }
+        usleep(SPEED_FRM);
     }
     // printf("OK TOUT LE MONDE CONNECTE\n");
 
@@ -461,7 +463,7 @@ void controller_play_online_join(controller *c){
         perror("[CONTROLLER] erreur allocation directions\n");
         return;
     }
-    direction *dirso;
+    // direction *dirso;
     position *pos;
     clock_t start, end;
     double duration;
@@ -494,8 +496,10 @@ void controller_play_online_join(controller *c){
         pos = client_get_positions(client);
         // printf("POSITION OK!\n");
 
-
         // SET POSITIONS
+        if(set_positions(c->m, pos) != 0){
+            // client_ask_for_grid(client);
+        }
 
         // collision_all(c->m);
         // printf("COLLISION OK!\n");

@@ -122,6 +122,27 @@ int move_player(model *m, int player, direction new_direction){
     return 1;
 }
 
+int set_positions(model *m, position *p){
+    position *player_old_position, player_new_pos;
+    int v = 0;
+    int r = 0;
+    for(int i = 0; i < m->n_player; i++){
+        player_old_position = m->players[i];
+        player_new_pos = p[i];
+        r = (player_old_position->x - player_new_pos.x) < 0 ? (player_new_pos.x - player_old_position->x) : (player_old_position->x - player_new_pos.x);
+        r += (player_old_position->y - player_new_pos.y) < 0 ? (player_new_pos.y - player_old_position->y) : (player_old_position->y - player_new_pos.y);
+        if(r > 1) v = 1;
+        
+        if(r >= 1){
+            m->grid[player_old_position->y][player_old_position->x] = -(i+1);
+            m->grid[player_new_pos.y][player_new_pos.x] = (i+1);
+            m->scores[i] += SCORE_INCREMENT;
+        }
+        
+    }
+    return v;
+}
+
 // AJOUTER UN TEST AVEC LA COLLISION SUR LES BORDS DE LA FENETRE IE : y >= 0 && y < nb_lignes && x >= 0 && x < nb_colonnes
 int collision_player(model *m, int indexPlayer){
     if(!m){

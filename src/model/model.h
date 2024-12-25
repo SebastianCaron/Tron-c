@@ -36,6 +36,9 @@ void destroy_model(model *);
 // Move the player to dir only if player is not dead
 int move_player(model *m, int player, direction dir);
 
+// Change positions of player and return 1 if distance > 1
+int set_positions(model *m, position *p);
+
 // Check if player has collided with something and update
 // dead[player]
 int collision_player(model *m, int player);

@@ -117,8 +117,8 @@ void retrieve_data_client(client *c){
         int nb_pos = c_buf[0];
         c_buf++;
         for(int i = 0; i < nb_pos; i++){
-            c->pos[i+1].x = c_buf[2 * i];
-            c->pos[i+1].y = c_buf[2 * i + 1];
+            c->pos[i].x = c_buf[2 * i];
+            c->pos[i].y = c_buf[2 * i + 1];
         }
         c->data_available[c->size_available++] = POSITIONS;
         free(buffer);}
