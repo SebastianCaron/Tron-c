@@ -283,6 +283,10 @@ void go_to_menu(controller *c){
                 }else{
                     controller_play_online_join(c);
                 }
+                destroy_model(c->m);
+                c->m = NULL;
+                act = RETOUR;
+                break;
             case RETOUR:
                 nbMenu = 0; 
                 break;
@@ -349,19 +353,21 @@ void controller_play_online_host(controller *c, int nb_connect){
             nb_player_connected++;
         }
     }
-    printf("OK TOUT LE MONDE CONNECTE\n");
+    // printf("OK TOUT LE MONDE CONNECTE\n");
 
     create_model(c, nb_player_connected);
-    printf("MODEL OK\n");
+    // printf("MODEL OK\n");
     send_nb_player_all(s, nb_player_connected);
-    printf("NB PLAYER SEND TO EVERYONE\n");
+    // printf("NB PLAYER SEND TO EVERYONE\n");
     send_grid_all(s, c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid);
-    printf("GRID SEND TO EVERYONE\n");
+    // printf("GRID SEND TO EVERYONE\n");
 
 
     // WAIT FOR EVERYONE TO BE READY
 
     send_start_signal_all(s);
+    // printf("START SIGNAL OK\n");
+
 
     direction *dirs = calloc(nb_player_connected, sizeof(direction));
     if(dirs == NULL){
@@ -373,6 +379,12 @@ void controller_play_online_host(controller *c, int nb_connect){
     double duration;
     int i = 0;
     int is_over = 0;
+    // printf("DEBUT BOUCLE JEU\n");
+
+    for(i = 0; i < c->nb_view; i++){
+        // MET A JOUR LES VIEWS
+        c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+    }
 
     while(!is_over){
         start = clock();
@@ -381,19 +393,32 @@ void controller_play_online_host(controller *c, int nb_connect){
             c->views[i]->get_direction(c->views[i],1, dirs);
         }
         move_player(c->m, 0, dirs[0]);
+        // printf("DEPLACE JOUEUR SOLO\n");
+
         dirso = get_directions_all(s);
-        for(int i = 0; i < nb_player_connected; i++){
-            move_player(c->m, i+2, dirso[i]);
+        // printf("RECUPERATION DES DIRECTIONS\n");
+
+
+        for(int i = 0; i < nb_player_connected-1; i++){
+            move_player(c->m, i+1, dirso[i]);
         }
+        // printf("DEPLACE JOUEURS\n");
+
 
         collision_all(c->m);
+        // printf("COLLISION ALL\n");
+
 
         for(i = 0; i < c->nb_view; i++){
             // MET A JOUR LES VIEWS
             c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
         }
+        // printf("SCREEN OK\n");
+
 
         send_positions_all(s, nb_player_connected, c->m->players);
+        // printf("POSITIONS ENVOYEES OK\n");
+
         
         end = clock();
         duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
@@ -401,9 +426,12 @@ void controller_play_online_host(controller *c, int nb_connect){
 
         is_over = est_fini(c->m);
         send_is_over_all(s, is_over);
+        // printf("SIGNAL FIN? OK\n");
+
 
         // WAIT FOR EVERYONE TO BE READY
     }
+    // printf("FIN DU JEU ET SERV'\n");
     free(dirs);
     close_connections(s);
     destroy_server(s);
@@ -414,9 +442,82 @@ void controller_play_online_join(controller *c){
 
     if(client == NULL){
         printf("IMPOSSIBLE DE SE CONNECTER A %s:%d\n", c->ip, c->port);
+        return;
     }else{
         printf("CONNECTE OK !\n");
     }
 
-    exit(EXIT_FAILURE);
+    int nb_player = client_get_nb_player(client);
+    // printf("NBPLAYER OK ! %d\n", nb_player);
+
+    grid *g = client_get_grid(client);
+    // printf("GRID OK !\n");
+
+    create_model_with_grid(c, nb_player, g);
+    // printf("MODEL OK!\n");
+
+    direction *dirs = calloc(nb_player, sizeof(direction));
+    if(dirs == NULL){
+        perror("[CONTROLLER] erreur allocation directions\n");
+        return;
+    }
+    direction *dirso;
+    position *pos;
+    clock_t start, end;
+    double duration;
+    int i = 0;
+    int is_over = 0;
+
+    while(client_get_start_signal(client) == 0){
+        usleep(SPEED_FRM);
+    }
+    // printf("START !!!!\n");
+
+    for(i = 0; i < c->nb_view; i++){
+        // MET A JOUR LES VIEWS
+        c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+    }
+
+    while(is_over == 0){
+        start = clock();
+        for(i = 0; i < c->nb_view; i++){
+            // RECUPERE LES INPUTS VIA LES VIEWS
+            c->views[i]->get_direction(c->views[i],1, dirs);
+        }
+        // printf("GET DIRECTION !\n");
+
+
+        client_send_movement(client, dirs[0]);
+        // printf("MOUVEMENT SENT !\n");
+
+
+        pos = client_get_positions(client);
+        // printf("POSITION OK!\n");
+
+
+        // SET POSITIONS
+
+        // collision_all(c->m);
+        // printf("COLLISION OK!\n");
+
+        for(i = 0; i < c->nb_view; i++){
+            // MET A JOUR LES VIEWS
+            c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+        }
+        // printf("SCREEN OK!\n");
+
+        
+        end = clock();
+        duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
+        usleep(SPEED_FRM - duration);
+
+        // WAIT FOR EVERYONE TO BE READY
+
+        is_over = client_is_over(client);
+        // printf("ISOVER OK!\n");
+    }
+
+    free(dirs);
+    destroy_client(client);
+    // exit(EXIT_FAILURE);
 }

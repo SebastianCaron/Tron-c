@@ -76,7 +76,7 @@ void destroy_server(server *s){
     for(int i = 0; i < s->nb_connect; i++){
         free(s->names[i]);
     }
-    free(s->address);
+    // free(s->address);
     free(s);
 }
 
@@ -100,8 +100,8 @@ int wait_for_connections(server *s, void (*on_connect)(char *message)){
             printf("CLIENT CONNECTE !\n");
         }
         s->clients_fd[s->act_connect] = new_socket;
-        char buffer[3] = {IDSERV, s->act_connect, ENDPACKET};
-        write(new_socket, (char *) buffer, 3 * sizeof(char));
+        int buffer[3] = {IDSERV, s->act_connect, ENDPACKET};
+        write(new_socket, (char *) buffer, 3 * sizeof(int));
         s->act_connect++;
         return 1;
     }
@@ -139,8 +139,8 @@ void send_grid_to(server *s, int connect, int nb_lignes, int nb_colonnes, int **
 }
 
 void send_nb_player_to(server *s, int connect, char nb_player){
-    int size = 3 * sizeof(char);
-    char buffer[3] = {NBJOUEUR, nb_player, ENDPACKET};
+    int size = 3 * sizeof(int);
+    int buffer[3] = {NBJOUEUR, nb_player, ENDPACKET};
     write(s->clients_fd[connect], buffer, size);
 }
 
@@ -213,33 +213,46 @@ void send_scores_to(server *s, int connect, int nb_players, int *scores){
 
 void retrieve_data_server(server *s){
     char f_type = 0;
-    int rd_size = read(s->serveur_fd, &f_type, sizeof(char));
-    if(rd_size == 0) return;
+    for(int i = 0; i < s->nb_connect-1; i++){
+        int rd_size = read(s->clients_fd[i], &f_type, sizeof(char));
+        // printf("READ : %d, NB :%d\n", f_type, rd_size);
+        if(rd_size == 0) return;
+        if(rd_size == -1){
+            printf("Erreur lors de la lecture : %s\n", strerror(errno));
+            return;
+        }
 
-    switch (f_type)
-    {
-    case MOUVEMENT:
-        {int size = 3 * sizeof(char);
-        char buffer[3] = {0};
-        rd_size = read(s->serveur_fd, buffer, size);
-        while(rd_size < size){
-            rd_size += read(s->serveur_fd, ((char *) buffer) + rd_size, size);
+        switch (f_type)
+        {
+        case MOUVEMENT:
+            {
+            // printf("MOVEMENT RECEIVED!\n");
+            int size = 3 * sizeof(char);
+            char buffer[3] = {0};
+            rd_size = read(s->clients_fd[i], buffer, size);
+            while(rd_size < size){
+                rd_size += read(s->clients_fd[i], ((char *) buffer) + rd_size, size);
+            }
+            s->directions[(int)buffer[0]] = buffer[1];
+            }
+            break;
+        case GRID:
+            {int size = 2 * sizeof(char);
+            char buffer[2] = {0};
+            rd_size = read(s->clients_fd[i], ((char *) buffer), size);
+            while(rd_size < size){
+                rd_size += read(s->clients_fd[i], ((char *) buffer) + rd_size, size);
+            }
+            send_grid_to(s, buffer[0],s->m->nb_lignes_grid, s->m->nb_colonnes_grid, s->m->grid);}
+            break;
+        default:
+            break;
         }
-        s->directions[(int)buffer[0]] = buffer[1];}
-        break;
-    case GRID:
-        {int size = 2 * sizeof(char);
-        char buffer[2] = {0};
-        rd_size = read(s->serveur_fd, ((char *) buffer), size);
-        while(rd_size < size){
-            rd_size += read(s->serveur_fd, ((char *) buffer) + rd_size, size);
-        }
-        send_grid_to(s, buffer[0],s->m->nb_lignes_grid, s->m->nb_colonnes_grid, s->m->grid);}
-        break;
-    default:
-        break;
+        // printf("RETRIEVE DATA!\n");
     }
-    retrieve_data_server(s);
+    // retrieve_data_server(s);
+    // printf("END\n");
+    
 }
 
 direction *get_directions_all(server *s){
@@ -250,9 +263,13 @@ direction *get_directions_all(server *s){
     return s->directions;
 }
 void send_grid_all(server *s, int nb_lignes, int nb_colonnes, int **grid){
+    int size = (4 + nb_lignes * nb_colonnes) * sizeof(int);
+    char *buffer = grid_to_buffer(nb_lignes, nb_colonnes, grid);
+    if(buffer == NULL) return;
     for(int i = 0; i < s->nb_connect; i++){
-        send_grid_to(s, i, nb_lignes, nb_colonnes, grid);
+        write(s->clients_fd[i], buffer, size);
     }
+    free(buffer);
 }
 void send_nb_player_all(server *s, char nb_player){
     for(int i = 0; i < s->nb_connect; i++){
@@ -260,9 +277,13 @@ void send_nb_player_all(server *s, char nb_player){
     }
 }
 void send_positions_all(server *s, int nb_position, position **positions){
+    int size = (3 + nb_position*2) * sizeof(int);
+    char *buffer = positions_to_buffer(nb_position, positions);
+    if(buffer == NULL) return;
     for(int i = 0; i < s->nb_connect; i++){
-        send_positions_to(s, i, nb_position, positions);
+        write(s->clients_fd[i], buffer, size);
     }
+    free(buffer);
 }
 void send_is_over_all(server *s, int est_fini){
     for(int i = 0; i < s->nb_connect; i++){

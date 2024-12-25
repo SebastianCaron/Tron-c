@@ -55,11 +55,23 @@ network: mrpropre all
 
 client: all
 	clear
+	./tron -sdl -ip127.0.0.1
+
+clientnc: all
+	clear
 	./tron -ncurse -ip127.0.0.1
+
+clientd: all
+	clear
+	valgrind ./tron -sdl -ip127.0.0.1
 
 server: all
 	clear
 	./tron -sdl -h
+
+servernc: all
+	clear
+	./tron -ncurse -h
 
 serverd: all
 	clear

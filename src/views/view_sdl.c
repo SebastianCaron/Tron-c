@@ -25,6 +25,12 @@ view *init_view_sdl(){
         exit(EXIT_FAILURE);
     }
 
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        fprintf(stderr, "Erreur lors de l'initialisation de la SDL : %s\n", SDL_GetError());
+        exit(EXIT_FAILURE);
+    }
+
+
     v->destroy_self = destroy_view_sdl; 
     v->get_direction = get_direction_sdl;
     // v->update_change_screen = ;
