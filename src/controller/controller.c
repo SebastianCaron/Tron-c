@@ -349,10 +349,13 @@ void controller_play_online_host(controller *c, int nb_connect){
     server *s = init_serveur(PORT, nb_connect);
 
     int nb_player_connected = 1;
+    actions act = NO_ACTION;
+
     while(nb_player_connected < nb_connect){
-        if(wait_for_connections(s, NULL) == 1){
+        if(wait_for_connections_timeout(s, NULL) == 1){
             nb_player_connected++;
         }
+        // GET EVENT SDL
         usleep(SPEED_FRM);
     }
     // printf("OK TOUT LE MONDE CONNECTE\n");

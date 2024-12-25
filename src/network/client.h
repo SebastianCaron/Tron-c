@@ -43,6 +43,6 @@ char **client_get_names(client *c);
 int client_get_winner(client *c);
 
 
-void client_send_movement(client *s, direction d);
-void client_ask_for_grid(client *s);
+void client_send_movement(client *c, direction d);
+void client_ask_for_grid(client *c);
 

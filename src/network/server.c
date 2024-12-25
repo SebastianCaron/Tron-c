@@ -5,6 +5,10 @@
 #include <arpa/inet.h>
 #include <errno.h>
 
+#include <fcntl.h>
+#include <sys/select.h>
+
+
 #include "server.h"
 #include "network.h"
 
@@ -25,6 +29,12 @@ server *init_serveur(int port, int nb_connect){
 
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
         perror("ERREUR CREATION SOCKET");
+        exit(EXIT_FAILURE);
+    }
+    // Mettre la socket en mode non bloquant
+    if (fcntl(server_fd, F_SETFL, fcntl(server_fd, F_GETFL, 0) | O_NONBLOCK) < 0) {
+        perror("ERREUR MODE NON BLOQUANT");
+        close(server_fd);
         exit(EXIT_FAILURE);
     }
 
@@ -107,6 +117,59 @@ int wait_for_connections(server *s, void (*on_connect)(char *message)){
     }
     return 0;
 }
+
+
+int wait_for_connections_timeout(server *s, void (*on_connect)(char *message)) {
+    struct timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 500000;
+
+    fd_set readfds;
+    FD_ZERO(&readfds);
+    FD_SET(s->serveur_fd, &readfds);
+
+    int activity = select(s->serveur_fd + 1, &readfds, NULL, NULL, &timeout);
+    if (activity < 0) {
+        perror("Erreur avec select");
+        return -1;
+    }
+
+    if (activity == 0) {
+        return 0;
+    }
+
+    if (FD_ISSET(s->serveur_fd, &readfds)) {
+        int new_socket = accept(s->serveur_fd, (struct sockaddr *)&(s->address), (socklen_t *)&(s->addrlen));
+        if (new_socket < 0) {
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                return 0;
+            }
+            perror("Erreur lors de l'acceptation de la connexion");
+            return -1;
+        }
+
+        if (on_connect != NULL) {
+            on_connect("CLIENT CONNECTE !");
+        } else {
+            printf("CLIENT CONNECTE !\n");
+        }
+
+        s->clients_fd[s->act_connect] = new_socket;
+        int buffer[3] = {IDSERV, s->act_connect, ENDPACKET};
+        if (write(new_socket, (char *)buffer, 3 * sizeof(int)) < 0) {
+            perror("Erreur lors de l'écriture sur le socket client");
+            close(new_socket);
+            return -1;
+        }
+        s->act_connect++;
+
+        return 1;
+    }
+
+    return 0;
+}
+
+
 
 char *grid_to_buffer(int nb_lignes, int nb_colonnes, int **grid){
     int *res = calloc(4 + nb_lignes * nb_colonnes, sizeof(int));

@@ -23,7 +23,8 @@ typedef struct {
 
 
 server *init_serveur(int port, int nb_connect);
-int wait_for_connections(server *s, void (*on_connect)(char *message));
+int wait_for_connections(server *s, void (*on_connect)(char *));
+int wait_for_connections_timeout(server *s, void (*on_connect)(char *));
 void close_connections(server *s);
 void destroy_server(server *s);
 
