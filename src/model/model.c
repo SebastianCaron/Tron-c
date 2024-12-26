@@ -114,10 +114,12 @@ int move_player(model *m, int player, direction new_direction){
 
         m->grid[player_position->y][player_position->x] = (player+1); // Deplace le joueur si la case ou il doit être déplacé est vide
         m->scores[player] += SCORE_INCREMENT;
+
+        return 1;
     }
 
 
-    return 1;
+    return 0;
 }
 
 int set_positions(model *m, position *p){
