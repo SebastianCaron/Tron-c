@@ -137,9 +137,11 @@ int set_positions(model *m, position *p){
             m->grid[player_old_position->y][player_old_position->x] = -(i+1);
             m->grid[player_new_pos.y][player_new_pos.x] = (i+1);
             m->scores[i] += SCORE_INCREMENT;
+
+            m->players[i]->x = player_new_pos.x;
+            m->players[i]->y = player_new_pos.y;
+
         }
-        m->players[i]->x = player_new_pos.x;
-        m->players[i]->y = player_new_pos.y;
 
     }
     return v;
