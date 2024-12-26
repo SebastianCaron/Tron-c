@@ -10,7 +10,6 @@
 #include "./controller.h"
 
 // AGENTS
-#include "../agents/random.h"
 #include "../agents/rectiligne.h"
 
 // NETWORK

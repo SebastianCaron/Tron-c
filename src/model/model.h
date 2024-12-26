@@ -6,12 +6,20 @@ typedef enum {UP = 1, DOWN = 3, LEFT = 2, RIGHT = 4, NODIRECTION = 0} direction;
 
 typedef enum { WALL = 100, EMPTY = 0 } cases;
 
-
+/** 
+∗ @struct position
+∗ @brief easy acces to a player position
+*/
 typedef struct {
     int x;
     int y;
 } position;
 
+
+/** 
+∗ @struct model
+∗ @brief represents the game
+*/
 typedef struct {
     position **players;
     direction *directions;

@@ -2,6 +2,10 @@
 
 #define BUFFER_SIZE 1024
 
+/** 
+∗ @struct grid
+∗ @brief easy access to table information
+*/
 typedef struct{
     int nb_colonnes;
     int nb_lignes;
