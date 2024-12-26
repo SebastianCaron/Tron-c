@@ -75,7 +75,7 @@ view *init_view_ncurse(){
     v->get_event = get_event_ncurses;
 
 
-    v->affiche_menu = afficheMenuNC;
+    v->affiche_menu = affiche_menu_ncurses;
     v->affiche_winner = affiche_win_ncurses;
 
     v->nbMenu = 0;
@@ -260,7 +260,7 @@ void affiche_win_ncurses(view *v, int indexPlayer) {
 }
 
 
-void afficheMenuNC(view *v, int *selected_option, int nbMenu){
+void affiche_menu_ncurses(view *v, int *selected_option, int nbMenu){
     v->get_action = get_action_menu_ncurses;
 
     const char *options[3][4] = {
