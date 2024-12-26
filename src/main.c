@@ -44,7 +44,7 @@ int main(int argc, char **argv){
     for(int i = 1; i < argc; i++){
         if(string_equal(argv[i],"-sdl") == 1){
             with_sdl = 1;
-        }else if(string_equal(argv[i],"-ncurse") == 1){
+        }else if(string_equal(argv[i],"-ncurse") == 1 || string_equal(argv[i],"-nc") == 1 || string_equal(argv[i],"-ncurses") == 1){
             with_ncurse = 1;
         }else if(start_with(argv[i],"-ip") == 1){
             ip = argv[i] + 3;
@@ -57,10 +57,12 @@ int main(int argc, char **argv){
             printf("INCORRECT PARAMETER %s\n", argv[i]);
             printf("[USAGE] %s\n WITH PARAMETERS\n", argv[0]);
             printf("\t -sdl : TO USE SDL LIB\n");
-            printf("\t -ncurse : TO USE NCURSE LIB\n");
+            printf("\t -ncurses : TO USE NCURSE LIB\n");
             printf("\t -ip : TO CONFIGURE THE IP ADDRESS\n");
+            printf("\t -port : TO CONFIGURE THE PORT\n");
+            printf("\t -h : TO HOST A GAME\n");
 
-            printf("EXAMPLE : %s -sdl -ncurse -ip192.168.0.0\n", argv[0]);
+            printf("EXAMPLE : %s -sdl -ncurses -ip192.168.0.0\n", argv[0]);
             exit(EXIT_FAILURE);
         }
     }
@@ -79,6 +81,15 @@ int main(int argc, char **argv){
         vsdl = init_view_sdl();
     }
     if(with_ncurse){
+        setlocale(LC_ALL, "");
+        initscr();
+        timeout(-1);
+        noecho();
+        cbreak();
+        keypad(stdscr, TRUE);
+        nodelay(stdscr, TRUE);
+        init_colors();
+
         vncr = init_view_ncurse();
     }
 
@@ -100,6 +111,11 @@ int main(int argc, char **argv){
     if(with_sdl){
         TTF_Quit();
         SDL_Quit();
+    }
+    if(with_ncurse){
+        clear();
+        echo();
+        endwin();
     }
 
     return EXIT_SUCCESS;

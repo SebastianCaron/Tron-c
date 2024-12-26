@@ -42,8 +42,6 @@ view *init_view_ncurse(){
         exit(EXIT_FAILURE);
     }
 
-    setlocale(LC_ALL, "");
-    initscr();
     v->type = 'n';
     getmaxyx(stdscr, v->height, v->width);
     v->width = (v->width > 100) ? 100 : v->width;
@@ -54,16 +52,10 @@ view *init_view_ncurse(){
     v->ncurse = vn;
 
     clear();
-    timeout(10000);
-    noecho();
-    cbreak();
-    keypad(stdscr, TRUE);
-    nodelay(stdscr, TRUE);
 
     v->ncurse->grid_w = subwin(stdscr, v->height, v->width, 1, 25);
     v->ncurse->scores = subwin(stdscr, v->height, 20, 1, 0);
 
-    init_colors();
 
     // vn->grid_w = subwin(stdscr, LINES-2, COLS-40, 1, 20); 
     // box(vn->grid_w, ACS_VLINE, ACS_HLINE);
