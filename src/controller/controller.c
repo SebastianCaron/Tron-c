@@ -11,6 +11,7 @@
 
 // AGENTS
 #include "../agents/rectiligne.h"
+#include "../agents/hara_kiri.h"
 
 // NETWORK
 #include "../network/network.h"
@@ -58,12 +59,6 @@ void controller_play_solo_j_vs_random(controller *c){
 
 void controller_play_solo_j_vs_hara_kiri(controller *c){
 
-    // Faire une liste des directions possible du bot
-    // Regarder position suivante du joueur en fonction de sa direction
-    // Prendre la direction du bot qui se rapproche le plus du joueur 
-
-    int directionBotTest[4][2] = {{-1,0},{0,-1},{1,0},{0,1} };
-    
     create_model(c, 2);
     int i = 0;
     direction *dirs = calloc(2, sizeof(direction));
@@ -73,46 +68,15 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
     }
     clock_t start, end;
     double duration;
-    direction currentDir;
 
     while(!est_fini(c->m)){
 
         start = clock();
         for(i = 0; i < c->nb_view; i++){
-            direction dir = c->views[i]->get_direction(c->views[i],1, dirs);
-            if(dir!=0){
-                currentDir = dir;
-            }
+            c->views[i]->get_direction(c->views[i],1, dirs);
         }
         move_player(c->m, 0, dirs[0]);
-
-        int xJ = c->m->players[0]->x;
-        int yJ = c->m->players[0]->y;
-        if(currentDir!=0){
-            xJ = c->m->players[0]->x + directionBotTest[currentDir-1][1];
-            yJ = c->m->players[0]->y + directionBotTest[currentDir-1][0];
-        }
-
-        int distancePlusCourte = 100000;
-        int indexDistancePlusCourte = 0;
-
-        for (int i = 0; i < 4; i++) {
-            int xBot = c->m->players[1]->x + directionBotTest[i][1];
-            int yBot = c->m->players[1]->y + directionBotTest[i][0];
-            if (c->m->grid[yBot][xBot] == EMPTY) {
-                int distance = ((xBot - xJ) * (xBot - xJ)) + ((yBot - yJ) * (yBot - yJ));
-                if (distancePlusCourte > distance) {
-                    indexDistancePlusCourte = i+1;
-                    distancePlusCourte = distance;
-                }
-            }
-        }
-
-        if (distancePlusCourte == 100000) {
-            move_player(c->m, 1, RIGHT);
-        } else {
-            move_player(c->m, 1, indexDistancePlusCourte);
-        }
+        move_player(c->m, 1, hara_kiri_get_direction(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, c->m->directions));
 
         collision_player(c->m, 0);
         collision_player(c->m, 1);
@@ -126,7 +90,6 @@ void controller_play_solo_j_vs_hara_kiri(controller *c){
         usleep(SPEED_FRM - duration);
     }
     free(dirs);
-    
 }  
 
 
@@ -204,7 +167,7 @@ void create_model(controller *c, int nb_player){
     
     for(unsigned i = 0; i < c->nb_view; i++){
         if(c->views[i]->type == 'n'){
-            grid *g = load_map("./maps/map4.txt", c->views[i]->height, c->views[i]->width);
+            grid *g = load_map("./maps/map1.txt", c->views[i]->height, c->views[i]->width);
             c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
             free(g);
             return;
@@ -213,7 +176,7 @@ void create_model(controller *c, int nb_player){
         }
     }
 
-    grid *g = load_map("./maps/map4.txt", best->height, best->width);
+    grid *g = load_map("./maps/map1.txt", best->height, best->width);
     c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
     // display_grid(g);
     free(g);
@@ -363,21 +326,13 @@ void controller_play_online_host(controller *c, int nb_connect){
         if(act == QUITTER) return;
         usleep(SPEED_FRM);
     }
-    // printf("OK TOUT LE MONDE CONNECTE\n");
-
     create_model(c, nb_player_connected);
-    // printf("MODEL OK\n");
     send_nb_player_all(s, nb_player_connected);
-    // printf("NB PLAYER SEND TO EVERYONE\n");
     send_grid_all(s, c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid);
-    // printf("GRID SEND TO EVERYONE\n");
-
 
     // WAIT FOR EVERYONE TO BE READY
 
     send_start_signal_all(s);
-    // printf("START SIGNAL OK\n");
-
 
     direction *dirs = calloc(nb_player_connected, sizeof(direction));
     if(dirs == NULL){
@@ -389,46 +344,29 @@ void controller_play_online_host(controller *c, int nb_connect){
     double duration;
     int i = 0;
     int is_over = 0;
-    // printf("DEBUT BOUCLE JEU\n");
-
     for(i = 0; i < c->nb_view; i++){
-        // MET A JOUR LES VIEWS
         c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
     }
 
     while(!is_over){
         start = clock();
         for(i = 0; i < c->nb_view; i++){
-            // RECUPERE LES INPUTS VIA LES VIEWS
             c->views[i]->get_direction(c->views[i],1, dirs);
         }
         move_player(c->m, 0, dirs[0]);
-        // printf("DEPLACE JOUEUR SOLO\n");
 
         dirso = get_directions_all(s);
-        // printf("RECUPERATION DES DIRECTIONS\n");
-
-
         for(int i = 0; i < nb_player_connected-1; i++){
             move_player(c->m, i+1, dirso[i]);
         }
-        // printf("DEPLACE JOUEURS\n");
-
 
         collision_all(c->m);
-        // printf("COLLISION ALL\n");
-
 
         for(i = 0; i < c->nb_view; i++){
-            // MET A JOUR LES VIEWS
             c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
         }
-        // printf("SCREEN OK\n");
-
 
         send_positions_all(s, nb_player_connected, c->m->players);
-        // printf("POSITIONS ENVOYEES OK\n");
-
         
         end = clock();
         duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
@@ -441,7 +379,6 @@ void controller_play_online_host(controller *c, int nb_connect){
 
         // WAIT FOR EVERYONE TO BE READY
     }
-    // printf("FIN DU JEU ET SERV'\n");
 
     send_winner_all(s, get_winner(c->m));
     free(dirs);
@@ -460,20 +397,14 @@ void controller_play_online_join(controller *c){
     }
 
     int nb_player = client_get_nb_player(client);
-    // printf("NBPLAYER OK ! %d\n", nb_player);
-
     grid *g = client_get_grid(client);
-    // printf("GRID OK !\n");
-
     create_model_with_grid(c, nb_player, g);
-    // printf("MODEL OK!\n");
 
     direction *dirs = calloc(nb_player, sizeof(direction));
     if(dirs == NULL){
         perror("[CONTROLLER] erreur allocation directions\n");
         return;
     }
-    // direction *dirso;
     position *pos;
     clock_t start, end;
     double duration;
@@ -483,43 +414,27 @@ void controller_play_online_join(controller *c){
     while(client_get_start_signal(client) == 0){
         usleep(SPEED_FRM);
     }
-    // printf("START !!!!\n");
-
     for(i = 0; i < c->nb_view; i++){
-        // MET A JOUR LES VIEWS
         c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
     }
 
     while(is_over == 0){
         start = clock();
         for(i = 0; i < c->nb_view; i++){
-            // RECUPERE LES INPUTS VIA LES VIEWS
             c->views[i]->get_direction(c->views[i],1, dirs);
         }
-        // printf("GET DIRECTION !\n");
-
-
         client_send_movement(client, dirs[0]);
-        // printf("MOUVEMENT SENT !\n");
-
 
         pos = client_get_positions(client);
-        // printf("POSITION OK!\n");
-
-        // SET POSITIONS
         if(set_positions(c->m, pos) != 0){
             // client_ask_for_grid(client);
         }
 
-        // collision_all(c->m);
-        // printf("COLLISION OK!\n");
+        // collision_all(c->m); // ON SERV
 
         for(i = 0; i < c->nb_view; i++){
-            // MET A JOUR LES VIEWS
             c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
         }
-        // printf("SCREEN OK!\n");
-
         
         end = clock();
         duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
@@ -528,7 +443,6 @@ void controller_play_online_join(controller *c){
         // WAIT FOR EVERYONE TO BE READY
 
         is_over = client_is_over(client);
-        // printf("ISOVER OK!\n");
     }
 
     int winner = client_get_winner(client);
@@ -536,5 +450,4 @@ void controller_play_online_join(controller *c){
 
     free(dirs);
     destroy_client(client);
-    // exit(EXIT_FAILURE);
 }
