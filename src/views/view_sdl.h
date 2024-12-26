@@ -18,8 +18,8 @@ void update_screen_sdl(view *, int, int *, int **, int , int);
 
 void quitter(SDL_Window *window, SDL_Renderer *renderer);
 SDL_Rect *createRect(int h, int w, int x, int y);
-SDL_Rect afficheButton(SDL_Renderer *renderer,char *texte, int y, int titre);
-void afficheScore(SDL_Renderer *, int, int *);
+SDL_Rect *afficheButton(SDL_Renderer *renderer,char *texte, int y, int titre, TTF_Font *);
+void afficheScore(SDL_Renderer *, int, int *, TTF_Font *);
 
 
 void affiche_win_sdl(view *v, int indexPlayer);

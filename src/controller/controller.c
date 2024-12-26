@@ -281,7 +281,6 @@ void go_to_menu(controller *c){
                 act = RETOUR;
                 break;
             case PLAY_ONLINE:
-                nbMenu = 3; 
                 if(c->marker == 1){
                     controller_play_online_host(c, 2);
                 }else{

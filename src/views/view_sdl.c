@@ -20,17 +20,6 @@ view *init_view_sdl(){
         exit(EXIT_FAILURE);
     }
 
-    if (TTF_Init() == -1) {
-        fprintf(stderr, "[VIEW SDL] ERREUR SDL_ttf - %s\n", TTF_GetError());
-        exit(EXIT_FAILURE);
-    }
-
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        fprintf(stderr, "Erreur lors de l'initialisation de la SDL : %s\n", SDL_GetError());
-        exit(EXIT_FAILURE);
-    }
-
-
     v->destroy_self = destroy_view_sdl; 
     v->get_direction = get_direction_sdl;
     // v->update_change_screen = ;
@@ -52,6 +41,9 @@ view *init_view_sdl(){
         exit(EXIT_FAILURE);
     }
     v->sdl = viewSdl;
+
+    v->sdl->font_title = TTF_OpenFont("./res/nextg.ttf", 70);
+    v->sdl->font = TTF_OpenFont("./res/nextg.ttf", 34);
 
     // v->sdl->buttons = (SDL_Rect **) calloc(20, sizeof(SDL_Rect *));
     // if(!v->sdl->buttons){
@@ -84,14 +76,15 @@ view *init_view_sdl(){
 void destroy_view_sdl(view *v){
     if(v == NULL) return;
     if(v->sdl){
+        TTF_CloseFont(v->sdl->font);
+        TTF_CloseFont(v->sdl->font_title);
+        free_buttons(v->sdl);
         SDL_DestroyRenderer(v->sdl->renderer);
         SDL_DestroyWindow(v->sdl->window);
     }
-    TTF_Quit();
-    SDL_Quit();
-    free_buttons(v->sdl);
-    // free(v->sdl);
-    // free(v);
+    free(v->sdl);
+    free(v);
+
 }
 
 
@@ -165,34 +158,48 @@ SDL_Rect *createRect(int h, int w, int x, int y){
     return ret;
 }
 
-SDL_Rect afficheButton(SDL_Renderer *renderer,char *texte, int y, int titre) {
-    TTF_Font *font = TTF_OpenFont("./res/nextg.ttf", 40);
-    SDL_Color color = {0, 0, 0, 255}; 
-    if(titre==1){
-        font = TTF_OpenFont("./res/nextg.ttf", 70);
+SDL_Rect *afficheButton(SDL_Renderer *renderer,char *texte, int y, int titre, TTF_Font *font) {
+    SDL_Color color; 
+    if(titre == 1){
         color = (SDL_Color) {255, 255, 255, 255};
+    }else{
+        color = (SDL_Color) {0, 0, 0, 255};
     }
     SDL_Surface *surfaceTexte = TTF_RenderText_Solid(font, texte, color);
+    if(surfaceTexte == NULL){
+        perror("[VIEW SDL] erreur allocation surface button\n");
+        return NULL;
+    }
     SDL_Texture *textureTexte = SDL_CreateTextureFromSurface(renderer, surfaceTexte);
+    if(textureTexte == NULL){
+        perror("[VIEW SDL] erreur allocation texture button\n");
+        return NULL;
+    }
 
-    SDL_Rect destRect = (SDL_Rect) {LARGEUR/2-surfaceTexte->w/2, y, surfaceTexte->w, surfaceTexte->h};
-    SDL_RenderFillRect(renderer, &destRect);
-    SDL_RenderCopy(renderer, textureTexte, NULL, &destRect);
+    SDL_Rect *destRect = calloc(1, sizeof(SDL_Rect));
+    if(destRect == NULL){
+        perror("[VIEW SDL] erreur allocation rect button\n");
+        return NULL;
+    }
+    destRect->x = LARGEUR/2 - surfaceTexte->w/2;
+    destRect->y = y;
+    destRect->w = surfaceTexte->w;
+    destRect->h = surfaceTexte->h;
+    SDL_RenderFillRect(renderer, destRect);
+    SDL_RenderCopy(renderer, textureTexte, NULL, destRect);
     
 
     SDL_DestroyTexture(textureTexte);
     SDL_FreeSurface(surfaceTexte);
-    TTF_CloseFont(font);
 
     return destRect;   
 }
 
-void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores) {
+void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores, TTF_Font *font) {
 
     int posX[8] = {10, 200, 400, 600,10, 100, 200, 300};
     int posY[8] = {5, 5, 5, 5, 30,30,30,30};
 
-    TTF_Font *font = TTF_OpenFont("./res/nextg.ttf", 20);
     SDL_Color color = {0, 0, 0, 255}; 
     SDL_Surface *surfaceTexte;
     SDL_Texture *textureTexte; 
@@ -207,11 +214,10 @@ void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores) {
 
         destRect = (SDL_Rect) { posX[i], posY[i], surfaceTexte->w, surfaceTexte->h};
         SDL_RenderCopy(renderer, textureTexte, NULL, &destRect);
-    }
 
-    SDL_DestroyTexture(textureTexte);
-    SDL_FreeSurface(surfaceTexte);
-    TTF_CloseFont(font);
+        SDL_DestroyTexture(textureTexte);
+        SDL_FreeSurface(surfaceTexte);
+    }
 }   
 
 
@@ -225,33 +231,30 @@ void affiche_win_sdl(view *v, int indexPlayer){
     SDL_SetRenderDrawColor(v->sdl->renderer, 255,255,255,255);
     SDL_RenderDrawRect(v->sdl->renderer, bg);
     
-
-    TTF_Font *font = TTF_OpenFont("./res/game.ttf", 30);
     SDL_Color color = {255, 255, 255, 255}; 
 
-    SDL_Surface *surfaceTexte = TTF_RenderText_Solid(font, gagnant, color);
+    SDL_Surface *surfaceTexte = TTF_RenderText_Solid(v->sdl->font, gagnant, color);
     SDL_Texture *textureTexte = SDL_CreateTextureFromSurface(v->sdl->renderer, surfaceTexte);
 
     SDL_Rect destRect = (SDL_Rect) {LARGEUR/2-surfaceTexte->w/2, HAUTEUR/2-surfaceTexte->h/2, surfaceTexte->w, surfaceTexte->h};
     SDL_RenderCopy(v->sdl->renderer, textureTexte, NULL, &destRect);
 
-    SDL_Rect ok = afficheButton(v->sdl->renderer, "  OK  ", 370, 0);
+    SDL_Rect *ok = afficheButton(v->sdl->renderer, "  OK  ", 370, 0, v->sdl->font);
 
     SDL_DestroyTexture(textureTexte);
     SDL_FreeSurface(surfaceTexte);
-    TTF_CloseFont(font);
     
+    free_buttons(v->sdl);
 
-    v->sdl->buttons[0] = malloc(sizeof(SDL_Rect));
+    v->sdl->buttons[0] = ok;
     v->sdl->nb_buttons = 1;
     if (!v->sdl->buttons[0]) {
         perror("[VIEW SDL] erreur allocation de mémoire pour les boutons.");
         quitter(v->sdl->window, v->sdl->renderer);
     }
 
-    *(v->sdl->buttons[0]) = ok;
-
     SDL_RenderPresent(v->sdl->renderer);
+    free(bg);
 }
 
 
@@ -262,10 +265,11 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu){
     v->sdl->menu_current = nbMenu;
     free_buttons(v->sdl);
 
-    char *menuText[3][4] = {
+    char *menuText[4][4] = {
         {"TRON", "  solo  ", "  multiplayer  ", "  EXIT  "},       
         {"SOLO", "  vs Algo (easy) ", "  vs Algo (hard) ", "  BACK  "},     
-        {"MULTIPLAYER", "  on this machine (2 players)  ", "  with others  ", "  BACK  "}      
+        {"MULTIPLAYER", "  on this machine (2 players)  ", "  with others  ", "  BACK  "},
+        {"Retour"}      
     };
 
     SDL_Renderer *renderer = v->sdl->renderer;
@@ -273,31 +277,28 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu){
     SDL_RenderClear(renderer);
     v->get_action = get_action_menu_sdl;
     
-    afficheButton(renderer, menuText[nbMenu][0], 100, 1);
+    SDL_Rect *title = afficheButton(renderer, menuText[nbMenu][0], 100, 1, v->sdl->font_title);
 
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
 
-    SDL_Rect c1 = afficheButton(renderer, menuText[nbMenu][1],300, 0);
+    SDL_Rect *c1 = afficheButton(renderer, menuText[nbMenu][1],300,0, v->sdl->font);
 
-    SDL_Rect c2 = afficheButton(renderer, menuText[nbMenu][2],400, 0);
+    SDL_Rect *c2 = afficheButton(renderer, menuText[nbMenu][2],400,0, v->sdl->font);
 
-    SDL_Rect c3 = afficheButton(renderer, menuText[nbMenu][3],500, 0);
+    SDL_Rect *c3 = afficheButton(renderer, menuText[nbMenu][3],500,0, v->sdl->font);
 
     v->sdl->nb_buttons = 3;
-    v->sdl->buttons[0] = malloc(sizeof(SDL_Rect));
-    v->sdl->buttons[1] = malloc(sizeof(SDL_Rect));
-    v->sdl->buttons[2] = malloc(sizeof(SDL_Rect));
+    v->sdl->buttons[0] = c1;
+    v->sdl->buttons[1] = c2;
+    v->sdl->buttons[2] = c3;
 
     if (!v->sdl->buttons[0] || !v->sdl->buttons[1] || !v->sdl->buttons[2]) {
         perror("[VIEW SDL] erreur allocation de mémoire pour les boutons.");
         quitter(v->sdl->window, v->sdl->renderer);
     }
 
-    *(v->sdl->buttons[0]) = c1;
-    *(v->sdl->buttons[1]) = c2;
-    *(v->sdl->buttons[2]) = c3;
-
     SDL_RenderPresent(renderer);
+    free(title);
 }
 
 
@@ -386,7 +387,7 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
         }
     }
 
-    afficheScore(renderer, nb_player, scores);
+    afficheScore(renderer, nb_player, scores, v->sdl->font);
     SDL_RenderPresent(renderer);
 
 }
