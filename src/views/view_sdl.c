@@ -52,13 +52,6 @@ view *init_view_sdl(){
         exit(EXIT_FAILURE);
     }
     v->sdl = viewSdl;
-
-    // v->sdl->buttons = (SDL_Rect **) calloc(20, sizeof(SDL_Rect *));
-    // if(!v->sdl->buttons){
-    //     perror("[VIEW SDL] erreur allocation des boutons");
-    //     exit(EXIT_FAILURE);
-    // }
-
     v->sdl->menu_current = 1000;
 
     v->sdl->renderer = NULL;
@@ -114,7 +107,6 @@ void quitter(SDL_Window *window, SDL_Renderer *renderer){
 }
 
 
-// J'ai mis l'ecoute d'évenement pour quitter ici parce que je sais pas ou le mettre sinon a part dans le main
 direction get_direction_sdl(view *v, int nb_player_on_keyboard, direction *dirs){    
     SDL_Event event;
     while (SDL_PollEvent(&event) > 0){
@@ -256,8 +248,6 @@ void affiche_win_sdl(view *v, int indexPlayer){
 
 
 void affiche_menu_sdl(view *v, int *act, int nbMenu){
-    // MODFIIER SI HOVER EFFECT
-    // NE RAFFRAICHI PAS LE MENU SI DEJA INIT
     if(v->sdl->menu_current == nbMenu) return;
     v->sdl->menu_current = nbMenu;
     free_buttons(v->sdl);
@@ -362,6 +352,7 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
+    
     for(int i = 0; i<nb_lignes;i++){
         for (int j= 0 ;j <nb_colonnes;j++){
 
