@@ -23,6 +23,7 @@ typedef struct{
 
     TTF_Font *font_title;
     TTF_Font *font;
+    TTF_Font *font_score;
 } view_sdl;
 
 typedef struct v{

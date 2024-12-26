@@ -44,6 +44,7 @@ view *init_view_sdl(){
 
     v->sdl->font_title = TTF_OpenFont("./res/nextg.ttf", 70);
     v->sdl->font = TTF_OpenFont("./res/nextg.ttf", 34);
+    v->sdl->font_score = TTF_OpenFont("./res/nextg.ttf", 20);
 
     // v->sdl->buttons = (SDL_Rect **) calloc(20, sizeof(SDL_Rect *));
     // if(!v->sdl->buttons){
@@ -385,7 +386,7 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
         }
     }
 
-    afficheScore(renderer, nb_player, scores, v->sdl->font);
+    afficheScore(renderer, nb_player, scores, v->sdl->font_score);
     SDL_RenderPresent(renderer);
 
 }
