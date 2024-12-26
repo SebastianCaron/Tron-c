@@ -45,13 +45,6 @@ view *init_view_sdl(){
     v->sdl->font_title = TTF_OpenFont("./res/nextg.ttf", 70);
     v->sdl->font = TTF_OpenFont("./res/nextg.ttf", 34);
     v->sdl->font_score = TTF_OpenFont("./res/nextg.ttf", 20);
-
-    // v->sdl->buttons = (SDL_Rect **) calloc(20, sizeof(SDL_Rect *));
-    // if(!v->sdl->buttons){
-    //     perror("[VIEW SDL] erreur allocation des boutons");
-    //     exit(EXIT_FAILURE);
-    // }
-
     v->sdl->menu_current = 1000;
 
     v->sdl->renderer = NULL;
