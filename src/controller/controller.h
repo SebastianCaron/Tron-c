@@ -24,7 +24,8 @@ typedef struct {
 controller *init_controller(int, ...);
 
 void create_model(controller *c, int nb_player);
-void controller_play_solo_j_vs_random(controller *c);
+
+void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, int, int **, position **, direction *));
 
 void destroy_controller(controller *);
 
