@@ -38,7 +38,7 @@ typedef struct v{
     unsigned height;
 
     void (*update_screen)(struct v *, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes);
-    void (*update_change_screen)(struct v *, int **grid, int nb_lignes, int nb_colonnes);
+    void (*update_change_screen)(struct v *, int, int *, int **, int, int, position **);
 
     direction (*get_direction)(struct v *, int nb_player_on_keyboard, direction *dirs);
     void (*destroy_self)(struct v *);

@@ -18,16 +18,18 @@
 #include "../network/server.h"
 #include "../network/client.h"
 
-void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, int, int **, position **, direction *)){
-    create_model(c, 2);
+void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, int, int **, position **, direction *), int nb_bots){
+    create_model(c, nb_bots+1);
     int i = 0;
-    direction *dirs = calloc(2, sizeof(direction));
+    direction *dirs = calloc(nb_bots+1, sizeof(direction));
     if(dirs == NULL){
         perror("[CONTROLLER] erreur allocation directions\n");
         return;
     }
     clock_t start, end;
     double duration;
+    c->views[i]->update_screen(c->views[i], c->m->n_player, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+
 
     while(!est_fini(c->m)){
 
@@ -36,13 +38,16 @@ void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, 
             c->views[i]->get_direction(c->views[i],1, dirs);
         }
         move_player(c->m, 0, dirs[0]);
-        move_player(c->m, 1, get_dir_bot(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, c->m->directions));
+        
+        for(int i = 0; i < nb_bots; i++){
+            dirs[i+1] = get_dir_bot(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, c->m->directions);
+            move_player(c->m, i+1, dirs[i+1]);
+        }
 
-        collision_player(c->m, 0);
-        collision_player(c->m, 1);
+        collision_all(c->m);
 
         for(i = 0; i < c->nb_view; i++){
-            c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+            c->views[i]->update_change_screen(c->views[i], c->m->n_player, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->players);
         }
 
         end = clock();
@@ -182,14 +187,14 @@ void go_to_menu(controller *c){
                 act = NO_ACTION;
                 break;
             case PLAY_BOT_ALGO:
-                controller_play_solo_j_vs_bot(c, rectiligne_get_direction);
+                controller_play_solo_j_vs_bot(c, rectiligne_get_direction, 1);
                 display_winner(c);
                 destroy_model(c->m);
                 c->m = NULL;
                 act = RETOUR;
                 break;
             case PLAY_BOT_Q:
-                controller_play_solo_j_vs_bot(c, hara_kiri_get_direction);
+                controller_play_solo_j_vs_bot(c, hara_kiri_get_direction, 1);
                 display_winner(c);
                 destroy_model(c->m);
                 c->m = NULL;

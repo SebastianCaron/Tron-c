@@ -5,10 +5,14 @@
 
 #include "utils/utils.h"
 #include "model/model.h"
+
 #include "views/view.h"
 #include "views/view_ncurse.h"
 #include "views/view_sdl.h"
+
 #include "controller/controller.h"
+
+#include "network/network.h"
 
 #define TEST 0
 
@@ -26,7 +30,7 @@ int main(int argc, char **argv){
 
     view *vncr = NULL;
     view *vsdl = NULL;
-    char *ip = NULL;
+    char *ip = "127.0.0.1";
     char *port = NULL;
     char with_sdl = 0;
     char with_ncurse = 0;

@@ -22,7 +22,7 @@ view *init_view_sdl(){
 
     v->destroy_self = destroy_view_sdl; 
     v->get_direction = get_direction_sdl;
-    // v->update_change_screen = ;
+    v->update_change_screen = update_change_screen_sdl;
     v->update_screen = update_screen_sdl;
 
     v->affiche_menu = affiche_menu_sdl;
@@ -335,7 +335,6 @@ void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu
 
 
 void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes){
-
     if(v == NULL){
         perror("[VIEW SDL] V is null.");
         exit(EXIT_FAILURE);
@@ -361,7 +360,7 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
 
             SDL_Rect pixel;
             pixel.h = HAUTEUR / nb_lignes;
-            pixel.w= LARGEUR / nb_colonnes;
+            pixel.w = LARGEUR / nb_colonnes;
             pixel.x = j*(LARGEUR / nb_colonnes);
             pixel.y = i*(HAUTEUR / nb_lignes);
 
@@ -383,6 +382,65 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
     afficheScore(renderer, nb_player, scores, v->sdl->font_score);
     SDL_RenderPresent(renderer);
 
+}
+
+void update_change_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes, position **players){
+    update_screen_sdl(v, nb_player, scores, grid, nb_lignes, nb_colonnes);
+    return;
+    /** if(v == NULL){
+        perror("[VIEW SDL] V is null.");
+        exit(EXIT_FAILURE);
+    }
+    
+    if(v->sdl == NULL){
+        perror("[VIEW SDL] V is not SDL.");
+        exit(EXIT_FAILURE);
+    }
+
+    if(v->sdl->renderer == NULL){
+        perror("[VIEW SDL] No renderer available in the view.");
+        exit(EXIT_FAILURE);
+    }
+    SDL_Renderer *renderer = v->sdl->renderer;
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    int to_check[5][2];
+    for(int i = 0; i < nb_player; i++){
+        position *p = players[i];
+        to_check[0][0] = p->x;
+        to_check[0][1] = p->y;
+        to_check[1][0] = p->x + 1;
+        to_check[2][0] = p->x - 1;
+        to_check[1][1] = p->y;
+        to_check[2][1] = p->y;
+        to_check[3][0] = p->x;
+        to_check[4][0] = p->x;
+        to_check[3][1] = p->y + 1;
+        to_check[4][1] = p->y - 1;
+
+        for(int k = 0; k < 5; k++){
+            SDL_Rect pixel;
+            pixel.h = HAUTEUR / nb_lignes;
+            pixel.w = LARGEUR / nb_colonnes;
+            pixel.x = to_check[k][0]*(LARGEUR / nb_colonnes);
+            pixel.y = to_check[k][1]*(HAUTEUR / nb_lignes);
+
+            if(to_check[k][1] < 0 || to_check[k][1] >= nb_lignes || to_check[k][0] < 0 || to_check[k][0] >= nb_colonnes) continue;
+            if(grid[to_check[k][1]][to_check[k][0]] == WALL){
+                SDL_SetRenderDrawColor(renderer, tabColors[9].r, tabColors[9].g, tabColors[9].b, tabColors[9].a);
+            }
+            else{
+                int indice = grid[to_check[k][1]][to_check[k][0]];
+                if (indice < 0){
+                    SDL_SetRenderDrawColor(renderer, tabColors[indice*-1].r, tabColors[indice*-1].g, tabColors[indice*-1].b, (tabColors[indice*-1].a) - 100);
+                }else{
+                    SDL_SetRenderDrawColor(renderer, tabColors[indice].r, tabColors[indice].g, tabColors[indice].b, tabColors[indice].a);
+                }
+            }
+            SDL_RenderFillRect(renderer, &pixel);
+        }
+    }
+    afficheScore(renderer, nb_player, scores, v->sdl->font_score);
+    SDL_RenderPresent(renderer); **/
 }
 
 void get_event_sdl(view *v, actions *act){

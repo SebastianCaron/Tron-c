@@ -68,11 +68,9 @@ view *init_view_ncurse(){
     // vn->grid_w = subwin(stdscr, LINES-2, COLS-40, 1, 20); 
     // box(vn->grid_w, ACS_VLINE, ACS_HLINE);
 
-
-
     v->destroy_self = destroy_view_ncurses;
     v->get_direction = get_direction_ncurses;
-    // v->update_change_screen = ;
+    v->update_change_screen = update_change_screen_ncurses;
     v->update_screen = update_screen_ncurses;
     v->get_event = get_event_ncurses;
 
@@ -147,7 +145,7 @@ void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int 
                 s = "█";
             }else if(grid[i][j] < 0){
                 color_pair = -(grid[i][j]) + 1;
-                s = "▒▒";
+                s = "▒";
             }else if(grid[i][j] > 0){
                 color_pair = grid[i][j] + 1;
                 s = "-";
@@ -171,6 +169,58 @@ void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int 
         wattroff(v->ncurse->scores, COLOR_PAIR(i + 2));
     }
     // wrefresh(v->ncurse->scores);
+    wnoutrefresh(v->ncurse->scores);
+
+    doupdate(); 
+}
+
+void update_change_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes, position **players){
+    box(v->ncurse->grid_w, ACS_VLINE, ACS_HLINE);
+
+    int to_check[5][2];
+    for(int i = 0; i < nb_player; i++){
+        position *p = players[i];
+        to_check[0][0] = p->x;
+        to_check[0][1] = p->y;
+        to_check[1][0] = p->x + 1;
+        to_check[2][0] = p->x - 1;
+        to_check[1][1] = p->y;
+        to_check[2][1] = p->y;
+        to_check[3][0] = p->x;
+        to_check[4][0] = p->x;
+        to_check[3][1] = p->y + 1;
+        to_check[4][1] = p->y - 1;        
+        for(int k = 0; k < 5; k++){
+            int color_pair = COLOR_WHITE;
+            char *s = " ";
+            if(to_check[k][1] < 0 || to_check[k][1] >= nb_lignes || to_check[k][0] < 0 || to_check[k][0] >= nb_colonnes) continue;
+            if(grid[to_check[k][1]][to_check[k][0]] == WALL){
+                s = "█";
+            }else if(grid[to_check[k][1]][to_check[k][0]] < 0){
+                color_pair = -(grid[to_check[k][1]][to_check[k][0]]) + 1;
+                s = "▒";
+            }else if(grid[to_check[k][1]][to_check[k][0]] > 0){
+                color_pair = grid[to_check[k][1]][to_check[k][0]] + 1;
+                s = "-";
+            }
+
+            wattron(v->ncurse->grid_w, COLOR_PAIR(color_pair));
+
+            mvwprintw(v->ncurse->grid_w, to_check[k][1], to_check[k][0], "%s", s);
+
+            wattroff(v->ncurse->grid_w, COLOR_PAIR(color_pair));
+        }
+    }
+
+    wnoutrefresh(v->ncurse->grid_w);
+
+    werase(v->ncurse->scores);
+    box(v->ncurse->scores, ACS_VLINE, ACS_HLINE);
+    for (int i = 0; i < nb_player; i++) {
+        wattron(v->ncurse->scores, COLOR_PAIR(i + 2));
+        mvwprintw(v->ncurse->scores, i + 1, 1, "Player %d: %d", i + 1, scores[i]);
+        wattroff(v->ncurse->scores, COLOR_PAIR(i + 2));
+    }
     wnoutrefresh(v->ncurse->scores);
 
     doupdate(); 
@@ -274,7 +324,7 @@ void get_action_menu_ncurses(view *v, actions *act, int *selected_option, int nb
 }
 
 void get_event_ncurses(view *v, actions *act){
-    int ch = getch();
+    getch();
 }
 
 

@@ -113,3 +113,6 @@ void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu
  * @param act the pointer of the element to update
  */
 void get_event_sdl(view *v, actions *act);
+
+
+void update_change_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes, position **players);

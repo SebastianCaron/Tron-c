@@ -87,9 +87,7 @@ int move_player(model *m, int player, direction new_direction){
     m->grid[player_position->y][player_position->x] = -(player+1); // Mur representé par -(joueur+1) 
 
     if((new_direction != NODIRECTION) && ((m->directions[player] & 1) != (new_direction & 1))){
-        // printf("JOUEUR %d : DIRECTION : %d : NEW_DIR : %d\n", player, m->directions[player], new_direction);
         m->directions[player] = new_direction; // Change la direction si n'est pas opposé à la précèdente
-
     }
 
     switch (m->directions[player])
@@ -147,7 +145,7 @@ int set_positions(model *m, position *p){
     return v;
 }
 
-// AJOUTER UN TEST AVEC LA COLLISION SUR LES BORDS DE LA FENETRE IE : y >= 0 && y < nb_lignes && x >= 0 && x < nb_colonnes
+
 int collision_player(model *m, int indexPlayer){
     if(!m){
         perror("[MODEL] collision joueur sur model NULL");
@@ -276,7 +274,6 @@ void init_positions(model *m){
         y = centre_y + radius * sin(angle);
 
         m->players[k] = get_nearest_point_available(m, round(x), round(y));
-        // printf("POSITION : %d, %d,  val : %d\n", m->players[k]->x, m->players[k]->y, m->grid[m->players[k]->y][m->players[k]->x]);
     }
 }
 
