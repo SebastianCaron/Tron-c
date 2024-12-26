@@ -95,7 +95,7 @@ direction get_direction_from(server *s, int connect){
     return s->directions[connect];
 }
 
-int wait_for_connections(server *s, void (*on_connect)(char *message)){
+int wait_for_connections(server *s, void (*on_connect)(char *)){
     int new_socket = 0;
     if ((new_socket = accept(s->serveur_fd, (struct sockaddr *)&(s->address), (socklen_t*)&(s->addrlen))) < 0) {
         perror("Erreur lors de l'acceptation de la connexion");
@@ -119,7 +119,7 @@ int wait_for_connections(server *s, void (*on_connect)(char *message)){
 }
 
 
-int wait_for_connections_timeout(server *s, void (*on_connect)(char *message)) {
+int wait_for_connections_timeout(server *s, void (*on_connect)(char *)) {
     struct timeval timeout;
     timeout.tv_sec = 0;
     timeout.tv_usec = 500000;
