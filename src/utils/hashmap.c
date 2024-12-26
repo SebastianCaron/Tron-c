@@ -3,23 +3,23 @@
 
 #include "hashmap.h"
 
-int hashmap_is_in(hashmap *h, void *val){
+int hashmap_is_in(hashmap *h, int x, int y){
     if(h == NULL) return 0;
 
-    int hashv = h->hash(val);
+    int hashv = h->hash(x, y);
     while(hashv < 0) hashv += h->size;
     hashv %= h->size;
 
-    return maillon_is_in(h->tab[hashv], val, h->equal);
+    return maillon_is_in(h->tab[hashv],x,y);
 }
-int hashmap_add(hashmap *h, void *val){
+int hashmap_add(hashmap *h, int x, int y){
     if(h == NULL) return 0;
 
-    int hashv = h->hash(val);
+    int hashv = h->hash(x, y);
     while(hashv < 0) hashv += h->size;
     hashv %= h->size;
 
-    maillon *nm = init_maillon(val);
+    maillon *nm = init_maillon(x, y);
     if(nm == NULL) return 0;
     nm->next = h->tab[hashv];
 
@@ -28,17 +28,17 @@ int hashmap_add(hashmap *h, void *val){
     return 1;
 }
 
-void hashmap_remove(hashmap *h, void *val){
+void hashmap_remove(hashmap *h, int x, int y){
     if(h == NULL) return;
 
-    int hashv = h->hash(val);
+    int hashv = h->hash(x, y);
     while(hashv < 0) hashv += h->size;
     hashv %= h->size;
 
-    h->tab[hashv] = maillon_remove(h->tab[hashv], val, h->equal);
+    h->tab[hashv] = maillon_remove(h->tab[hashv], x, y);
 }
 
-hashmap *init_hashmap(int size, int (*equal)(void *v1, void *v2), int (*hash)(void *v)){
+hashmap *init_hashmap(int size, int (*hash)(int x, int y)){
     hashmap *res = calloc(1, sizeof(hashmap));
     if(res == NULL){
         perror("[HASHMAP] erreur init hashmap");
@@ -55,7 +55,6 @@ hashmap *init_hashmap(int size, int (*equal)(void *v1, void *v2), int (*hash)(vo
     }
 
     res->hash = hash;
-    res->equal = equal;
 
     return res;
 }

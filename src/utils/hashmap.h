@@ -7,15 +7,13 @@
 typedef struct hashmap{
     maillon **tab;
     int size;
-
-    int (*equal)(void *v1, void *v2);
-    int (*hash)(void *v);
+    int (*hash)(int x, int y);
 } hashmap;
 
-int hashmap_is_in(hashmap *h, void *val);
-int hashmap_add(hashmap *h, void *val);
-void hashmap_remove(hashmap *h, void *val);
+int hashmap_is_in(hashmap *h, int x, int y);
+int hashmap_add(hashmap *h, int x, int y);
+void hashmap_remove(hashmap *h, int x, int y);
 
-hashmap *init_hashmap(int size, int (*equal)(void *v1, void *v2), int (*hash)(void *v));
+hashmap *init_hashmap(int size, int (*hash)(int x, int y));
 void destroy_hashmap(hashmap *h);
 

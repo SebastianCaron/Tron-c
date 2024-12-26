@@ -204,7 +204,7 @@ void create_model(controller *c, int nb_player){
     
     for(unsigned i = 0; i < c->nb_view; i++){
         if(c->views[i]->type == 'n'){
-            grid *g = load_map("./maps/map1.txt", c->views[i]->height, c->views[i]->width);
+            grid *g = load_map("./maps/map3.txt", c->views[i]->height, c->views[i]->width);
             c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
             free(g);
             return;
@@ -213,7 +213,7 @@ void create_model(controller *c, int nb_player){
         }
     }
 
-    grid *g = load_map("./maps/map1.txt", best->height, best->width);
+    grid *g = load_map("./maps/map3.txt", best->height, best->width);
     c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
     // display_grid(g);
     free(g);

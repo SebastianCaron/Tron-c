@@ -1,13 +1,14 @@
 #pragma once
 
 typedef struct _maillon{
-    void *value;
+    int x;
+    int y;
     struct _maillon *next;
     struct _maillon *prev;
 } maillon;
 
-maillon *init_maillon(void *value);
+maillon *init_maillon(int x, int y);
 void destroy_maillons(maillon *m);
 
-maillon *maillon_remove(maillon *m, void *value, int (*equal)(void *v1, void *v2));
-int maillon_is_in(maillon *m, void *value, int (*equal)(void *v1, void *v2));
+maillon *maillon_remove(maillon *m, int x, int y);
+int maillon_is_in(maillon *m, int x, int y);

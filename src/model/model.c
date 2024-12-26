@@ -202,61 +202,44 @@ position *create_position(int x, int y){
     return p;
 }
 
-int position_hash(void *v){
-    position *p = v;
-    return p->x * 100 + p->y;
-}
-int position_equal(void *a, void *b){
-    position *v1 = a;
-    position *v2 = b;
-
-    return (v1->x == v2->x && v1->y == v2->y) ? 1 : 0;
+int position_hash(int x, int y){
+    return x * 100 + y;
 }
 
 position *get_nearest_point_available(model *m, int x, int y){
     if(m->grid[y][x] == EMPTY) return create_position(x, y);
-    position *pos_depart = create_position(x, y);
 
-    hashmap *visited = init_hashmap(-1, position_equal, position_hash);
+    hashmap *visited = init_hashmap(-1, position_hash);
     queue *q = QS_init();
-    QS_add(q, pos_depart);
-    hashmap_add(visited, pos_depart);
+    QS_add(q, x, y);
+    hashmap_add(visited, x, y);
     while(q->size > 0){
-        position *pos = QS_pop_first(q);
+        int pos_x = QS_show_first(q)->x;
+        int pos_y = QS_show_first(q)->y;
+        QS_pop_first(q);
 
-        if(m->grid[pos->y][pos->x] == EMPTY){
-            int xn = pos->x;
-            int yn = pos->y;
+        if(pos_x >= 0 && pos_y >= 0 && pos_x < m->nb_colonnes_grid && pos_y < m->nb_lignes_grid && m->grid[pos_y][pos_x] == EMPTY){
             QS_destroy(q);
             destroy_hashmap(visited);
-            return create_position(xn, yn);
+            return create_position(pos_x, pos_y);
         }
-        position *north, *south, *east, *west;
-        north = create_position(pos->x, pos->y-1);
-        south = create_position(pos->x, pos->y+1);
-        east = create_position(pos->x+1, pos->y);
-        west = create_position(pos->x-1, pos->y);
-        if((pos->y > 0) && !hashmap_is_in(visited, north)){
-            hashmap_add(visited, north);
-            QS_add(q, north);
+        if((pos_y > 0) && !hashmap_is_in(visited, pos_x, pos_y-1)){
+            hashmap_add(visited, pos_x, pos_y-1);
+            QS_add(q, pos_x, pos_y-1);
         }
-        if((pos->y < m->nb_lignes_grid - 1) && !hashmap_is_in(visited, south)){
-            hashmap_add(visited, south);
-            QS_add(q, south);
+        if((pos_y < m->nb_lignes_grid - 1) && !hashmap_is_in(visited, pos_x, pos_y+1)){
+            hashmap_add(visited, pos_x, pos_y+1);
+            QS_add(q, pos_x, pos_y+1);
         }
-        if((pos->x > 0) && !hashmap_is_in(visited, east)){
-            hashmap_add(visited, east);
-            QS_add(q, east);
+        if((pos_x > 0) && !hashmap_is_in(visited, pos_x+1, pos_y)){
+            hashmap_add(visited, pos_x+1, pos_y);
+            QS_add(q, pos_x+1, pos_y);
         }
-        if((pos->x < m->nb_colonnes_grid - 1) && !hashmap_is_in(visited, west)){
-            hashmap_add(visited, west);
-            QS_add(q, west);
+        if((pos_x < m->nb_colonnes_grid - 1) && !hashmap_is_in(visited, pos_x-1, pos_y)){
+            hashmap_add(visited, pos_x-1, pos_y);
+            QS_add(q, pos_x-1, pos_y);
         }
-
-        // printf("Q SIZE : %d\n", q->size);
-        // free(pos);
     }
-    // printf("TOUT VISITE\n");
     QS_destroy(q);
     destroy_hashmap(visited);
     return create_position(x, y);

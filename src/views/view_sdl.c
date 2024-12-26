@@ -72,6 +72,7 @@ void destroy_view_sdl(view *v){
     if(v->sdl){
         TTF_CloseFont(v->sdl->font);
         TTF_CloseFont(v->sdl->font_title);
+        TTF_CloseFont(v->sdl->font_score);
         free_buttons(v->sdl);
         SDL_DestroyRenderer(v->sdl->renderer);
         SDL_DestroyWindow(v->sdl->window);
