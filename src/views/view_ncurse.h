@@ -16,3 +16,5 @@ void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int 
 void afficheMenuNC(view *v, int *, int nbMenu);
 void affiche_win_ncurses(view *v, int indexPlayer);
 void get_action_menu_ncurses(view *v, actions *act, int *selected_option, int nbMenu);
+
+void get_event_ncurses(view *v, actions *act);

@@ -216,6 +216,7 @@ void create_model(controller *c, int nb_player){
 
     grid *g = load_map("./maps/map1.txt", best->height, best->width);
     c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
+    // display_grid(g);
     free(g);
 }
 void create_model_with_grid(controller *c, int nb_player, grid *g){
@@ -225,11 +226,9 @@ void create_model_with_grid(controller *c, int nb_player, grid *g){
 
 void destroy_controller(controller *c) {
     if(c == NULL) return;
-    // printf("NB VIEW : %d\n", c->nb_view);
     for(int i = 0; i < c->nb_view; i++){
         c->views[i]->destroy_self(c->views[i]);
     }
-    
     free(c->views);
     destroy_model(c->m);
     free(c);
@@ -252,9 +251,13 @@ void go_to_menu(controller *c){
         switch (act) {
             case MENU_SOLO:
                 nbMenu = 1; 
+                selected_option = 1;
+                act = NO_ACTION;
                 break;
             case MENU_MULTI:
                 nbMenu = 2; 
+                selected_option = 1;
+                act = NO_ACTION;
                 break;
             case PLAY_BOT_ALGO:
                 controller_play_solo_j_vs_random(c);
@@ -278,6 +281,7 @@ void go_to_menu(controller *c){
                 act = RETOUR;
                 break;
             case PLAY_ONLINE:
+                nbMenu = 3; 
                 if(c->marker == 1){
                     controller_play_online_host(c, 2);
                 }else{
@@ -355,7 +359,10 @@ void controller_play_online_host(controller *c, int nb_connect){
         if(wait_for_connections_timeout(s, NULL) == 1){
             nb_player_connected++;
         }
-        // GET EVENT SDL
+        for(int i = 0; i < c->nb_view; i++){
+            c->views[i]->get_event(c->views[i],&act);
+        }
+        if(act == QUITTER) return;
         usleep(SPEED_FRM);
     }
     // printf("OK TOUT LE MONDE CONNECTE\n");

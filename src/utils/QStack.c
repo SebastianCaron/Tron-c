@@ -45,14 +45,22 @@ void QS_add(struct _stack_queue *s, void *elt){
     if(s == NULL) return;
     if(s->start == NULL || s->end == NULL){
         maillon *m = init_maillon(elt);
+        if(m == NULL){
+            perror("[QS] erreur ajout\n");
+            return;
+        }
         s->start = m;
         s->end = m;
         s->size = 1;
         return;
     }
-
     s->end->next = init_maillon(elt);
+    if(s->end->next == NULL){
+        perror("[QS] erreur ajout\n");
+        return;
+    }
     s->end->next->prev = s->end;
+    s->end = s->end->next;
     s->size += 1;
     return;
 }
@@ -60,12 +68,20 @@ void QS_add_first(struct _stack_queue *s, void *elt){
     if(s == NULL) return;
     if(s->start == NULL || s->end == NULL){
         maillon *m = init_maillon(elt);
+        if(m == NULL){
+            perror("[QS] erreur ajout\n");
+            return;
+        }
         s->start = m;
         s->end = m;
         s->size = 1;
         return;
     }
     maillon *tmp = init_maillon(elt);
+    if(tmp == NULL){
+        perror("[QS] erreur ajout\n");
+        return;
+    }
     tmp->next = s->start;
     s->start->prev = tmp;
     s->start = tmp;

@@ -38,6 +38,7 @@ view *init_view_sdl(){
 
     v->affiche_menu = affiche_menu_sdl;
     v->affiche_winner = affiche_win_sdl;
+    v->get_event = get_event_sdl;
 
 
     v->type = 's';
@@ -388,4 +389,17 @@ void update_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_l
     afficheScore(renderer, nb_player, scores);
     SDL_RenderPresent(renderer);
 
+}
+
+void get_event_sdl(view *v, actions *act){
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+            case SDL_QUIT:
+                *act = QUITTER;
+                return;
+            default:
+                break;
+        }
+    }
 }

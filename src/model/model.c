@@ -214,45 +214,52 @@ int position_equal(void *a, void *b){
 }
 
 position *get_nearest_point_available(model *m, int x, int y){
+    if(m->grid[y][x] == EMPTY) return create_position(x, y);
     position *pos_depart = create_position(x, y);
 
     hashmap *visited = init_hashmap(-1, position_equal, position_hash);
     queue *q = QS_init();
+    QS_add(q, pos_depart);
+    hashmap_add(visited, pos_depart);
     while(q->size > 0){
         position *pos = QS_pop_first(q);
 
         if(m->grid[pos->y][pos->x] == EMPTY){
-            destroy_hashmap(visited);
+            int xn = pos->x;
+            int yn = pos->y;
             QS_destroy(q);
-            return pos;
+            destroy_hashmap(visited);
+            return create_position(xn, yn);
         }
         position *north, *south, *east, *west;
         north = create_position(pos->x, pos->y-1);
         south = create_position(pos->x, pos->y+1);
         east = create_position(pos->x+1, pos->y);
         west = create_position(pos->x-1, pos->y);
-        if(!hashmap_is_in(visited, north)){
+        if((pos->y > 0) && !hashmap_is_in(visited, north)){
             hashmap_add(visited, north);
             QS_add(q, north);
         }
-        if(!hashmap_is_in(visited, south)){
+        if((pos->y < m->nb_lignes_grid - 1) && !hashmap_is_in(visited, south)){
             hashmap_add(visited, south);
             QS_add(q, south);
         }
-        if(!hashmap_is_in(visited, east)){
+        if((pos->x > 0) && !hashmap_is_in(visited, east)){
             hashmap_add(visited, east);
             QS_add(q, east);
         }
-        if(!hashmap_is_in(visited, west)){
+        if((pos->x < m->nb_colonnes_grid - 1) && !hashmap_is_in(visited, west)){
             hashmap_add(visited, west);
             QS_add(q, west);
         }
 
-        free(pos);
+        // printf("Q SIZE : %d\n", q->size);
+        // free(pos);
     }
-    destroy_hashmap(visited);
+    // printf("TOUT VISITE\n");
     QS_destroy(q);
-    return pos_depart;
+    destroy_hashmap(visited);
+    return create_position(x, y);
 }
 
 void init_positions(model *m){
@@ -277,6 +284,7 @@ void init_positions(model *m){
         y = centre_y + radius * sin(angle);
 
         m->players[k] = get_nearest_point_available(m, round(x), round(y));
+        // printf("POSITION : %d, %d,  val : %d\n", m->players[k]->x, m->players[k]->y, m->grid[m->players[k]->y][m->players[k]->x]);
     }
 }
 

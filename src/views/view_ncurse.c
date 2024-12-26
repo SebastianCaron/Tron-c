@@ -74,6 +74,7 @@ view *init_view_ncurse(){
     v->get_direction = get_direction_ncurses;
     // v->update_change_screen = ;
     v->update_screen = update_screen_ncurses;
+    v->get_event = get_event_ncurses;
 
 
     v->affiche_menu = afficheMenuNC;
@@ -270,6 +271,10 @@ void get_action_menu_ncurses(view *v, actions *act, int *selected_option, int nb
             (*act) = menuActions[nbMenu][*selected_option-1];
             return;
     }
+}
+
+void get_event_ncurses(view *v, actions *act){
+    int ch = getch();
 }
 
 

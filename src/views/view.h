@@ -42,6 +42,8 @@ typedef struct v{
     void (*get_action)(struct v *, actions *, int *, int);
     void (*affiche_winner)(struct v *, int);
 
+    void (*get_event)(struct v *, actions *act);
+
 } view;
 
 

@@ -28,3 +28,4 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu);
 void free_buttons(view_sdl *sdl);
 
 void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu);
+void get_event_sdl(view *v, actions *act);

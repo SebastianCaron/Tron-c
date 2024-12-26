@@ -40,9 +40,9 @@ fr0: mrpropre all
 	clear
 	./tron
 
-debug: mrpropre all
+debug: all
 	clear
-	valgrind --log-file=val.txt --leak-check=full ./tron -sdl -ncurse
+	valgrind --log-file=val.txt ./tron -ncurse
 
 nc: mrpropre all
 	clear

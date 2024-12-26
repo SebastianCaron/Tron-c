@@ -16,7 +16,7 @@ maillon *init_maillon(void *value){
 void destroy_maillons(maillon *m){
     if(m == NULL) return;
     destroy_maillons(m->next);
-    free(m->value);
+    if(m->value) free(m->value);
     free(m);
 }
 
