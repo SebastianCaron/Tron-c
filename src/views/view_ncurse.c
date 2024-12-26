@@ -215,7 +215,7 @@ void afficheMenuNC(view *v, int *selected_option, int nbMenu){
 
     const char *options[3][4] = {
         {"TRON", "solo", "multiplayer", "EXIT"},       
-        {"SOLO", "vs Algo (easy)", "vs Q-Learning (hard)", "BACK"},     
+        {"SOLO", "vs Algo (easy)", "vs Algo (hard)", "BACK"},     
         {"MULTIPLAYER", "on this machine (2 players)", "with others", "BACK"}      
     };
 
