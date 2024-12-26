@@ -22,7 +22,6 @@ int main(int argc, char **argv){
 
     if(TEST) return test();
 
-    setlocale(LC_ALL, "");
     srand(time(NULL));
 
     view *vncr = NULL;

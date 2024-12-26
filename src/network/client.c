@@ -109,11 +109,11 @@ void retrieve_data_client(client *c){
         int size = (c->nb_player * 2 + 2) * sizeof(int);
         char *buffer = calloc((c->nb_player * 2 + 2), sizeof(int));
         if(buffer == NULL){
-            buffer[BLOC_BUFFER_SIZE];
+            char nbuffer[BLOC_BUFFER_SIZE];
             size = BLOC_BUFFER_SIZE * sizeof(char);
-            rd_size = read(c->serveur_fd, buffer, size);
+            rd_size = read(c->serveur_fd, nbuffer, size);
             while(rd_size < size){
-                rd_size += read(c->serveur_fd, buffer+rd_size, size);
+                rd_size += read(c->serveur_fd, nbuffer+rd_size, size);
             }
             break;
         }

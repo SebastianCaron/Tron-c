@@ -138,7 +138,9 @@ int set_positions(model *m, position *p){
             m->grid[player_new_pos.y][player_new_pos.x] = (i+1);
             m->scores[i] += SCORE_INCREMENT;
         }
-        
+        m->players[i]->x = player_new_pos.x;
+        m->players[i]->y = player_new_pos.y;
+
     }
     return v;
 }
@@ -157,7 +159,6 @@ int collision_player(model *m, int indexPlayer){
     if(!m->dead[indexPlayer]){
         position *player = m->players[indexPlayer];
         if(player->y < 0 || player->y >= m->nb_lignes_grid || player->x < 0 || player->x >= m->nb_colonnes_grid || m->grid[player->y][player->x] != (indexPlayer+1)){
-            // printf("PLAYER %d est moooort ! \n", indexPlayer);
             m->dead[indexPlayer] = 1;
             m->n_player_alive--;
             return 1;
@@ -183,7 +184,7 @@ int est_fini(model *m){
 int get_winner(model *m){
     if(m == NULL) return -1;
     for(int i = 0; i < m->n_player;i++){
-        if(m->dead[i] != 0) return i;
+        if(m->dead[i] == 0) return i;
     }
     return -1;
 }

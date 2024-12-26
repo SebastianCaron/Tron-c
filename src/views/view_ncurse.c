@@ -21,11 +21,11 @@ void init_colors() {
         int g = ncurses_tabColors[i][1] * 1000 / 255;
         int b = ncurses_tabColors[i][2] * 1000 / 255;
 
-        init_color(COLOR_RED + i, r, g, b);
+        init_color(COLOR_WHITE + i + 1, r, g, b);
     }
 
     for (int i = 0; i < 10; i++) {
-        init_pair(i + 1, COLOR_RED + i, COLOR_BLACK);
+        init_pair(i + 1, COLOR_WHITE + i + 1, COLOR_BLACK);
     }
 }
 
@@ -42,6 +42,7 @@ view *init_view_ncurse(){
         exit(EXIT_FAILURE);
     }
 
+    setlocale(LC_ALL, "");
     initscr();
     v->type = 'n';
     getmaxyx(stdscr, v->height, v->width);
@@ -53,7 +54,7 @@ view *init_view_ncurse(){
     v->ncurse = vn;
 
     clear();
-    timeout(-1);
+    timeout(10000);
     noecho();
     cbreak();
     keypad(stdscr, TRUE);
@@ -133,17 +134,18 @@ direction get_direction_ncurses(view *v, int nb_player_on_keyboard, direction *d
 }
 
 void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes){
-    // clear();
+    clear();
     box(v->ncurse->grid_w, ACS_VLINE, ACS_HLINE);
+
     // fprintf(stderr, "C : %d, L : %d\n", nb_colonnes, nb_lignes);
     for(int i = 0; i < nb_lignes; i++){
         for(int j = 0; j < nb_colonnes; j++){
-            int color_pair = 1;
+            int color_pair = COLOR_WHITE;
             char *s = " ";
             if(grid[i][j] == WALL){
                 s = "█";
             }else if(grid[i][j] < 0){
-                color_pair = -grid[i][j] + 1;
+                color_pair = -(grid[i][j]) + 1;
                 s = "▒▒";
             }else if(grid[i][j] > 0){
                 color_pair = grid[i][j] + 1;
@@ -250,10 +252,11 @@ void get_action_menu_ncurses(view *v, actions *act, int *selected_option, int nb
     refresh();
     int ch = getch();
 
-    const actions menuActions[3][3] = {
+    const actions menuActions[4][3] = {
         {MENU_SOLO, MENU_MULTI, QUITTER},       
         {PLAY_BOT_ALGO, PLAY_BOT_Q, RETOUR},    
-        {PLAY_MULTI, PLAY_ONLINE, RETOUR}       
+        {PLAY_MULTI, PLAY_ONLINE, RETOUR},
+        {RETOUR}       
     };
 
     switch (ch) {
