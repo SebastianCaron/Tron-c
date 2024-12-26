@@ -69,6 +69,7 @@ server *init_serveur(int port, int nb_connect){
     }
 
     printf("PRET POUR CONNEXIONS...\n");
+    free(s->address);
 
     return s;
 }
