@@ -53,6 +53,7 @@ int collision_player(model *m, int player);
 void collision_all(model *m);
 
 int get_winner(model *);
+void set_winner(model *, int);
 
 // Return 1 if the game is over
 int est_fini(model *m);

@@ -204,7 +204,7 @@ void create_model(controller *c, int nb_player){
     
     for(unsigned i = 0; i < c->nb_view; i++){
         if(c->views[i]->type == 'n'){
-            grid *g = load_map("./maps/map3.txt", c->views[i]->height, c->views[i]->width);
+            grid *g = load_map("./maps/map4.txt", c->views[i]->height, c->views[i]->width);
             c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
             free(g);
             return;
@@ -213,7 +213,7 @@ void create_model(controller *c, int nb_player){
         }
     }
 
-    grid *g = load_map("./maps/map3.txt", best->height, best->width);
+    grid *g = load_map("./maps/map4.txt", best->height, best->width);
     c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
     // display_grid(g);
     free(g);
@@ -442,6 +442,8 @@ void controller_play_online_host(controller *c, int nb_connect){
         // WAIT FOR EVERYONE TO BE READY
     }
     // printf("FIN DU JEU ET SERV'\n");
+
+    send_winner_all(s, get_winner(c->m));
     free(dirs);
     close_connections(s);
     destroy_server(s);
@@ -528,6 +530,9 @@ void controller_play_online_join(controller *c){
         is_over = client_is_over(client);
         // printf("ISOVER OK!\n");
     }
+
+    int winner = client_get_winner(client);
+    set_winner(c->m, winner);
 
     free(dirs);
     destroy_client(client);

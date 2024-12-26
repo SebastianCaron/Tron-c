@@ -191,6 +191,15 @@ int get_winner(model *m){
     return -1;
 }
 
+void set_winner(model *m, int index){
+    if(m == NULL) return;
+    for(int i = 0; i < m->n_player; i++){
+        m->dead[i] = 1;
+    }
+
+    if(index != -1) m->dead[index] = 0;
+}
+
 position *create_position(int x, int y){
     position *p = calloc(1, sizeof(position));
     if(p == NULL){
