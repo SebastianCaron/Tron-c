@@ -43,7 +43,7 @@ view *init_view_sdl(){
     v->sdl = viewSdl;
 
     v->sdl->font_title = TTF_OpenFont("./res/nextg.ttf", 70);
-    v->sdl->font = TTF_OpenFont("./res/nextg.ttf", 34);
+    v->sdl->font = TTF_OpenFont("./res/nextg.ttf", 45);
     v->sdl->font_score = TTF_OpenFont("./res/nextg.ttf", 20);
     v->sdl->menu_current = 1000;
 
