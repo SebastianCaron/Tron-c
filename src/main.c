@@ -61,9 +61,17 @@ int main(int argc, char **argv){
         }
     }
 
-
     controller *c;
     if(with_sdl){
+        if (TTF_Init() == -1) {
+            fprintf(stderr, "ERREUR SDL_ttf - %s\n", TTF_GetError());
+            exit(EXIT_FAILURE);
+        }
+
+        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+            fprintf(stderr, "ERREUR SDL : %s\n", SDL_GetError());
+            exit(EXIT_FAILURE);
+        }
         vsdl = init_view_sdl();
     }
     if(with_ncurse){
@@ -84,5 +92,11 @@ int main(int argc, char **argv){
 
     go_to_menu(c);
     destroy_controller(c);
+
+    if(with_sdl){
+        TTF_Quit();
+        SDL_Quit();
+    }
+
     return EXIT_SUCCESS;
 }

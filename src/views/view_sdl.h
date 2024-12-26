@@ -63,17 +63,19 @@ SDL_Rect *createRect(int h, int w, int x, int y);
  * @param texte to display on the button
  * @param y coodinate to place the button
  * @param titre to know if the text surface should be filled or not
+ * @param f the font used
  * @return the rectangle created for the button to know his coordinate
  */
-SDL_Rect afficheButton(SDL_Renderer *renderer,char *texte, int y, int titre);
+SDL_Rect *afficheButton(SDL_Renderer *renderer,char *texte, int y, int titre, TTF_Font *f);
 
 /**
  * @brief display the scores
  * @param renderer to display the scores on
  * @param nb_player the number of players to display their scores
  * @param scores the table of scores / each score corresponds to the player's index
+ * @param f the font used
  */
-void afficheScore(SDL_Renderer *renderer, int nb_player, int *scores);
+void afficheScore(SDL_Renderer *renderer, int nb_player, int *scores,TTF_Font *f);
 
 /**
  * @brief display the winner at the end of the game

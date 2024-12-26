@@ -42,7 +42,7 @@ fr0: mrpropre all
 
 debug: all
 	clear
-	valgrind --log-file=val.txt ./tron -ncurse
+	valgrind --log-file=val.txt ./tron -sdl -ncurse
 
 nc: mrpropre all
 	clear

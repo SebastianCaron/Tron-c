@@ -2,6 +2,7 @@
 
 #include <ncurses.h>
 #include <SDL2/SDL.h>
+#include "SDL2/SDL_ttf.h"
 
 #include "../model/model.h"
 #include "../utils/utils.h"
@@ -19,6 +20,9 @@ typedef struct{
     SDL_Rect *buttons[20];
     unsigned nb_buttons;
     unsigned menu_current;
+
+    TTF_Font *font_title;
+    TTF_Font *font;
 } view_sdl;
 
 typedef struct v{
