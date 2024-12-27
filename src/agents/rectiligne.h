@@ -24,6 +24,7 @@
  * @param grid The game grid
  * @param players Array of player positions
  * @param directions Array of directions for each player
+ * @param index_bot Bot index in players and directions
  * @return The direction for the bot to move
  */
-direction rectiligne_get_direction(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions);
+direction rectiligne_get_direction(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions, int index_bot);

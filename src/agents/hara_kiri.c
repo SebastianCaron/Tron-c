@@ -3,13 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-direction hara_kiri_get_direction(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions){
+direction hara_kiri_get_direction(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions, int index_bot){
     // Faire une liste des directions possible du bot
     // Regarder position suivante du joueur en fonction de sa direction
     // Prendre la direction du bot qui se rapproche le plus du joueur 
 
     int directionBotTest[4][2] = {{-1,0},{0,-1},{1,0},{0,1}};
-    direction current_direction = directions[1];
+    direction current_direction = directions[index_bot];
 
     int xJ = players[0]->x;
     int yJ = players[0]->y;

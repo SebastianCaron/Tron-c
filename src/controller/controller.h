@@ -21,7 +21,7 @@
 #include "../views/view.h"
 #include "../utils/utils.h"
 
-#define SPEED_FRM 100000
+#define SPEED_FRM 120000
 
 /**
  * @struct controller
@@ -58,7 +58,7 @@ void create_model(controller *c, int nb_player);
  * @param get_dir_bot Function pointer to get the direction for the bot
  * @param nb_bots Number of bots in the game
  */
-void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, int, int **, position **, direction *), int nb_bots);
+void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, int, int **, position **, direction *, int), int nb_bots);
 
 /**
  * @brief Frees the memory allocated for the controller

@@ -6,12 +6,12 @@
 int rectiligne_XY[4][2]={{0,-1},{0,1},{-1,0},{1,0}};
 direction rectiligne_converted[4] = {UP, DOWN, LEFT, RIGHT};
 
-direction rectiligne_get_direction(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions){
+direction rectiligne_get_direction(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions, int index_bot){
     int cptPosPossible = 0;
-    position *bot_position = players[1];
+    position *bot_position = players[index_bot];
     int posPossible[4] = {NODIRECTION};
 
-    direction current_direction = directions[1];
+    direction current_direction = directions[index_bot];
     int x = 0; 
     int y = 0;
     if(current_direction != NODIRECTION){
@@ -47,7 +47,7 @@ direction rectiligne_get_direction(int nb_lignes, int nb_colonnes, int **grid, p
         y = (bot_position->y)+rectiligne_XY[k][1];
         // printf("x : %d; y : %d\n", x, y);
         if (x >= 0 && x <= nb_lignes-1 && y >= 0 && y <= nb_colonnes-1 && grid[y][x] == EMPTY) {
-            if(directions[1] != NODIRECTION || (rectiligne_converted[k]&1) != (directions[1]&1)){ // VERIFIE DIRECTIONS OPPOSEE
+            if(directions[index_bot] != NODIRECTION || (rectiligne_converted[k]&1) != (directions[index_bot]&1)){ // VERIFIE DIRECTIONS OPPOSEE
                 posPossible[cptPosPossible++] = k;
             } 
         }

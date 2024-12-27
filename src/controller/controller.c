@@ -18,7 +18,7 @@
 #include "../network/server.h"
 #include "../network/client.h"
 
-void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, int, int **, position **, direction *), int nb_bots){
+void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, int, int **, position **, direction *, int), int nb_bots){
     create_model(c, nb_bots+1);
     int i = 0;
     direction *dirs = calloc(nb_bots+1, sizeof(direction));
@@ -40,7 +40,7 @@ void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, 
         move_player(c->m, 0, dirs[0]);
         
         for(int i = 0; i < nb_bots; i++){
-            dirs[i+1] = get_dir_bot(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, c->m->directions);
+            dirs[i+1] = get_dir_bot(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, c->m->directions, i+1);
             move_player(c->m, i+1, dirs[i+1]);
         }
 
@@ -52,7 +52,7 @@ void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, 
 
         end = clock();
         duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
-        usleep(SPEED_FRM - duration);
+        if(SPEED_FRM - duration > 0) usleep(SPEED_FRM - duration);
     }
     free(dirs);
 }  
@@ -89,7 +89,7 @@ void controller_play_multi(controller *c){
         
         end = clock();
         duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
-        usleep(SPEED_FRM - duration);
+        if(SPEED_FRM - duration > 0) usleep(SPEED_FRM - duration);
     }
     free(dirs);
 }
@@ -187,14 +187,14 @@ void go_to_menu(controller *c){
                 act = NO_ACTION;
                 break;
             case PLAY_BOT_ALGO:
-                controller_play_solo_j_vs_bot(c, rectiligne_get_direction, 1);
+                controller_play_solo_j_vs_bot(c, rectiligne_get_direction, 4);
                 display_winner(c);
                 destroy_model(c->m);
                 c->m = NULL;
                 act = RETOUR;
                 break;
             case PLAY_BOT_Q:
-                controller_play_solo_j_vs_bot(c, hara_kiri_get_direction, 1);
+                controller_play_solo_j_vs_bot(c, hara_kiri_get_direction, 4);
                 display_winner(c);
                 destroy_model(c->m);
                 c->m = NULL;
@@ -335,7 +335,7 @@ void controller_play_online_host(controller *c, int nb_connect){
         
         end = clock();
         duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
-        usleep(SPEED_FRM - duration);
+        if(SPEED_FRM - duration > 0) usleep(SPEED_FRM - duration);
 
         is_over = est_fini(c->m);
         send_is_over_all(s, is_over);
@@ -403,7 +403,7 @@ void controller_play_online_join(controller *c){
         
         end = clock();
         duration = ((double)(end - start) / CLOCKS_PER_SEC) * 1e6;
-        usleep(SPEED_FRM - duration);
+        if(SPEED_FRM - duration > 0) usleep(SPEED_FRM - duration);
 
         // WAIT FOR EVERYONE TO BE READY
 

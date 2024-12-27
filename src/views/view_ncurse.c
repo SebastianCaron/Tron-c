@@ -44,7 +44,7 @@ view *init_view_ncurse(){
 
     v->type = 'n';
     getmaxyx(stdscr, v->height, v->width);
-    v->width = (v->width > 100) ? 100 : v->width;
+    // v->width = (v->width > 100) ? 100 : v->width;
     v->width -= 40;
     v->height -= 2;
     // v->width = (v->width > 100) ? 100 : v->width-40;
@@ -167,8 +167,7 @@ void update_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int 
 }
 
 void update_change_screen_ncurses(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes, position **players){
-    box(v->ncurse->grid_w, ACS_VLINE, ACS_HLINE);
-
+    //box(v->ncurse->grid_w, ACS_VLINE, ACS_HLINE);
     int to_check[5][2];
     for(int i = 0; i < nb_player; i++){
         position *p = players[i];
@@ -219,10 +218,18 @@ void update_change_screen_ncurses(view *v, int nb_player, int *scores, int **gri
 }
 
 void affiche_win_ncurses(view *v, int indexPlayer) {
+    int min_win_width = 40;
+    int min_win_height = 7;
 
+    if (v->width < min_win_width || v->height < min_win_height) {
+        clear();
+        mvprintw(0, 0, "Fenêtre trop petite pour afficher le vainqueur !");
+        refresh();
+        return;
+    }
 
     int win_height = 10;
-    int win_width = v->width - 20;
+    int win_width = v->width;
 
     int start_y = (v->height - win_height) / 2;
     int start_x = (v->width - win_width) / 2 + 25;
