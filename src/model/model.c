@@ -163,6 +163,7 @@ int collision_player(model *m, int indexPlayer){
         if(player->y < 0 || player->y >= m->nb_lignes_grid || player->x < 0 || player->x >= m->nb_colonnes_grid || m->grid[player->y][player->x] != (indexPlayer+1)){
             m->dead[indexPlayer] = 1;
             m->n_player_alive--;
+            m->directions[indexPlayer] = NODIRECTION;
             return 1;
         }
     }

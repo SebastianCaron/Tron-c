@@ -24,6 +24,7 @@
 typedef struct hashmap {
     maillon **tab;            /**< Array of pointers to linked lists */
     int size;                 /**< Size of the hashmap  */
+    int nb_elt;               /**< Number of elements in it */
     int (*hash)(int x, int y); /**< Function pointer to the hash function */
 } hashmap;
 

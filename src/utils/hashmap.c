@@ -25,6 +25,8 @@ int hashmap_add(hashmap *h, int x, int y){
 
     h->tab[hashv] = nm;
 
+    h->nb_elt++;
+
     return 1;
 }
 
@@ -36,6 +38,7 @@ void hashmap_remove(hashmap *h, int x, int y){
     hashv %= h->size;
 
     h->tab[hashv] = maillon_remove(h->tab[hashv], x, y);
+    h->nb_elt--;
 }
 
 hashmap *init_hashmap(int size, int (*hash)(int x, int y)){
@@ -46,6 +49,7 @@ hashmap *init_hashmap(int size, int (*hash)(int x, int y)){
     }
     if(size <= 0) size = DEFAULT_SIZE_HASH_MAP;
     res->size = size;
+    res->nb_elt = 0;
 
     res->tab = calloc(res->size, sizeof(maillon *));
     if(res->tab == NULL){
