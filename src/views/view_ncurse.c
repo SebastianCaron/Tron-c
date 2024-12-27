@@ -262,13 +262,14 @@ void affiche_win_ncurses(view *v, int indexPlayer) {
 void affiche_menu_ncurses(view *v, int *selected_option, int nbMenu){
     v->get_action = get_action_menu_ncurses;
 
-    const char *options[3][4] = {
-        {"TRON", "solo", "multiplayer", "EXIT"},       
-        {"SOLO", "vs Algo (easy)", "vs Algo (hard)", "BACK"},     
-        {"MULTIPLAYER", "on this machine (2 players)", "with others", "BACK"}      
+    const char *options[3][6] = {
+        {"TRON", "solo", "multiplayer", "EXIT", NULL, NULL},       
+        {"SOLO", "vs Algo (easy)", "vs Algo (hard)", "vs Algo (copieur)", "vs Algo (mon espace)", "BACK"},     
+        {"MULTIPLAYER", "on this machine (2 players)", "with others", "BACK", NULL, NULL}      
     };
 
     int n_options = 4;
+    if(nbMenu == 1) n_options = 6;
 
     if(*selected_option < 1) *selected_option = n_options-1;
     if(*selected_option >= n_options) *selected_option = 1;
@@ -302,9 +303,9 @@ void get_action_menu_ncurses(view *v, actions *act, int *selected_option, int nb
     refresh();
     int ch = getch();
 
-    const actions menuActions[4][3] = {
+    const actions menuActions[4][5] = {
         {MENU_SOLO, MENU_MULTI, QUITTER},       
-        {PLAY_BOT_ALGO, PLAY_BOT_Q, RETOUR},    
+        {PLAY_BOT_ALGO, PLAY_BOT_Q, PLAY_BOT_COPY, PLAY_BOT_ESPACE, RETOUR},    
         {PLAY_MULTI, PLAY_ONLINE, RETOUR},
         {RETOUR}       
     };

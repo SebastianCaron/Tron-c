@@ -43,7 +43,7 @@ view *init_view_sdl(){
     v->sdl = viewSdl;
 
     v->sdl->font_title = TTF_OpenFont("./res/nextg.ttf", 70);
-    v->sdl->font = TTF_OpenFont("./res/nextg.ttf", 45);
+    v->sdl->font = TTF_OpenFont("./res/nextg.ttf", 46);
     v->sdl->font_score = TTF_OpenFont("./res/nextg.ttf", 20);
     v->sdl->menu_current = 1000;
 
@@ -192,8 +192,8 @@ SDL_Rect *afficheButton(SDL_Renderer *renderer,char *texte, int y, int titre, TT
 
 void afficheScore(SDL_Renderer *renderer, int nbPlayer, int *scores, TTF_Font *font) {
 
-    int posX[8] = {10, 200, 400, 600,10, 100, 200, 300};
-    int posY[8] = {5, 5, 5, 5, 30,30,30,30};
+    int posX[8] = {10, 200, 400, 600,10, 200, 400, 600};
+    int posY[8] = {5, 5, 5, 5, 24,24,24,24};
 
     SDL_Color color = {0, 0, 0, 255}; 
     SDL_Surface *surfaceTexte;
@@ -258,10 +258,10 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu){
     v->sdl->menu_current = nbMenu;
     free_buttons(v->sdl);
 
-    char *menuText[4][4] = {
-        {"TRON", "  solo  ", "  multiplayer  ", "  EXIT  "},       
-        {"SOLO", "  vs Algo (easy) ", "  vs Algo (hard) ", "  BACK  "},     
-        {"MULTIPLAYER", "  on this machine (2 players)  ", "  with others  ", "  BACK  "},
+    char *menuText[4][6] = {
+        {"TRON", "  solo  ", "  multiplayer  ", "  EXIT  ", NULL, NULL},       
+        {"SOLO", "  vs Algo (easy) ", "  vs Algo (hard) ", "  vs Algo (copieur)  ", "  vs Algo (mon espace)  ", "  BACK  "},     
+        {"MULTIPLAYER", "  on this machine (2 players)  ", "  with others  ", "  BACK  ", NULL, NULL},
         {"Retour"}      
     };
 
@@ -270,20 +270,28 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu){
     SDL_RenderClear(renderer);
     v->get_action = get_action_menu_sdl;
     
-    SDL_Rect *title = afficheButton(renderer, menuText[nbMenu][0], 100, 1, v->sdl->font_title);
+    SDL_Rect *title = afficheButton(renderer, menuText[nbMenu][0], 50, 1, v->sdl->font_title);
 
     SDL_SetRenderDrawColor(renderer, 237, 237, 148, 255);
+    SDL_Rect *c1 = NULL;
+    SDL_Rect *c2 = NULL;
+    SDL_Rect *c3 = NULL;
+    SDL_Rect *c4 = NULL;
+    SDL_Rect *c5 = NULL;
 
-    SDL_Rect *c1 = afficheButton(renderer, menuText[nbMenu][1],300,0, v->sdl->font);
 
-    SDL_Rect *c2 = afficheButton(renderer, menuText[nbMenu][2],400,0, v->sdl->font);
+    c1 = afficheButton(renderer, menuText[nbMenu][1],200,0, v->sdl->font);
+    c2 = afficheButton(renderer, menuText[nbMenu][2],270,0, v->sdl->font);
+    c3 = afficheButton(renderer, menuText[nbMenu][3],340,0, v->sdl->font);
+    if(menuText[nbMenu][4] != NULL) c4 = afficheButton(renderer, menuText[nbMenu][4],410,0, v->sdl->font);
+    if(menuText[nbMenu][5] != NULL) c5 = afficheButton(renderer, menuText[nbMenu][5],480,0, v->sdl->font);
 
-    SDL_Rect *c3 = afficheButton(renderer, menuText[nbMenu][3],500,0, v->sdl->font);
-
-    v->sdl->nb_buttons = 3;
+    v->sdl->nb_buttons = 5;
     v->sdl->buttons[0] = c1;
     v->sdl->buttons[1] = c2;
     v->sdl->buttons[2] = c3;
+    v->sdl->buttons[3] = c4;
+    v->sdl->buttons[4] = c5;
 
     if (!v->sdl->buttons[0] || !v->sdl->buttons[1] || !v->sdl->buttons[2]) {
         perror("[VIEW SDL] erreur allocation de mémoire pour les boutons.");
@@ -298,11 +306,11 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu){
 void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu) {
     SDL_Event event;
 
-    const actions menuActions[4][3] = {
-        {MENU_SOLO, MENU_MULTI, QUITTER},       
-        {PLAY_BOT_ALGO, PLAY_BOT_Q, RETOUR},    
-        {PLAY_MULTI, PLAY_ONLINE, RETOUR},
-        {RETOUR}
+    const actions menuActions[4][5] = {
+        {MENU_SOLO, MENU_MULTI, QUITTER, NO_ACTION, NO_ACTION},       
+        {PLAY_BOT_ALGO, PLAY_BOT_Q, PLAY_BOT_COPY, PLAY_BOT_ESPACE, RETOUR},    
+        {PLAY_MULTI, PLAY_ONLINE, RETOUR, NO_ACTION, NO_ACTION},
+        {NO_ACTION}
     };
 
     while (SDL_PollEvent(&event)) {
@@ -319,6 +327,7 @@ void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu
                     return;
                 }
                 for (unsigned i = 0; i < v->sdl->nb_buttons; i++) {
+                    if(v->sdl->buttons[i] == NULL) continue;
                     if (x >= v->sdl->buttons[i]->x &&
                         x <= (v->sdl->buttons[i]->x + v->sdl->buttons[i]->w) &&
                         y >= v->sdl->buttons[i]->y &&

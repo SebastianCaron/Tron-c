@@ -188,9 +188,21 @@ void go_to_menu(controller *c){
                 act = NO_ACTION;
                 break;
             case PLAY_BOT_ALGO:
+                controller_play_solo_j_vs_bot(c, rectiligne_get_direction, c->nb_bots);
+                display_winner(c);
+                destroy_model(c->m);
+                c->m = NULL;
+                act = RETOUR;
+                break;
+            case PLAY_BOT_ESPACE:
+                controller_play_solo_j_vs_bot(c, espace_vital_get_direction, c->nb_bots);
+                display_winner(c);
+                destroy_model(c->m);
+                c->m = NULL;
+                act = RETOUR;
+                break;
+            case PLAY_BOT_COPY:
                 controller_play_solo_j_vs_bot(c, immitateur_get_direction, c->nb_bots);
-                // controller_play_solo_j_vs_bot(c, espace_vital_get_direction, c->nb_bots);
-                // controller_play_solo_j_vs_bot(c, rectiligne_get_direction, c->nb_bots);
                 display_winner(c);
                 destroy_model(c->m);
                 c->m = NULL;
