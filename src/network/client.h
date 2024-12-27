@@ -127,3 +127,18 @@ void client_send_movement(client *c, direction d);
  * @param c Pointer to the client
  */
 void client_ask_for_grid(client *c);
+
+/**
+ * @brief Test if DATA is available
+ * @param c Pointer to the client
+ * @param DATA Type of Data
+ * @return 1 if available, 0 otherwise
+ */
+int is_in_data_available(client *c, int DATA);
+
+
+/**
+ * @brief Retrieve the available data in the fd and set it into the structure
+ * @param c Pointer to the client
+ */
+void retrieve_data_client(client *c);

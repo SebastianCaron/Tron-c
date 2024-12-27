@@ -5,6 +5,9 @@
 #include <arpa/inet.h>
 #include <errno.h>
 
+#include <fcntl.h>
+#include <sys/select.h>
+
 #include "client.h"
 #include "network.h"
 #include "../utils/utils.h"
@@ -216,6 +219,16 @@ void retrieve_data_client(client *c){
         break;
     }
 }
+
+int is_in_data_available(client *c, int DATA){
+    for(int i = 0; i < c->size_available; i++){
+        if(c->data_available[i] == DATA){
+            return 1;
+        }
+    }
+    return 0;
+}
+
 
 int pop_is_in_data_available(client *c, int DATA){
     for(int i = 0; i < c->size_available; i++){

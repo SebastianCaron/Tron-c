@@ -106,7 +106,8 @@ direction get_direction_sdl(view *v, int nb_player_on_keyboard, direction *dirs)
     SDL_Event event;
     while (SDL_PollEvent(&event) > 0){
         if (event.type == SDL_QUIT){
-            quitter(v->sdl->window, v->sdl->renderer);
+            // quitter(v->sdl->window, v->sdl->renderer);
+            return NODIRECTION;
         }else if(event.type == SDL_KEYDOWN){
             switch(event.key.keysym.sym){
                 case SDLK_UP:

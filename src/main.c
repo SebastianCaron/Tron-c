@@ -43,6 +43,8 @@ int main(int argc, char **argv){
     char with_sdl = 0;
     char with_ncurse = 0;
     char marker = 0;
+    char *map = "./maps/map1.txt";
+    char *nb_bots = NULL;
 
     if(argc == 1){
         with_sdl = 1;
@@ -60,6 +62,10 @@ int main(int argc, char **argv){
             port = argv[i] + 5;
         }else if(string_equal(argv[i],"-h") == 1){
             marker = 1;
+        }else if(start_with(argv[i],"-bots") == 1){
+            nb_bots = argv[i] + 5;
+        }else if(start_with(argv[i],"-map") == 1){
+            map = argv[i] + 4;
         }
         else{
             printf("INCORRECT PARAMETER %s\n", argv[i]);
@@ -69,11 +75,15 @@ int main(int argc, char **argv){
             printf("\t -ip : TO CONFIGURE THE IP ADDRESS\n");
             printf("\t -port : TO CONFIGURE THE PORT\n");
             printf("\t -h : TO HOST A GAME\n");
+            printf("\t -bots : TO SET THE NUMBER OF BOTS OR PLAYERS IN ONLINE GAMES\n");
+            printf("\t -map : TO SET THE PATH TO THE MAP TO USE\n");
 
-            printf("EXAMPLE : %s -sdl -ncurses -ip192.168.0.0\n", argv[0]);
+            printf("EXAMPLE : %s -sdl -ncurses -ip192.168.0.0 -bots5 -map./maps/map3.txt\n", argv[0]);
             exit(EXIT_FAILURE);
         }
     }
+
+    if(with_sdl == 0 && with_ncurse == 0) with_sdl = 1;
 
     controller *c;
     if(with_sdl){
@@ -101,6 +111,7 @@ int main(int argc, char **argv){
         vncr = init_view_ncurse();
     }
 
+
     if(with_sdl == 1 && with_ncurse == 1){
         c = init_controller(2, vncr, vsdl);
     }else if(with_sdl){
@@ -112,6 +123,8 @@ int main(int argc, char **argv){
     set_ip(c, ip);
     set_port(c, port);
     c->marker = marker;
+    set_nb_bots(c, nb_bots);
+    set_map(c, map);
 
     go_to_menu(c);
     destroy_controller(c);

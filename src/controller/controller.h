@@ -35,6 +35,9 @@ typedef struct {
     char *ip;          /**< IP address for online play */
     int port;          /**< Port number for online play */
     char marker;       /**< Marker character for the controller */
+
+    char *map;         /**< Path to the map that will be used as grid */
+    int nb_bots;       /**< Number of bots against algorithms */
 } controller;
 
 /**
@@ -104,3 +107,17 @@ void controller_play_online_join(controller *c);
  * @param nb_connect Number of connections allowed
  */
 void controller_play_online_host(controller *c, int nb_connect);
+
+/**
+ * @brief Sets the map for the controller
+ * @param c Pointer to the controller
+ * @param map The path to the map
+ */
+void set_map(controller *c, char *map);
+
+/**
+ * @brief Sets the number of bots for the controller
+ * @param c Pointer to the controller
+ * @param nb_bots The number of bots
+ */
+void set_nb_bots(controller *c, char *nb_bots);

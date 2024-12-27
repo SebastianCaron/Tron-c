@@ -132,7 +132,7 @@ void create_model(controller *c, int nb_player){
     
     for(unsigned i = 0; i < c->nb_view; i++){
         if(c->views[i]->type == 'n'){
-            grid *g = load_map("./maps/map1.txt", c->views[i]->height, c->views[i]->width);
+            grid *g = load_map(c->map, c->views[i]->height, c->views[i]->width);
             c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
             free(g);
             return;
@@ -141,7 +141,7 @@ void create_model(controller *c, int nb_player){
         }
     }
 
-    grid *g = load_map("./maps/map1.txt", best->height, best->width);
+    grid *g = load_map(c->map, best->height, best->width);
     c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
     // display_grid(g);
     free(g);
@@ -187,14 +187,14 @@ void go_to_menu(controller *c){
                 act = NO_ACTION;
                 break;
             case PLAY_BOT_ALGO:
-                controller_play_solo_j_vs_bot(c, rectiligne_get_direction, 4);
+                controller_play_solo_j_vs_bot(c, rectiligne_get_direction, c->nb_bots);
                 display_winner(c);
                 destroy_model(c->m);
                 c->m = NULL;
                 act = RETOUR;
                 break;
             case PLAY_BOT_Q:
-                controller_play_solo_j_vs_bot(c, hara_kiri_get_direction, 4);
+                controller_play_solo_j_vs_bot(c, hara_kiri_get_direction, c->nb_bots);
                 display_winner(c);
                 destroy_model(c->m);
                 c->m = NULL;
@@ -209,7 +209,7 @@ void go_to_menu(controller *c){
                 break;
             case PLAY_ONLINE:
                 if(c->marker == 1){
-                    controller_play_online_host(c, 2);
+                    controller_play_online_host(c, c->nb_bots + 1);
                 }else{
                     controller_play_online_join(c);
                 }
@@ -251,6 +251,35 @@ void display_winner(controller *c){
             return;
         }
     }
+}
+
+void set_map(controller *c, char *map){
+    FILE *file = fopen(map, "r");
+    if (file) {
+        fclose(file);
+        c->map = map;
+    } else {
+        c->map = "./maps/map1.txt";
+    }
+}
+
+void set_nb_bots(controller *c, char *nb_bots){
+    if(nb_bots == NULL){
+        c->nb_bots = 1;
+        return;
+    }
+    int res = 0;
+    int i = 0;
+    while(nb_bots[i] != '\0'){
+        if(nb_bots[i] >= '0' && nb_bots[i] <= '9'){
+            res = res * 10 + (nb_bots[i] - '0');
+        }else{
+            c->nb_bots = 1;
+            return;
+        }
+        i++;
+    }
+    c->nb_bots = (res >= 8 ? 7 : res);
 }
 
 // NETWORK
@@ -353,6 +382,8 @@ void controller_play_online_host(controller *c, int nb_connect){
 
 void controller_play_online_join(controller *c){
     client *client = init_client(c->ip, c->port);
+    actions act = NO_ACTION;
+    int interrupt = 0;
 
     if(client == NULL){
         printf("IMPOSSIBLE DE SE CONNECTER A %s:%d\n", c->ip, c->port);
@@ -361,7 +392,21 @@ void controller_play_online_join(controller *c){
         printf("CONNECTE OK !\n");
     }
 
+    // NON BLOQUANT
+    // while(is_in_data_available(client, NBJOUEUR) == 0){
+    //     for(int i = 0; i < c->nb_view; i++){
+    //         c->views[i]->get_event(c->views[i], &act);
+    //     }
+    //     if(act == QUITTER){
+    //         interrupt = 1;
+    //         break;
+    //     }
+    //     usleep(SPEED_FRM);
+    //     retrieve_data_client(client);
+    // }
+
     int nb_player = client_get_nb_player(client);
+
     grid *g = client_get_grid(client);
     create_model_with_grid(c, nb_player, g);
 
@@ -376,14 +421,23 @@ void controller_play_online_join(controller *c){
     int i = 0;
     int is_over = 0;
 
+
     while(client_get_start_signal(client) == 0){
+        // for(int i = 0; i < c->nb_view; i++){
+        //     c->views[i]->get_event(c->views[i],&act);
+        // }
+        // if(act == QUITTER){
+        //     is_over = 1;
+        //     interrupt = 1;
+        //     break;
+        // }
         usleep(SPEED_FRM);
     }
     for(i = 0; i < c->nb_view; i++){
         c->views[i]->update_screen(c->views[i],2, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
     }
 
-    while(is_over == 0){
+    while(is_over == 0 && interrupt == 0){
         start = clock();
         for(i = 0; i < c->nb_view; i++){
             c->views[i]->get_direction(c->views[i],1, dirs);
@@ -410,8 +464,13 @@ void controller_play_online_join(controller *c){
         is_over = client_is_over(client);
     }
 
-    int winner = client_get_winner(client);
-    set_winner(c->m, winner);
+    if(interrupt == 0){
+        int winner = client_get_winner(client);
+        set_winner(c->m, winner);
+    }else{
+        set_winner(c->m, -1);
+    }
+    
 
     free(dirs);
     destroy_client(client);
