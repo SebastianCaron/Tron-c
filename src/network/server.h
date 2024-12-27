@@ -1,5 +1,18 @@
 #pragma once
 
+/**
+ * @file server.h
+ * @date 2024-12-27
+ * @brief Header file for the game server.
+ * 
+ * This file contains the declarations of structures and functions 
+ * related to the game server, which manages client connections, 
+ * handles game state updates, and coordinates communication between 
+ * the server and clients.
+ * 
+ * @author Sebastian Caron
+ */
+
 #include "network.h"
 #include "../utils/utils.h"
 #include "../model/model.h"

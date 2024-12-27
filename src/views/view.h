@@ -1,5 +1,20 @@
 #pragma once
 
+/**
+ * @file view.h
+ * @date 2024-12-27
+ * @brief Header file for the game views.
+ * 
+ * This file contains the declarations of structures and functions 
+ * related to the game views, including ncurses and SDL implementations, 
+ * for rendering the game state and handling user input.
+ * 
+ * @authors
+ * Pierre Magieu
+ * Sebastian Caron
+ * Lina Lethoor
+ */
+
 #include <ncurses.h>
 #include <SDL2/SDL.h>
 #include "SDL2/SDL_ttf.h"

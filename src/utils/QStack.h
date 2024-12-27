@@ -1,10 +1,22 @@
 #pragma once
 
+/**
+ * @file QStack.h
+ * @date 2024-12-27
+ * @brief Header file for stack and queue data structures.
+ * 
+ * This file contains the declarations of structures and functions 
+ * related to stack and queue data structures, utilizing linked lists 
+ * for managing elements.
+ * 
+ * @authors
+ * Pierre Magieu
+ * Sebastian Caron
+ * Lina Lethoor
+ */
+
 #include "maillon.h"
 
-#pragma once
-
-#include "maillon.h"
 
 /**
  * @struct _stack_queue

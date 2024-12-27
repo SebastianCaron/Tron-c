@@ -1,30 +1,38 @@
+/**
+ * @file main.c
+ * @date 2024-12-27
+ * @brief Main entry point for the game application.
+ * 
+ * This file contains the main function which initializes the game, 
+ * processes command-line arguments, sets up the views (SDL and ncurses), 
+ * and starts the game controller. It also handles cleanup and resource 
+ * deallocation upon exit.
+ * 
+ * @authors
+ * Pierre Magieu
+ * Sebastian Caron
+ * Lina Lethoor
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <locale.h>
 
+// UTILS
 #include "utils/utils.h"
+// MODEL
 #include "model/model.h"
-
+// VIEWS
 #include "views/view.h"
 #include "views/view_ncurse.h"
 #include "views/view_sdl.h"
-
+// CONTROLLER
 #include "controller/controller.h"
-
+// NETWORK
 #include "network/network.h"
 
-#define TEST 0
-
-int test(){
-
-    return EXIT_SUCCESS;
-}
-
-
 int main(int argc, char **argv){
-
-    if(TEST) return test();
 
     srand(time(NULL));
 

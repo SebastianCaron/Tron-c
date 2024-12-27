@@ -1,6 +1,19 @@
 #pragma once
 
-#pragma once
+/**
+ * @file maillon.h
+ * @date 2024-12-27
+ * @brief Header file for linked list nodes (maillon).
+ * 
+ * This file contains the declarations of structures and functions 
+ * related to linked list nodes (maillon), used in stack and queue 
+ * implementations.
+ * 
+ * @authors
+ * Pierre Magieu
+ * Sebastian Caron
+ * Lina Lethoor
+ */
 
 /**
  * @struct _maillon

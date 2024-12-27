@@ -1,5 +1,20 @@
 #pragma once
 
+/**
+ * @file view_ncurses.h
+ * @date 2024-12-27
+ * @brief Header file for ncurses-based view functions.
+ * 
+ * This file contains the declarations of structures and functions 
+ * related to the ncurses-based view, including initialization, 
+ * screen updates, menu handling, and user input processing.
+ * 
+ * @authors
+ * Pierre Magieu
+ * Sebastian Caron
+ * Lina Lethoor
+ */
+
 #include "view.h"
 #include "../controller/controller.h"
 

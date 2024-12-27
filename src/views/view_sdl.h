@@ -1,9 +1,25 @@
 #pragma once
 
-#include "view.h"
-#include "../controller/controller.h"
+/**
+ * @file view_sdl.h
+ * @date 2024-12-27
+ * @brief Header file for SDL-based view functions.
+ * 
+ * This file contains the declarations of structures and functions 
+ * related to the SDL-based view, including initialization, screen 
+ * updates, menu handling, and user input processing.
+ * 
+ * @authors
+ * Pierre Magieu
+ * Sebastian Caron
+ * Lina Lethoor
+ */
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+
+#include "view.h"
+#include "../controller/controller.h"
+
 
 #define HAUTEUR 600
 #define LARGEUR 900

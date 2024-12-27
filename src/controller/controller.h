@@ -1,6 +1,22 @@
 #pragma once
 
+/**
+ * @file controller.h
+ * @date 2024-12-27
+ * @brief Header file for the game controller.
+ * 
+ * This file contains the declarations of structures and functions 
+ * related to the game controller, which manages the game model and views, 
+ * handles player input, and coordinates game activities.
+ * 
+ * @authors
+ * Pierre Magieu
+ * Sebastian Caron
+ * Lina Lethoor
+ */
+
 #include <stdarg.h>
+
 #include "../model/model.h"
 #include "../views/view.h"
 #include "../utils/utils.h"

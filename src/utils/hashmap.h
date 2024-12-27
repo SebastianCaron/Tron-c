@@ -1,5 +1,19 @@
 #pragma once
 
+/**
+ * @file hashmap.h
+ * @date 2024-12-27
+ * @brief Header file for a hashmap designed for 2D coordinates.
+ * 
+ * This file contains the declarations of structures and functions 
+ * related to a hashmap that uses linked lists for handling 2D coordinates.
+ * 
+ * @authors
+ * Pierre Magieu
+ * Sebastian Caron
+ * Lina Lethoor
+ */
+
 #include "maillon.h"
 
 #define DEFAULT_SIZE_HASH_MAP 1024

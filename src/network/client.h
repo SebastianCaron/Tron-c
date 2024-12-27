@@ -1,5 +1,17 @@
 #pragma once
 
+/**
+ * @file client.h
+ * @date 2024-12-27
+ * @brief Header file for the game client.
+ * 
+ * This file contains the declarations of structures and functions 
+ * related to the game client, which connects to the server, manages 
+ * local game state, and handles communication with the server.
+ * 
+ * @author Sebastian Caron
+ */
+
 #include "network.h"
 #include "../utils/utils.h"
 #include "../utils/QStack.h"

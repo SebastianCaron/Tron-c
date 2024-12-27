@@ -1,5 +1,20 @@
 #pragma once
 
+/**
+ * @file model.h
+ * @date 2024-12-27
+ * @brief Header file for the game model representation and functions.
+ * 
+ * This file contains the declarations of structures and functions 
+ * related to the game model, including initialization, movement, 
+ * collision detection, and game state management.
+ * 
+ * @authors
+ * Pierre Magieu
+ * Sebastian Caron
+ * Lina Lethoor
+ */
+
 #define SCORE_INCREMENT 10
 
 typedef enum {UP = 1, DOWN = 3, LEFT = 2, RIGHT = 4, NODIRECTION = 0} direction;

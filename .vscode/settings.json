@@ -9,6 +9,7 @@
         "controller.h": "c",
         "math.h": "c",
         "server.h": "c",
-        "random.h": "c"
+        "random.h": "c",
+        "string_view": "cpp"
     }
 }

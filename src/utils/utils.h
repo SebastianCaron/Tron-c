@@ -1,5 +1,20 @@
 #pragma once
 
+/**
+ * @file utils.h
+ * @date 2024-12-27
+ * @brief Header file for grid utilities and other useful functions.
+ * 
+ * This file contains the declarations of functions related to grid 
+ * management, including loading, initializing, displaying, and 
+ * manipulating game grids.
+ * 
+ * @authors
+ * Pierre Magieu
+ * Sebastian Caron
+ * Lina Lethoor
+ */
+
 #define BUFFER_SIZE 1024
 
 /** 
