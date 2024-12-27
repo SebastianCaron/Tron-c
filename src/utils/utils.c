@@ -6,17 +6,50 @@
 #include "../model/model.h"
 
 grid *load_map(char *path, int nb_lignes, int nb_colonnes){
+    FILE *f = fopen(path, "r");
+    if(!f){
+        return load_default(nb_lignes, nb_colonnes);
+    }
+    fclose(f);
     int nbfc = 0;
     int nbfl = 0;
     count_nb_lignes_colonnes(path, &nbfl, &nbfc);
     grid *g = load_grid_as_it_is(path, nbfl, nbfc);
     if(!g){
-        return NULL;
+        return load_default(nb_lignes, nb_colonnes);
     }
     // display_grid(g);
     grid *ng = upscale_grid(g, nb_lignes, nb_colonnes);
     destroy_grid(g);
+    if(!ng) return load_default(nb_lignes, nb_colonnes);
     return ng;
+}
+
+grid *load_default(int nb_lignes, int nb_colonnes){
+    grid *g = calloc(1, sizeof(grid));
+    if(g == NULL){
+        perror("[UTILS] ERREUR ALLOCATION GRID");
+        return NULL;
+    }
+    g->nb_colonnes = nb_colonnes;
+    g->nb_lignes = nb_lignes;
+
+    g->grid = allocate_grid(nb_lignes, nb_colonnes);
+    if(g->grid == NULL){
+        destroy_grid(g);
+        return NULL;
+    }
+
+    for(int i = 0; i < nb_lignes; i++){
+        for(int j = 0; j < nb_colonnes; j++){
+            if(i == 0 || j == 0 || j == nb_colonnes-1 || i == nb_lignes-1){
+                g->grid[i][j] = WALL;
+            }else{
+                g->grid[i][j] = EMPTY;
+            }
+        }
+    }
+    return g;
 }
 
 // CHARGE LA GRILLE DEPUIS LE FICHIER 
@@ -174,12 +207,15 @@ int **allocate_grid(int nb_lignes, int nb_colonnes){
 
 // LIBERE LA GRILLE
 void destroy_grid(grid *g){
-    if(!g) return;
+    if(g == NULL) return;
 
-    for(int i = 0; i < g->nb_lignes; i++){
-        free(g->grid[i]);
+    if(g->grid != NULL){
+        for(int i = 0; i < g->nb_lignes; i++){
+            free(g->grid[i]);
+        }
+        free(g->grid);
     }
-    free(g->grid);
+
 
     free(g);
 }

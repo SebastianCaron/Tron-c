@@ -39,6 +39,14 @@ typedef enum {QUITTER, MENU_PRINCIPAL, MENU_SOLO, MENU_MULTI, NO_ACTION, PLAY_BO
 grid *load_map(char *path, int nb_colonnes, int nb_lignes);
 
 /**
+ * @brief Initializes a grid with the given dimensions
+ * @param nb_colonnes The number of columns in the grid
+ * @param nb_lignes The number of lines in the grid
+ * @return A pointer to the grid
+ */
+grid *load_default(int nb_lignes, int nb_colonnes);
+
+/**
  * @brief Loads a grid from a file without altering its dimensions
  * @param path The file path to load the grid from
  * @param nb_lignes The number of lines in the grid
