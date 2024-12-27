@@ -26,7 +26,7 @@ $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(COMPILER) $(CFLAGS) -c $< -o $@
 
-.PHONY: clean mrpropre fr0 debug nc
+.PHONY: clean mrpropre fr0 debug network
 clean:
 	rm -rf $(BIN_DIR)
 
@@ -34,7 +34,6 @@ mrpropre: clean
 	clear
 	rm -f $(TARGET)
 	rm -rf val.txt
-	rm -rf debug_ncurse.txt
 
 fr0: mrpropre all
 	clear
@@ -44,38 +43,10 @@ debug: all
 	clear
 	valgrind --log-file=val.txt ./tron -sdl -ncurse
 
-nc: mrpropre all
-	clear
-	./tron -ncurse 2> debug_ncurse.txt
-
 network: mrpropre all
 	clear
 	./tron -sdl -h &
 	./tron -sdl -ip127.0.0.1 &
-
-client: all
-	clear
-	./tron -sdl -ip127.0.0.1
-
-clientnc: all
-	clear
-	./tron -ncurse -ip127.0.0.1
-
-clientd: all
-	clear
-	valgrind ./tron -sdl -ip127.0.0.1
-
-server: all
-	clear
-	./tron -sdl -h
-
-servernc: all
-	clear
-	./tron -ncurse -h
-
-serverd: all
-	clear
-	valgrind ./tron -sdl -h
 	
 -include $(DEPS)
 
