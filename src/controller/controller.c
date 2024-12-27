@@ -382,7 +382,7 @@ void controller_play_online_host(controller *c, int nb_connect){
 
 void controller_play_online_join(controller *c){
     client *client = init_client(c->ip, c->port);
-    actions act = NO_ACTION;
+    // actions act = NO_ACTION;
     int interrupt = 0;
 
     if(client == NULL){

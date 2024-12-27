@@ -44,7 +44,7 @@ view *init_view_ncurse(){
 
     v->type = 'n';
     getmaxyx(stdscr, v->height, v->width);
-    // v->width = (v->width > 100) ? 100 : v->width;
+    v->width = (v->width > 100) ? 100 : v->width;
     v->width -= 40;
     v->height -= 2;
     // v->width = (v->width > 100) ? 100 : v->width-40;
@@ -220,10 +220,17 @@ void update_change_screen_ncurses(view *v, int nb_player, int *scores, int **gri
 void affiche_win_ncurses(view *v, int indexPlayer) {
     int min_win_width = 40;
     int min_win_height = 7;
+    char msg[50];
+    if(indexPlayer == -1){
+        snprintf(msg, sizeof(msg), "Aucun Vainqueur");
+    }else{
+        snprintf(msg, sizeof(msg), "Le joueur %d a gagné !", indexPlayer+1);
+    }
 
     if (v->width < min_win_width || v->height < min_win_height) {
         clear();
-        mvprintw(0, 0, "Fenêtre trop petite pour afficher le vainqueur !");
+        mvprintw(0, 0, "Fenêtre trop petite pour afficher proprement le vainqueur !");
+        mvprintw(2, 0, "%s", msg);
         refresh();
         return;
     }
@@ -239,13 +246,6 @@ void affiche_win_ncurses(view *v, int indexPlayer) {
     wrefresh(v->ncurse->win);
     box(v->ncurse->win, ACS_VLINE, ACS_HLINE);
     
-
-    char msg[50];
-    if(indexPlayer == -1){
-        snprintf(msg, sizeof(msg), "Aucun Vainqueur");
-    }else{
-        snprintf(msg, sizeof(msg), "Le joueur %d a gagné !", indexPlayer+1);
-    }
 
     int msg_x = (win_width - strlen(msg)) / 2;
     mvwprintw(v->ncurse->win, 3, msg_x, "%s", msg);
