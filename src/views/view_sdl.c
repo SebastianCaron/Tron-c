@@ -260,7 +260,7 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu){
 
     char *menuText[4][6] = {
         {"TRON", "  solo  ", "  multiplayer  ", "  EXIT  ", NULL, NULL},       
-        {"SOLO", "  vs Algo (alphonse) ", "  vs Algo (kamikaze) ", "  vs Algo (copieur)  ", "  vs Algo (mon espace)  ", "  BACK  "},     
+        {"SOLO", "  vs Algo (alphonse) ", "  vs Algo (kami cases) ", "  vs Algo (copieur)  ", "  vs Algo (mon espace)  ", "  BACK  "},     
         {"MULTIPLAYER", "  on this machine (2 players)  ", "  with others  ", "  BACK  ", NULL, NULL},
         {"Retour"}      
     };
