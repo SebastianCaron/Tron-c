@@ -82,7 +82,7 @@ void retrieve_data_client(client *c){
         int buffer[2] = {0};
         rd_size = read(c->serveur_fd, buffer, size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, buffer+rd_size, size);
+            rd_size += read(c->serveur_fd, buffer+rd_size, size-rd_size);
         }
         c->id_on_serv = buffer[0];
         c->data_available[c->size_available++] = IDSERV;}
@@ -92,7 +92,7 @@ void retrieve_data_client(client *c){
         int buffer[2] = {0};
         rd_size = read(c->serveur_fd, buffer, size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, buffer+rd_size, size);
+            rd_size += read(c->serveur_fd, buffer+rd_size, size-rd_size);
         }
         c->nb_player = buffer[0];
         c->data_available[c->size_available++] = NBJOUEUR;}
@@ -102,7 +102,7 @@ void retrieve_data_client(client *c){
         int buffer = 0;
         rd_size = read(c->serveur_fd, &buffer, size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, ((char *) &buffer)+rd_size, size);
+            rd_size += read(c->serveur_fd, ((char *) &buffer)+rd_size, size-rd_size);
         }
         c->has_started = 1;
         c->data_available[c->size_available++] = START;}
@@ -116,13 +116,13 @@ void retrieve_data_client(client *c){
             size = BLOC_BUFFER_SIZE * sizeof(char);
             rd_size = read(c->serveur_fd, nbuffer, size);
             while(rd_size < size){
-                rd_size += read(c->serveur_fd, nbuffer+rd_size, size);
+                rd_size += read(c->serveur_fd, nbuffer+rd_size, size-rd_size);
             }
             break;
         }
         rd_size = read(c->serveur_fd, buffer, size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, ((char *)buffer)+rd_size, size);
+            rd_size += read(c->serveur_fd, ((char *)buffer)+rd_size, size-rd_size);
         }
         int *c_buf = (int *) buffer;
         int nb_pos = c_buf[0];
@@ -141,7 +141,7 @@ void retrieve_data_client(client *c){
         int buffer[2] = {0};
         rd_size = read(c->serveur_fd, (char *)buffer, size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, ((char *)buffer)+rd_size, size);
+            rd_size += read(c->serveur_fd, ((char *)buffer)+rd_size, size-rd_size);
         }
 
         int nb_lignes = buffer[0];
@@ -154,7 +154,7 @@ void retrieve_data_client(client *c){
         if(grid_buff != NULL){
             rd_size = read(c->serveur_fd, grid_buff, g_size);
             while(rd_size < g_size){
-                rd_size += read(c->serveur_fd, grid_buff+rd_size, g_size);
+                rd_size += read(c->serveur_fd, grid_buff+rd_size, g_size-rd_size);
             }
 
             grid *g = buffer_to_grid(nb_lignes, nb_colonnes, grid_buff);
@@ -164,6 +164,7 @@ void retrieve_data_client(client *c){
         }
         else{
             // READ LES DATAS POUR VIDER LE FD
+            // INCORRECT ! // TODO : FIX
             char buffer[BLOC_BUFFER_SIZE];
             int size = BLOC_BUFFER_SIZE * sizeof(char);
             rd_size = read(c->serveur_fd, buffer, size);
@@ -178,14 +179,14 @@ void retrieve_data_client(client *c){
         int nb_p = 0;
         rd_size = read(c->serveur_fd, ((char *) &nb_p), size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, ((char *) &nb_p)+rd_size, size);
+            rd_size += read(c->serveur_fd, ((char *) &nb_p)+rd_size, size-rd_size);
         }
 
         int scores_buff[MAX_CLIENT + 2] = {0};
         int s_size = (nb_p + 1) * sizeof(int);
         rd_size = read(c->serveur_fd, ((char *) &scores_buff), s_size);
         while(rd_size < s_size){
-            rd_size += read(c->serveur_fd, ((char *) scores_buff)+rd_size, s_size);
+            rd_size += read(c->serveur_fd, ((char *) scores_buff)+rd_size, s_size-rd_size);
         }
 
         for(int i = 0; i < nb_p; i++){
@@ -198,7 +199,7 @@ void retrieve_data_client(client *c){
         int buffer[2] = {0};
         rd_size = read(c->serveur_fd, ((char *) buffer), size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, ((char *) buffer)+rd_size, size);
+            rd_size += read(c->serveur_fd, ((char *) buffer)+rd_size, size-rd_size);
         }
         c->winner = buffer[0];
         c->data_available[c->size_available++] = WINNER;}
@@ -208,7 +209,7 @@ void retrieve_data_client(client *c){
         int buffer[2] = {0};
         rd_size = read(c->serveur_fd, ((char *) buffer), size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, ((char *) buffer)+rd_size, size);
+            rd_size += read(c->serveur_fd, ((char *) buffer)+rd_size, size-rd_size);
         }
         c->is_over = buffer[0];
         c->data_available[c->size_available++] = ISOVER;}
