@@ -122,4 +122,11 @@ void set_map(controller *c, char *map);
  */
 void set_nb_bots(controller *c, char *nb_bots);
 
+/**
+ * @brief This function is used to train the QLearning Bot
+ * @param c Pointer to the controller
+ * @param get_dir_bot Function pointer to get the direction for the bot
+ * @param get_dir_bot_q Function pointer to get the direction for the bot for q_learning
+ * @param nb_bots Number of bots in the game
+ */
 void controller_play_train_vs_bot(controller *c, direction (*get_dir_bot)(int, int, int **, position **, direction *, int), direction (*get_dir_bot_q)(int, int, int **, position **, direction *, int), int nb_bots);
