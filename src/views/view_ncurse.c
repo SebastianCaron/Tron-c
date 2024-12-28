@@ -264,7 +264,7 @@ void affiche_menu_ncurses(view *v, int *selected_option, int nbMenu){
 
     const char *options[3][6] = {
         {"TRON", "solo", "multiplayer", "EXIT", NULL, NULL},       
-        {"SOLO", "vs Algo (alphonse)", "vs Algo (kami cases)", "vs Algo (copieur)", "vs Algo (mon espace)", "BACK"},     
+        {"SOLO", "vs Algo (alphonse)", "vs Algo (kami cases)", "vs Algo (m'sieur Frodon \u261D \U0001F913)", "vs Algo (mon espace)", "BACK"},     
         {"MULTIPLAYER", "on this machine (2 players)", "with others", "BACK", NULL, NULL}      
     };
 
