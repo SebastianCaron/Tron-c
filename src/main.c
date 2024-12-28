@@ -5,8 +5,7 @@
  * 
  * This file contains the main function which initializes the game, 
  * processes command-line arguments, sets up the views (SDL and ncurses), 
- * and starts the game controller. It also handles cleanup and resource 
- * deallocation upon exit.
+ * and starts the game controller.
  * 
  * @authors
  * Pierre Magieu
