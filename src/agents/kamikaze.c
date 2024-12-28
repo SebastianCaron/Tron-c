@@ -1,9 +1,9 @@
-#include "hara_kiri.h"
+#include "kamikaze.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-direction hara_kiri_get_direction(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions, int index_bot){
+direction kamikaze_get_direction(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions, int index_bot){
 
     int directionBotTest[4][2] = {{-1,0},{0,-1},{1,0},{0,1}};
     direction current_direction = directions[index_bot];

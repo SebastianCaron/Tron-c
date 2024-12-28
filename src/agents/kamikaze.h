@@ -1,7 +1,7 @@
 #pragma once
 
 /**
- * @file hara_kiri.h
+ * @file kamikaze.h
  * @date 2024-12-27
  * @brief Header file for Hara-Kiri bot implementation in the game.
  * 
@@ -27,4 +27,4 @@
  * @param index_bot Bot index in players and directions
  * @return The direction for the bot to move
  */
-direction hara_kiri_get_direction(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions, int index_bot);
+direction kamikaze_get_direction(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions, int index_bot);

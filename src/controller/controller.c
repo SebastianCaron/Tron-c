@@ -11,7 +11,7 @@
 
 // AGENTS
 #include "../agents/rectiligne.h"
-#include "../agents/hara_kiri.h"
+#include "../agents/kamikaze.h"
 #include "../agents/big.h"
 
 // NETWORK
@@ -209,7 +209,7 @@ void go_to_menu(controller *c){
                 act = RETOUR;
                 break;
             case PLAY_BOT_Q:
-                controller_play_solo_j_vs_bot(c, hara_kiri_get_direction, c->nb_bots);
+                controller_play_solo_j_vs_bot(c, kamikaze_get_direction, c->nb_bots);
                 display_winner(c);
                 destroy_model(c->m);
                 c->m = NULL;
