@@ -320,7 +320,7 @@ void set_port(controller *c, char *port){
 // TODO : CHECK ERRORS & READY
 
 void controller_play_online_host(controller *c, int nb_connect){
-    server *s = init_serveur(PORT, nb_connect);
+    server *s = init_serveur(c->port, nb_connect);
 
     int nb_player_connected = 1;
     actions act = NO_ACTION;
