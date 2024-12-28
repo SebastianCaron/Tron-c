@@ -32,9 +32,72 @@
 // NETWORK
 #include "network/network.h"
 
+#include "./agents/q.h"
+#include "./agents/rectiligne.h"
+#include "./agents/kamikaze.h"
+#include "./agents/big.h"
+
+#define BOT_TRAINING 0
+
+// POUR l'entrainement du bot !
+int bot_training(){
+
+    if (TTF_Init() == -1) {
+        fprintf(stderr, "ERREUR SDL_ttf - %s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
+    }
+
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        fprintf(stderr, "ERREUR SDL : %s\n", SDL_GetError());
+        exit(EXIT_FAILURE);
+    }
+
+    init_Q();
+    load_Q_table("./q.bot");
+    view *vsdl = init_view_sdl();
+
+    controller *c = init_controller(1, vsdl);
+    actions act = NO_ACTION;
+
+    int max_episodes = 5000000;  // Nombre d'épisodes
+
+    int nb_victoire = 0;
+    int nb_played = 0;
+    // epsilon = initial_epsilon;
+
+    // printf("%02.2f %%\n", (float) nb_played / (float) max_episodes * 100.0f);
+    for(int i = 0; i < max_episodes; i++){
+        // update_epsilon(i, max_episodes);
+        vsdl->get_event(vsdl, &act);
+        if(act == QUITTER){
+            break;
+        }
+
+        // controller_play_train_vs_bot(c, rectiligne_get_direction, q_learning_bot, rand()%((5+1)-2) + 2);
+        controller_play_train_vs_bot(c, rectiligne_get_direction, q_learning_bot, 1);
+        if(get_winner(c->m) == 0) nb_victoire++;
+        destroy_model(c->m);
+        nb_played++;
+
+        if ((i + 1) % 1000 == 0) {
+            printf("\b\b\b\b\b\b\b%02.2f %%", (float) nb_played / (float) max_episodes * 100.0f);
+        }
+    }
+    printf("\n");
+
+    printf("%d / %d \t\t -- %0.2f %% de victoire \t %0.2f %% du test \n", nb_victoire, nb_played, (float) nb_victoire / (float) nb_played * 100.0f, (float) nb_played / (float) max_episodes * 100.0f);
+
+    save_Q_table("./q.bot");
+    TTF_Quit();
+    SDL_Quit();
+
+    return EXIT_SUCCESS;
+}
+
 int main(int argc, char **argv){
 
     srand(time(NULL));
+    if(BOT_TRAINING) return bot_training();
 
     view *vncr = NULL;
     view *vsdl = NULL;
@@ -125,6 +188,8 @@ int main(int argc, char **argv){
     c->marker = marker;
     set_nb_bots(c, nb_bots);
     set_map(c, map);
+    // init_Q();
+    // load_Q_table("./q.bot");
 
     go_to_menu(c);
     destroy_controller(c);
@@ -138,6 +203,8 @@ int main(int argc, char **argv){
         echo();
         endwin();
     }
+
+    // save_Q_table("./q.bot");
 
     return EXIT_SUCCESS;
 }

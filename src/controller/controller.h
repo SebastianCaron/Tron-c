@@ -21,7 +21,7 @@
 #include "../views/view.h"
 #include "../utils/utils.h"
 
-#define SPEED_FRM 120000
+#define SPEED_FRM 1
 
 /**
  * @struct controller
@@ -121,3 +121,5 @@ void set_map(controller *c, char *map);
  * @param nb_bots The number of bots
  */
 void set_nb_bots(controller *c, char *nb_bots);
+
+void controller_play_train_vs_bot(controller *c, direction (*get_dir_bot)(int, int, int **, position **, direction *, int), direction (*get_dir_bot_q)(int, int, int **, position **, direction *, int), int nb_bots);

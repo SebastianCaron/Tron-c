@@ -34,6 +34,8 @@ mrpropre: clean
 	clear
 	rm -f $(TARGET)
 	rm -rf val.txt
+	rm -f q.bot
+
 
 fr0: mrpropre all
 	clear
@@ -47,6 +49,10 @@ network: mrpropre all
 	clear
 	./tron -sdl -h &
 	./tron -sdl -ip127.0.0.1 &
+
+bot: all
+	rm -f q.bot
+	@./tron
 	
 -include $(DEPS)
 

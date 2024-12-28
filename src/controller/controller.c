@@ -13,6 +13,7 @@
 #include "../agents/rectiligne.h"
 #include "../agents/kamikaze.h"
 #include "../agents/big.h"
+#include "../agents/q.h"
 
 // NETWORK
 #include "../network/network.h"
@@ -56,6 +57,30 @@ void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, 
         if(SPEED_FRM - duration > 0) usleep(SPEED_FRM - duration);
     }
     free(dirs);
+}  
+
+void controller_play_train_vs_bot(controller *c, direction (*get_dir_bot)(int, int, int **, position **, direction *, int), direction (*get_dir_bot_q)(int, int, int **, position **, direction *, int), int nb_bots){
+    create_model(c, nb_bots+1);
+    direction *dirs = calloc(nb_bots+1, sizeof(direction));
+    if(dirs == NULL){
+        perror("[CONTROLLER] erreur allocation directions\n");
+        return;
+    }
+    while(!est_fini(c->m)){
+        move_player(c->m, 0, get_dir_bot_q(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, c->m->directions, 0));
+        
+        for(int i = 0; i < nb_bots; i++){
+            dirs[i+1] = get_dir_bot(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, c->m->directions, i+1);
+            move_player(c->m, i+1, dirs[i+1]);
+        }
+
+        collision_all(c->m);
+    }
+    // for(int i = 0; i < c->nb_view; i++){
+    //     c->views[i]->update_change_screen(c->views[i], c->m->n_player, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->players);
+    // }
+    free(dirs);
+    
 }  
 
 
@@ -209,6 +234,7 @@ void go_to_menu(controller *c){
                 act = RETOUR;
                 break;
             case PLAY_BOT_Q:
+                init_Q();
                 controller_play_solo_j_vs_bot(c, kamikaze_get_direction, c->nb_bots);
                 display_winner(c);
                 destroy_model(c->m);

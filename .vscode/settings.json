@@ -12,6 +12,7 @@
         "random.h": "c",
         "string_view": "cpp",
         "array": "c",
-        "initializer_list": "c"
+        "initializer_list": "c",
+        "limits": "c"
     }
 }
