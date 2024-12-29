@@ -11,7 +11,7 @@
  * strategies for the game. Each function determines the direction of movement 
  * for a bot based on a specific strategy.
  * 
- * Authors:
+ * @authors
  * Pierre Magieu
  * Sebastian Caron
  * Lina Lethoor
