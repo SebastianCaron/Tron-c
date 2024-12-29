@@ -281,9 +281,21 @@ void init_positions(model *m){
 }
 
 void init_directions(model *m){
-    for(int i = 0; i < m->n_player; i++){
-        int d_x = (m->nb_colonnes_grid / 2) - m->players[i]->x;
-        int d_y = (m->nb_lignes_grid / 2) - m->players[i]->y;
+    int md_x = 0;
+    int md_y = 0;
+
+    int i = 0;
+    for(i = 0; i < m->n_player; i++){
+        md_x += m->players[i]->x;
+        md_y += m->players[i]->y;
+    }
+
+    md_x /= m->n_player;
+    md_y /= m->n_player;
+
+    for(i = 0; i < m->n_player; i++){
+        int d_x = (md_x) - m->players[i]->x;
+        int d_y = (md_y) - m->players[i]->y;
         if((d_x  < 0 ? -d_x : d_x) > (d_y  < 0 ? -d_y : d_y)){
             if(d_x > 0){
                 m->directions[i] = RIGHT;

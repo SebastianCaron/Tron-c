@@ -21,7 +21,7 @@
 #include "../views/view.h"
 #include "../utils/utils.h"
 
-#define SPEED_FRM 1
+#define SPEED_FRM 100000
 
 /**
  * @struct controller

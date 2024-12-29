@@ -449,6 +449,10 @@ void controller_play_online_join(controller *c){
     int nb_player = client_get_nb_player(client);
 
     grid *g = client_get_grid(client);
+    for(int i = 0; i < c->nb_view; i++){
+        c->views[i]->height = g->nb_lignes;
+        c->views[i]->width = g->nb_colonnes;
+    }
     create_model_with_grid(c, nb_player, g);
 
     direction *dirs = calloc(nb_player, sizeof(direction));
