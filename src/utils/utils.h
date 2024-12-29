@@ -27,7 +27,7 @@ typedef struct{
     int **grid;
 } grid;
 
-typedef enum {QUITTER, MENU_PRINCIPAL, MENU_SOLO, MENU_MULTI, NO_ACTION, PLAY_BOT_ALGO, PLAY_BOT_RANDOM, PLAY_BOT_Q, PLAY_BOT_COPY, PLAY_BOT_ESPACE, PLAY_MULTI, PLAY_ONLINE, RETOUR} actions;
+typedef enum {QUITTER, MENU_PRINCIPAL, MENU_SOLO, MENU_MULTI, NO_ACTION, PLAY_BOT_ALGO, PLAY_BOT_RANDOM, PLAY_BOT_Q, PLAY_BOT_KAMIKAZE, PLAY_BOT_COPY, PLAY_BOT_ESPACE, PLAY_MULTI, PLAY_ONLINE, RETOUR} actions;
 
 /**
  * @brief Loads a map from a file and initializes a grid with the given dimensions

@@ -13,6 +13,8 @@
         "string_view": "cpp",
         "array": "c",
         "initializer_list": "c",
-        "limits": "c"
+        "limits": "c",
+        "kamikaze.h": "c",
+        "cstdlib": "c"
     }
 }

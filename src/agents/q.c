@@ -121,6 +121,7 @@ void update_Q(int state, int action, int reward, int next_state) {
 
     float update = ALPHA * (reward + GAMMA * max_next_q - Q[state][action]);
     Q[state][action] += update;
+    // Q[state][action] = (1 - ALPHA) * Q[state][action] + ALPHA * (reward + GAMMA * max_next_q);
 
     if (Q[state][action] > 1e6) Q[state][action] = 1e6;
     if (Q[state][action] < -1e6) Q[state][action] = -1e6;

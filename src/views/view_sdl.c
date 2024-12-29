@@ -281,12 +281,23 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu){
     v->sdl->menu_current = nbMenu;
     free_buttons(v->sdl);
 
+
+
+    #ifdef BOT_TRAINING
+    char *menuText[4][6] = {
+        {"TRON", "  solo  ", "  multiplayer  ", "  EXIT  ", NULL, NULL},       
+        {"SOLO", "  vs Q_LEARNING! ", "  vs Algo (kami cases) ", "  vs Algo (m'sieur Frodon)  ", "  vs Algo (mon espace)  ", "  BACK  "},     
+        {"MULTIPLAYER", "  on this machine (2 players)  ", "  with others  ", "  BACK  ", NULL, NULL},
+        {"Retour"}      
+    };
+    #else
     char *menuText[4][6] = {
         {"TRON", "  solo  ", "  multiplayer  ", "  EXIT  ", NULL, NULL},       
         {"SOLO", "  vs Algo (alphonse) ", "  vs Algo (kami cases) ", "  vs Algo (m'sieur Frodon)  ", "  vs Algo (mon espace)  ", "  BACK  "},     
         {"MULTIPLAYER", "  on this machine (2 players)  ", "  with others  ", "  BACK  ", NULL, NULL},
         {"Retour"}      
     };
+    #endif
 
     SDL_Renderer *renderer = v->sdl->renderer;
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -329,12 +340,22 @@ void affiche_menu_sdl(view *v, int *act, int nbMenu){
 void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu) {
     SDL_Event event;
 
+
+    #ifdef BOT_TRAINING
     const actions menuActions[4][5] = {
         {MENU_SOLO, MENU_MULTI, QUITTER, NO_ACTION, NO_ACTION},       
-        {PLAY_BOT_ALGO, PLAY_BOT_Q, PLAY_BOT_COPY, PLAY_BOT_ESPACE, RETOUR},    
+        {PLAY_BOT_Q, PLAY_BOT_KAMIKAZE, PLAY_BOT_COPY, PLAY_BOT_ESPACE, RETOUR},    
         {PLAY_MULTI, PLAY_ONLINE, RETOUR, NO_ACTION, NO_ACTION},
         {NO_ACTION}
     };
+    #else
+    const actions menuActions[4][5] = {
+        {MENU_SOLO, MENU_MULTI, QUITTER, NO_ACTION, NO_ACTION},       
+        {PLAY_BOT_ALGO, PLAY_BOT_KAMIKAZE, PLAY_BOT_COPY, PLAY_BOT_ESPACE, RETOUR},    
+        {PLAY_MULTI, PLAY_ONLINE, RETOUR, NO_ACTION, NO_ACTION},
+        {NO_ACTION}
+    };
+    #endif
 
     while (SDL_PollEvent(&event)) {
         switch (event.type) {

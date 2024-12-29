@@ -262,11 +262,19 @@ void affiche_win_ncurses(view *v, int indexPlayer) {
 void affiche_menu_ncurses(view *v, int *selected_option, int nbMenu){
     v->get_action = get_action_menu_ncurses;
 
+    #ifdef BOT_TRAINING
+    const char *options[3][6] = {
+        {"TRON", "solo", "multiplayer", "EXIT", NULL, NULL},       
+        {"SOLO", "vs Q_LEARNING !!", "vs Algo (kami cases)", "vs Algo (m'sieur Frodon \u261D \U0001F913)", "vs Algo (mon espace)", "BACK"},     
+        {"MULTIPLAYER", "on this machine (2 players)", "with others", "BACK", NULL, NULL}      
+    };
+    #else
     const char *options[3][6] = {
         {"TRON", "solo", "multiplayer", "EXIT", NULL, NULL},       
         {"SOLO", "vs Algo (alphonse)", "vs Algo (kami cases)", "vs Algo (m'sieur Frodon \u261D \U0001F913)", "vs Algo (mon espace)", "BACK"},     
         {"MULTIPLAYER", "on this machine (2 players)", "with others", "BACK", NULL, NULL}      
     };
+    #endif
 
     int n_options = 4;
     if(nbMenu == 1) n_options = 6;
@@ -303,12 +311,21 @@ void get_action_menu_ncurses(view *v, actions *act, int *selected_option, int nb
     refresh();
     int ch = getch();
 
+    #ifdef BOT_TRAINING
     const actions menuActions[4][5] = {
         {MENU_SOLO, MENU_MULTI, QUITTER},       
-        {PLAY_BOT_ALGO, PLAY_BOT_Q, PLAY_BOT_COPY, PLAY_BOT_ESPACE, RETOUR},    
+        {PLAY_BOT_Q, PLAY_BOT_KAMIKAZE, PLAY_BOT_COPY, PLAY_BOT_ESPACE, RETOUR},    
         {PLAY_MULTI, PLAY_ONLINE, RETOUR},
         {RETOUR}       
     };
+    #else
+    const actions menuActions[4][5] = {
+        {MENU_SOLO, MENU_MULTI, QUITTER},       
+        {PLAY_BOT_ALGO, PLAY_BOT_KAMIKAZE, PLAY_BOT_COPY, PLAY_BOT_ESPACE, RETOUR},    
+        {PLAY_MULTI, PLAY_ONLINE, RETOUR},
+        {RETOUR}       
+    };
+    #endif
 
     switch (ch) {
         case KEY_UP:

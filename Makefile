@@ -50,13 +50,14 @@ network: mrpropre all
 	./tron -sdl -h &
 	./tron -sdl -ip127.0.0.1 &
 
-bot: all
-	# rm -f q.bot
-	@./tron
-	@./tron
-	@./tron
-	@./tron
-	@./tron
-	
+bot: CFLAGS += -DBOT_TRAINING=1
+bot: mrpropre all
+	@echo "BUILD QLEARNING OK"
+
+training:
+	@for i in $(shell seq 1 $(n)); do \
+		echo "Training run $$i of $(n)"; \
+		./tron -train; \
+	done
 -include $(DEPS)
 

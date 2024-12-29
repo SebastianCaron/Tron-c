@@ -183,7 +183,7 @@ void destroy_controller(controller *c) {
         c->views[i]->destroy_self(c->views[i]);
     }
     free(c->views);
-    destroy_model(c->m);
+    if(c->m != NULL) destroy_model(c->m);
     free(c);
 }
 
@@ -234,7 +234,13 @@ void go_to_menu(controller *c){
                 act = RETOUR;
                 break;
             case PLAY_BOT_Q:
-                init_Q();
+                controller_play_solo_j_vs_bot(c, q_learning_bot, c->nb_bots);
+                display_winner(c);
+                destroy_model(c->m);
+                c->m = NULL;
+                act = RETOUR;
+                break;
+            case PLAY_BOT_KAMIKAZE:
                 controller_play_solo_j_vs_bot(c, kamikaze_get_direction, c->nb_bots);
                 display_winner(c);
                 destroy_model(c->m);
