@@ -113,7 +113,7 @@ When the game is compiled in Q-Learning mode, additional options are available:
 
 Example : 
 ```bash
-./tron -train -ep10000 -bots5`
+./tron -train -ep10000 -bots5
 ```
 
 The bot will play 10,000 training games against 5 other bots.
