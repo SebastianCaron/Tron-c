@@ -101,7 +101,7 @@ These options are:
 
 Example : 
 ```bash
-./tron -sdl -ncurses -ip192.168.0.0 -bots5 -map./maps/map3.txt`
+./tron -sdl -ncurses -ip192.168.0.0 -bots5 -map./maps/map3.txt
 ```
 
 This launches the game with both Ncurses and SDL interfaces, with 5 bots, using the map `./maps/map3.txt`, and the IP address `192.168.0.0`.
