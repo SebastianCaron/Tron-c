@@ -457,6 +457,8 @@ void update_change_screen_sdl(view *v, int nb_player, int *scores, int **grid, i
     }
     SDL_Renderer *renderer = v->sdl->renderer;
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    // SDL_RenderClear(renderer);
+
     int to_check[5][2];
     for(int i = 0; i < nb_player; i++){
         position *p = players[i];
@@ -493,6 +495,10 @@ void update_change_screen_sdl(view *v, int nb_player, int *scores, int **grid, i
             SDL_RenderFillRect(renderer, &pixel);
         }
     }
+    SDL_Rect *bg = createRect(34, LARGEUR, 0, 0);
+    SDL_SetRenderDrawColor(v->sdl->renderer, 255,255,255,255);
+    SDL_RenderFillRect(v->sdl->renderer, bg);
+
     afficheScore(renderer, nb_player, scores, v->sdl->font_score);
     SDL_RenderPresent(renderer); **/
 }

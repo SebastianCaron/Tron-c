@@ -30,7 +30,7 @@ void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, 
     }
     clock_t start, end;
     double duration;
-    c->views[i]->update_screen(c->views[i], c->m->n_player, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
+    for(i = 0; i < c->nb_view; i++) c->views[i]->update_screen(c->views[i], c->m->n_player, c->m->scores, c->m->grid, c->m->nb_lignes_grid, c->m->nb_colonnes_grid);
 
 
     while(!est_fini(c->m)){

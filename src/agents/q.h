@@ -19,9 +19,9 @@
 #define PENALTY_COLLISION -100
 
 // Define the Q-learning algorithm parameters
-#define ALPHA 0.09 /**< Learning rate */
-#define GAMMA 0.96 /**< Discount factor */
-#define EPSILON 0.2 /**< Exploration rate */
+#define ALPHA 0.1 /**< Learning rate */
+#define GAMMA 0.9 /**< Discount factor */
+#define EPSILON 0.1 /**< Exploration rate */
 #define MAX_STATES 10000000 /**< Maximum number of states */
 
 /**

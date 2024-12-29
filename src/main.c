@@ -109,9 +109,11 @@ int main(int argc, char **argv){
     char marker = 0;
     char *map = "./maps/map1.txt";
     char *nb_bots = "1";
+    #ifdef BOT_TRAINING
     char train = 0;
     char *nb_ep = "200000";
-
+    #endif
+    
     if(argc == 1){
         with_sdl = 1;
     }

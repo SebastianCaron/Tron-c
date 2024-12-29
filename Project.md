@@ -124,6 +124,8 @@ Les mouvements des joueurs sont capturés grâce à la gestion des événements 
 
 Le code est plutôt complexe notamment en raison de la gestion des textures et de la mémoire mais offre une interface graphique plus détaillée.
 
+La font que nous avons utilisée (`nextg.ttf`) a été convertie en hexa à l'aide de `xxd -i` afin d'être inclue dans la SDL. Ainsi, l'exécutable peut être déplacé sans la font sans aucun problème.
+
 ## La Vue Ncurses
 
 Dans le cas de Ncurses, l'interface du jeu est directement créée dans le terminal, sans nécessiter la gestion de surfaces ou de textures. La grille est affichée en utilisant des caractères spéciaux, tandis que les joueurs sont représentés par des symboles simples. 

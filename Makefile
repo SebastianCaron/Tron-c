@@ -56,7 +56,7 @@ bot: mrpropre all
 training:
 	@for i in $(shell seq 1 $(n)); do \
 		echo "Training run $$i of $(n)"; \
-		./tron -train; \
+		./tron -train -ep200000; \
 	done
 -include $(DEPS)
 
