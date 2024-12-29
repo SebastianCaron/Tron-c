@@ -5,13 +5,34 @@
 
 
 #include "../controller/controller.h"
+
+// VIEWS
 #include "view.h"
 #include "view_sdl.h"
+
+// FONTS
+// xxd -i nextg.ttf > nextg.h
+#include "./fonts/nextg.h"
 
 SDL_Color tabColors[10] = { {0,0,0,255}, {255,255,0,255}, {255,0,255,255}, //Sol, J1, J2
                             {0,255,255,255}, {255,0,0,255}, {0,255,0,255}, //J3, J4, J5
                             {0,0,255,255}, {0,140,140,255}, {140,0,0,255}, //J6, J7, J8
                             {255,255,255,255}}; // Mur de la map
+
+TTF_Font *load_font_from_memory(const unsigned char *data, unsigned int size, int ptsize) {
+    SDL_RWops *rw = SDL_RWFromMem((void *)data, size);
+    if (!rw) {
+        fprintf(stderr, "[VIEW SDL] Erreur de creation de RWops : %s\n", SDL_GetError());
+        return NULL;
+    }
+    TTF_Font *font = TTF_OpenFontRW(rw, 1, ptsize);
+    if (!font) {
+        fprintf(stderr, "[VIEW SDL] Erreur de chargement de la police : %s\n", TTF_GetError());
+        return NULL;
+    }
+    return font;
+}
+
 
 view *init_view_sdl(){
     view *v = (view *) calloc(1, sizeof(view));
@@ -42,9 +63,11 @@ view *init_view_sdl(){
     }
     v->sdl = viewSdl;
 
-    v->sdl->font_title = TTF_OpenFont("./res/nextg.ttf", 70);
-    v->sdl->font = TTF_OpenFont("./res/nextg.ttf", 46);
-    v->sdl->font_score = TTF_OpenFont("./res/nextg.ttf", 20);
+    v->sdl->font_title = load_font_from_memory(nextg_ttf, nextg_ttf_len, 70);
+    v->sdl->font = load_font_from_memory(nextg_ttf, nextg_ttf_len, 46);
+    v->sdl->font_score = load_font_from_memory(nextg_ttf, nextg_ttf_len, 20);
+
+    
     v->sdl->menu_current = 1000;
 
     v->sdl->renderer = NULL;
