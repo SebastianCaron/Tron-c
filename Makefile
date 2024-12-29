@@ -45,8 +45,7 @@ debug: all
 	clear
 	valgrind --log-file=val.txt ./tron -sdl -ncurse
 
-network: mrpropre all
-	clear
+network: all
 	./tron -sdl -h &
 	./tron -sdl -ip127.0.0.1 &
 

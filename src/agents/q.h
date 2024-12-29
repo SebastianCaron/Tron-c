@@ -16,11 +16,11 @@
 #include "../model/model.h"
 
 // Define the penalty for collision
-#define PENALTY_COLLISION -1000
+#define PENALTY_COLLISION -100
 
 // Define the Q-learning algorithm parameters
 #define ALPHA 0.09 /**< Learning rate */
-#define GAMMA 0.92 /**< Discount factor */
+#define GAMMA 0.96 /**< Discount factor */
 #define EPSILON 0.2 /**< Exploration rate */
 #define MAX_STATES 10000000 /**< Maximum number of states */
 
