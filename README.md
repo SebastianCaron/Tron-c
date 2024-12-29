@@ -108,7 +108,7 @@ This launches the game with both Ncurses and SDL interfaces, with 5 bots, using 
 
 ### Options in Q Learning Mode Only: 
 
-When the game is compiled in Q-Learning mode (ie : `make bot`) or with the Macro `BOT_TRAINING` set to 1, additional options are available:
+When the game is compiled in Q-Learning mode (ie : `make bot` or with the Macro `BOT_TRAINING` set to 1), additional options are available:
 
 - `-train` to enter training mode for the bot.
 - `-ep` to choose the number of games the bot will play.
