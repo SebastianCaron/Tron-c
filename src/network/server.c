@@ -15,32 +15,32 @@
 server *init_serveur(int port, int nb_connect){
     server *s = calloc(1, sizeof(server));
     if(!s){
-        perror("ERREUR INITIALISATION SERVEUR");
+        perror("[SERVER] ERREUR INITIALISATION SERVEUR");
         exit(EXIT_FAILURE);
     }
 
     int server_fd;
     s->address = calloc(1, sizeof(struct sockaddr_in));
     if(!s->address){
-        perror("ERREUR INITIALISATION STRUCT ADDRESS");
+        perror("[SERVER] ERREUR INITIALISATION STRUCT ADDRESS");
         exit(EXIT_FAILURE);
     }
     s->addrlen = sizeof(struct sockaddr_in);
 
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-        perror("ERREUR CREATION SOCKET");
+        perror("[SERVER] ERREUR CREATION SOCKET");
         exit(EXIT_FAILURE);
     }
     // Mettre la socket en mode non bloquant
     if (fcntl(server_fd, F_SETFL, fcntl(server_fd, F_GETFL, 0) | O_NONBLOCK) < 0) {
-        perror("ERREUR MODE NON BLOQUANT");
+        perror("[SERVER] ERREUR MODE NON BLOQUANT");
         close(server_fd);
         exit(EXIT_FAILURE);
     }
 
     int opt = 1;
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
-        perror("ERREUR SETSOCKOPT");
+        perror("[SERVER] ERREUR SETSOCKOPT");
         close(server_fd);
         free(s->address);
         free(s);
@@ -57,13 +57,13 @@ server *init_serveur(int port, int nb_connect){
     (*s->address).sin_port = htons(port);
 
     if (bind(server_fd, (struct sockaddr *) &(*s->address), s->addrlen) < 0) {
-        perror("ERREUR BIND");
+        perror("[SERVER] ERREUR BIND");
         close(server_fd);
         exit(EXIT_FAILURE);
     }
 
     if (listen(server_fd, MAX_CLIENT) < 0) {
-        perror("ERREUR LISTEN");
+        perror("[SERVER] ERREUR LISTEN");
         close(server_fd);
         exit(EXIT_FAILURE);
     }
@@ -99,7 +99,7 @@ direction get_direction_from(server *s, int connect){
 int wait_for_connections(server *s, void (*on_connect)(char *)){
     int new_socket = 0;
     if ((new_socket = accept(s->serveur_fd, (struct sockaddr *)&(s->address), (socklen_t*)&(s->addrlen))) < 0) {
-        perror("Erreur lors de l'acceptation de la connexion");
+        perror("[SERVER] Erreur lors de l'acceptation de la connexion");
         close(s->serveur_fd);
         exit(EXIT_FAILURE);
     }
@@ -131,7 +131,7 @@ int wait_for_connections_timeout(server *s, void (*on_connect)(char *)) {
 
     int activity = select(s->serveur_fd + 1, &readfds, NULL, NULL, &timeout);
     if (activity < 0) {
-        perror("Erreur avec select");
+        perror("[SERVER] Erreur avec select");
         return -1;
     }
 
@@ -145,7 +145,7 @@ int wait_for_connections_timeout(server *s, void (*on_connect)(char *)) {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
                 return 0;
             }
-            perror("Erreur lors de l'acceptation de la connexion");
+            perror("[SERVER] Erreur lors de l'acceptation de la connexion");
             return -1;
         }
 
@@ -158,7 +158,7 @@ int wait_for_connections_timeout(server *s, void (*on_connect)(char *)) {
         s->clients_fd[s->act_connect] = new_socket;
         int buffer[3] = {IDSERV, s->act_connect, ENDPACKET};
         if (write(new_socket, (char *)buffer, 3 * sizeof(int)) < 0) {
-            perror("Erreur lors de l'écriture sur le socket client");
+            perror("[SERVER] Erreur lors de l'écriture sur le socket client");
             close(new_socket);
             return -1;
         }

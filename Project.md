@@ -63,6 +63,8 @@ Si la grille est trop petite, on l’upscale.
 ```
 *Ceci est une carte (oui, pour de vrai).* 
 
+> Nous fournissons 4 cartes exemples dans le dossier `./maps/`.
+
 <br>
 Le fait qu’il y ait un nombre variable de joueur ( + que 2  voire infini !!! ) 
 nous empêche de positionner les joueurs à la main. 
