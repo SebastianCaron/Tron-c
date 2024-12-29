@@ -130,5 +130,14 @@ void get_action_menu_sdl(view *v, actions *act, int *selected_option, int nbMenu
  */
 void get_event_sdl(view *v, actions *act);
 
-
+/**
+ * @brief update the display of sdl view
+ * @param v the view that needs to be update
+ * @param nb_player the number of players to display their scores
+ * @param score the table of scores / each score corresponds to the player's index
+ * @param grid table of the game
+ * @param nb_lignes to know how many items to display with nb_colonnes
+ * @param nb_colonnes to know how many items to display with nb_lignes
+ * @param players the positions of the players
+ */
 void update_change_screen_sdl(view *v, int nb_player, int *scores, int **grid, int nb_lignes, int nb_colonnes, position **players);
