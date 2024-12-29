@@ -43,7 +43,7 @@ fr0: mrpropre all
 
 debug: all
 	clear
-	valgrind --log-file=val.txt ./tron -sdl -ncurse
+	valgrind --leak-check=full --log-file=val.txt ./tron -sdl
 
 network: all
 	./tron -sdl -h &
