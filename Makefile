@@ -51,7 +51,11 @@ network: mrpropre all
 	./tron -sdl -ip127.0.0.1 &
 
 bot: all
-	rm -f q.bot
+	# rm -f q.bot
+	@./tron
+	@./tron
+	@./tron
+	@./tron
 	@./tron
 	
 -include $(DEPS)

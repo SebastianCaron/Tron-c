@@ -58,7 +58,7 @@ int bot_training(){
     controller *c = init_controller(1, vsdl);
     actions act = NO_ACTION;
 
-    int max_episodes = 5000000;  // Nombre d'épisodes
+    int max_episodes = 100000;  // Nombre d'épisodes
 
     int nb_victoire = 0;
     int nb_played = 0;

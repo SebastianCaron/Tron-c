@@ -60,7 +60,7 @@ int get_state_index(int nb_lignes, int nb_colonnes, int **grid, position bot_pos
         index = index * 10 + v[i];
     }
 
-
+    // if(index > MAX_STATES) printf("INDEX %d out : %d / %d \n", index, index, MAX_STATES);
     return index % MAX_STATES;
 }
 
@@ -107,7 +107,6 @@ int calculate_reward(int nb_lignes, int nb_colonnes, int **grid, int x, int y) {
     if (x > 0 && grid[y][x - 1] == EMPTY) free_neighbors++;
     if (x < nb_colonnes - 1 && grid[y][x + 1] == EMPTY) free_neighbors++;
 
-    
     return SCORE_INCREMENT + free_neighbors;
 }
 
