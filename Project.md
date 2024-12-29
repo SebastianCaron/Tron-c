@@ -187,7 +187,7 @@ Pour Espace Vital, c’est le même principe, sauf qu’il va essayer de se rapp
 
 Pour le bot Q-Learning, Sebastian a suivi la recette sur wikipedia (juste [ici](https://fr.wikipedia.org/wiki/Q-learning)).
 
-Spoiler : ça ne fonctionne pas très bien (21.2% de victoires en moyenne contre alphonse).
+Spoiler : ça ne fonctionne pas très bien (11.2% de victoires en moyenne contre alphonse).
 
 ## [BONUS] Du Réseau!
 
