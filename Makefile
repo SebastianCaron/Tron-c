@@ -54,9 +54,18 @@ bot: mrpropre all
 	@echo "BUILD QLEARNING OK"
 
 training:
-	@for i in $(shell seq 1 $(n)); do \
+	@total_victories=0; \
+	count=0; \
+	for i in $(shell seq 1 $(n)); do \
 		echo "Training run $$i of $(n)"; \
-		./tron -train -ep200000; \
-	done
+		output=$$(./tron -train -ep100000); \
+		echo "$$output"; \
+		victory_percent=$$(echo "$$output" | tail -n1 | cut -d' ' -f6); \
+		total_victories=$$(echo "$$total_victories + $$victory_percent" | bc); \
+		count=$$((count + 1)); \
+	done; \
+	average=$$(echo "scale=2; $$total_victories / $$count" | bc); \
+	echo "Average : $$average %"
+
 -include $(DEPS)
 

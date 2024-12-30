@@ -14,6 +14,7 @@ int dx[] = {0, 0, -1, 1};  // LEFT, RIGHT
 int dy[] = {-1, 1, 0, 0};  // UP, DOWN
 
 float epsilon = EPSILON;
+int episode_count = 0;
 
 void init_Q() {
     for (int i = 0; i < MAX_STATES; i++) {
@@ -39,6 +40,11 @@ int load_Q_table(const char *filename) {
         return 1;
     }
     return 0;
+}
+
+void reset_bot_q(){
+    epsilon = EPSILON;
+    episode_count = 0;
 }
 
 int get_state_index(int nb_lignes, int nb_colonnes, int **grid, position bot_position) {
@@ -107,7 +113,7 @@ int calculate_reward(int nb_lignes, int nb_colonnes, int **grid, int x, int y) {
     if (x > 0 && grid[y][x - 1] == EMPTY) free_neighbors++;
     if (x < nb_colonnes - 1 && grid[y][x + 1] == EMPTY) free_neighbors++;
 
-    return SCORE_INCREMENT + free_neighbors;
+    return SCORE_INCREMENT + free_neighbors * 2;
 }
 
 // https://fr.wikipedia.org/wiki/Q-learning
@@ -136,9 +142,7 @@ void update_Q(int state, int action, int reward, int next_state) {
 //     return epsilon;
 // }
 
-
-direction q_learning_bot(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions, int index_bot) {
-    static int episode_count = 0;
+direction q_learning_bot(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions, int index_bot) { 
     position bot_position = *(players[index_bot]);
     direction current_direction = directions[index_bot];
     int current_state = get_state_index(nb_lignes, nb_colonnes, grid, bot_position);

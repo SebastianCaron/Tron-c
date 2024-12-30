@@ -20,6 +20,90 @@
 #include "../network/server.h"
 #include "../network/client.h"
 
+controller *init_controller(int nb_views, ...){
+    controller *c = calloc(1, sizeof(controller));
+    if(c == NULL){
+        perror("[CONTROLLER] erreur allocation de la structure controller.");
+        exit(EXIT_FAILURE);
+    }
+
+    c->nb_view = nb_views;
+    if(c->nb_view == 0) return c;
+
+    va_list args;
+    va_start(args, nb_views);
+    c->views = calloc(nb_views, sizeof(view *));
+    if (c->views == NULL) {
+        perror("[CONTROLLER] erreur allocation liste views.");
+        free(c);
+        exit(EXIT_FAILURE);
+    }
+    int i = 0;
+    while (i < nb_views) {
+        view *nv = va_arg(args, view *);
+
+        if (nv == NULL) {
+            break;
+        }
+
+        c->views[i] = nv;
+        i++;
+    }
+    va_end(args);
+    return c;
+}
+
+void add_view(controller *c, view *v){
+    view **save = c->views;
+    c->views = realloc(c->views, sizeof(view *) * (c->nb_view + 1));
+    if(c->views == NULL){
+        c->views = save;
+        return;
+    }
+    c->views[c->nb_view++] = v;
+}
+
+void create_model(controller *c, int nb_player){
+    view *best = NULL;
+    if(c->nb_view == 0){
+        grid *g = load_map(c->map, 30, 30);
+        c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
+        free(g);
+        return;
+    }
+    
+    for(unsigned i = 0; i < c->nb_view; i++){
+        if(c->views[i]->type == 'n'){
+            grid *g = load_map(c->map, c->views[i]->height, c->views[i]->width);
+            c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
+            free(g);
+            return;
+        }else{
+            best = c->views[i];
+        }
+    }
+
+    grid *g = load_map(c->map, best->height, best->width);
+    c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
+    // display_grid(g);
+    free(g);
+}
+void create_model_with_grid(controller *c, int nb_player, grid *g){
+    c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
+    free(g);
+}
+
+void destroy_controller(controller *c) {
+    if(c == NULL) return;
+    for(int i = 0; i < c->nb_view; i++){
+        c->views[i]->destroy_self(c->views[i]);
+    }
+    free(c->views);
+    if(c->m != NULL) destroy_model(c->m);
+    free(c);
+}
+
+
 void controller_play_solo_j_vs_bot(controller *c, direction (*get_dir_bot)(int, int, int **, position **, direction *, int), int nb_bots){
     create_model(c, nb_bots+1);
     int i = 0;
@@ -118,73 +202,6 @@ void controller_play_multi(controller *c){
         if(SPEED_FRM - duration > 0) usleep(SPEED_FRM - duration);
     }
     free(dirs);
-}
-
-
-controller *init_controller(int nb_views, ...){
-    controller *c = calloc(1, sizeof(controller));
-    if(c == NULL){
-        perror("[CONTROLLER] erreur allocation de la structure controller.");
-        exit(EXIT_FAILURE);
-    }
-
-    va_list args;
-    va_start(args, nb_views);
-
-    c->nb_view = nb_views;
-    c->views = calloc(nb_views, sizeof(view *));
-    if (c->views == NULL) {
-        perror("[CONTROLLER] erreur allocation liste views.");
-        free(c);
-        exit(EXIT_FAILURE);
-    }
-    int i = 0;
-    while (i < nb_views) {
-        view *nv = va_arg(args, view *);
-
-        if (nv == NULL) {
-            break;
-        }
-
-        c->views[i] = nv;
-        i++;
-    }
-    va_end(args);
-    return c;
-}
-
-void create_model(controller *c, int nb_player){
-    view *best = NULL;
-    
-    for(unsigned i = 0; i < c->nb_view; i++){
-        if(c->views[i]->type == 'n'){
-            grid *g = load_map(c->map, c->views[i]->height, c->views[i]->width);
-            c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
-            free(g);
-            return;
-        }else{
-            best = c->views[i];
-        }
-    }
-
-    grid *g = load_map(c->map, best->height, best->width);
-    c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
-    // display_grid(g);
-    free(g);
-}
-void create_model_with_grid(controller *c, int nb_player, grid *g){
-    c->m = init_game(nb_player, g->nb_lignes, g->nb_colonnes, g->grid);
-    free(g);
-}
-
-void destroy_controller(controller *c) {
-    if(c == NULL) return;
-    for(int i = 0; i < c->nb_view; i++){
-        c->views[i]->destroy_self(c->views[i]);
-    }
-    free(c->views);
-    if(c->m != NULL) destroy_model(c->m);
-    free(c);
 }
 
 

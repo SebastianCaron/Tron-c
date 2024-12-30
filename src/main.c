@@ -53,11 +53,8 @@ int bot_training(int max_episodes, int nb_bots){
 
     init_Q();
     load_Q_table("./q.bot");
-    view *vsdl = init_view_sdl();
 
-    controller *c = init_controller(1, vsdl);
-    actions act = NO_ACTION;
-
+    controller *c = init_controller(0);
 
     int nb_victoire = 0;
     int nb_played = 0;
@@ -76,10 +73,6 @@ int bot_training(int max_episodes, int nb_bots){
 
         if ((i + 1) % 1000 == 0) {
             printf("\b\b\b\b\b\b\b%02.2f %%", (float) nb_played / (float) max_episodes * 100.0f);
-            vsdl->get_event(vsdl, &act);
-            if(act == QUITTER){
-                break;
-            }
         }
     }
     printf("\n");
@@ -203,12 +196,20 @@ int main(int argc, char **argv){
     }
 
 
-    if(with_sdl == 1 && with_ncurse == 1){
-        c = init_controller(2, vncr, vsdl);
-    }else if(with_sdl){
-        c = init_controller(1, vsdl);
-    }else{
-        c = init_controller(1, vncr);
+    // if(with_sdl == 1 && with_ncurse == 1){
+    //     c = init_controller(2, vncr, vsdl);
+    // }else if(with_sdl){
+    //     c = init_controller(1, vsdl);
+    // }else{
+    //     c = init_controller(1, vncr);
+    // }
+
+    c = init_controller(0);
+    if(with_sdl){
+        add_view(c, vsdl);
+    }
+    if(with_ncurse){
+        add_view(c, vncr);
     }
 
     set_ip(c, ip);

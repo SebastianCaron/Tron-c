@@ -49,6 +49,13 @@ typedef struct {
 controller *init_controller(int nb_view, ...);
 
 /**
+ * @brief Add a view to the controller
+ * @param c A pointer to the controller
+ * @param v The view that will be added
+ */
+void add_view(controller *c, view *v);
+
+/**
  * @brief Creates the game model within the controller
  * @param c Pointer to the controller
  * @param nb_player Number of players in the game

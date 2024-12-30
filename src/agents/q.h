@@ -67,3 +67,8 @@ int load_Q_table(const char *filename);
  * @return The direction for the bot to move
  */
 direction q_learning_bot(int nb_lignes, int nb_colonnes, int **grid, position **players, direction *directions, int index_bot);
+
+/**
+ * @brief Reset the number of episode and the epsilon value if has changed
+ */
+void reset_bot_q();
