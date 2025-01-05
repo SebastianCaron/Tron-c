@@ -17,33 +17,6 @@
 #include "../utils/QStack.h"
 #include "../model/model.h"
 
-/**
- * @struct client
- * @brief Represents a game client that connects to the server and manages game state
- */
-typedef struct {
-    char *ip;                         /**< IP address of the server */
-    int port;                         /**< Port number for the server */
-
-    int serveur_fd;                   /**< File descriptor for the server socket */
-
-    int id_on_serv;                   /**< Client ID on the server */
-
-    grid *g;                          /**< Pointer to the game grid */
-    int is_over;                      /**< Game over status */
-    int scores[MAX_CLIENT + 1];       /**< Array of scores for each player */
-    position pos[MAX_CLIENT + 1];     /**< Array of positions for each player */
-    int nb_player;                    /**< Number of players */
-    int has_started;                  /**< Game start status */
-    char *names[MAX_CLIENT + 1];      /**< Array of player names */
-    int winner;                       /**< Index of the winner */
-
-    char data_available[15];          /**< Data available for reading */
-    unsigned size_available;          /**< Size of available data */
-
-    f_packet need_to_read_type;       /**< Type of packet to read */
-    int *need_to_read_nbytes;         /**< Number of bytes to read */
-} client;
 
 /**
  * @brief Initializes a client with the specified IP address and port

@@ -19,13 +19,15 @@ client *init_client(char *ip, int port){
         exit(EXIT_FAILURE);
     }
 
+    uni_start_client();
+
     c->need_to_read_type = -1;
 
     c->ip = ip;
     c->port = port;
     struct sockaddr_in serv_addr;
 
-    if ((c->serveur_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+    if ((c->serveur_fd = uni_socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         perror("Erreur lors de la creation du socket\n");
         return NULL;
     }
@@ -39,6 +41,7 @@ client *init_client(char *ip, int port){
 
     if (connect(c->serveur_fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
         perror("Erreur de connexion\n");
+        uni_close(c->serveur_fd);
         return NULL;
     }
 
@@ -46,8 +49,9 @@ client *init_client(char *ip, int port){
 }
 
 void destroy_client(client *c){
-    close(c->serveur_fd);
+    uni_close(c->serveur_fd);
     free(c);
+    uni_stop_client();
 }
 
 grid *buffer_to_grid(int nb_lignes, int nb_colonnes, char *c){
@@ -69,7 +73,7 @@ void retrieve_data_client(client *c){
     // SI PAS DANS LES DATAS AVAILABLES, ON READ ET ON AJOUTE AUX DATA AV
     // TANT QUE PAS IN AVAILABLE ON RETRIEVE tant pis
     int f_type = 0;
-    int rd_size = read(c->serveur_fd, &f_type, sizeof(int));
+    int rd_size = uni_read(c->serveur_fd, &f_type, sizeof(int));
     if(rd_size == 0) return;
     // printf("READ : %d, NB :%d\n",f_type, rd_size);
 
@@ -80,9 +84,9 @@ void retrieve_data_client(client *c){
         {
         int size = 2 * sizeof(int);
         int buffer[2] = {0};
-        rd_size = read(c->serveur_fd, buffer, size);
+        rd_size = uni_read(c->serveur_fd, buffer, size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, buffer+rd_size, size-rd_size);
+            rd_size += uni_read(c->serveur_fd, buffer+rd_size, size-rd_size);
         }
         c->id_on_serv = buffer[0];
         c->data_available[c->size_available++] = IDSERV;}
@@ -90,9 +94,9 @@ void retrieve_data_client(client *c){
     case NBJOUEUR:
         {int size = 2 * sizeof(int);
         int buffer[2] = {0};
-        rd_size = read(c->serveur_fd, buffer, size);
+        rd_size = uni_read(c->serveur_fd, buffer, size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, buffer+rd_size, size-rd_size);
+            rd_size += uni_read(c->serveur_fd, buffer+rd_size, size-rd_size);
         }
         c->nb_player = buffer[0];
         c->data_available[c->size_available++] = NBJOUEUR;}
@@ -100,9 +104,9 @@ void retrieve_data_client(client *c){
     case START:
         {int size = 1 * sizeof(int);
         int buffer = 0;
-        rd_size = read(c->serveur_fd, &buffer, size);
+        rd_size = uni_read(c->serveur_fd, &buffer, size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, ((char *) &buffer)+rd_size, size-rd_size);
+            rd_size += uni_read(c->serveur_fd, ((char *) &buffer)+rd_size, size-rd_size);
         }
         c->has_started = 1;
         c->data_available[c->size_available++] = START;}
@@ -114,15 +118,15 @@ void retrieve_data_client(client *c){
         if(buffer == NULL){
             char nbuffer[BLOC_BUFFER_SIZE];
             size = BLOC_BUFFER_SIZE * sizeof(char);
-            rd_size = read(c->serveur_fd, nbuffer, size);
+            rd_size = uni_read(c->serveur_fd, nbuffer, size);
             while(rd_size < size){
-                rd_size += read(c->serveur_fd, nbuffer+rd_size, size-rd_size);
+                rd_size += uni_read(c->serveur_fd, nbuffer+rd_size, size-rd_size);
             }
             break;
         }
-        rd_size = read(c->serveur_fd, buffer, size);
+        rd_size = uni_read(c->serveur_fd, buffer, size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, ((char *)buffer)+rd_size, size-rd_size);
+            rd_size += uni_read(c->serveur_fd, ((char *)buffer)+rd_size, size-rd_size);
         }
         int *c_buf = (int *) buffer;
         int nb_pos = c_buf[0];
@@ -139,9 +143,9 @@ void retrieve_data_client(client *c){
         //printf("GRID RECEIVED !\n");
         int size = 2 * sizeof(int);
         int buffer[2] = {0};
-        rd_size = read(c->serveur_fd, (char *)buffer, size);
+        rd_size = uni_read(c->serveur_fd, (char *)buffer, size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, ((char *)buffer)+rd_size, size-rd_size);
+            rd_size += uni_read(c->serveur_fd, ((char *)buffer)+rd_size, size-rd_size);
         }
 
         int nb_lignes = buffer[0];
@@ -152,9 +156,9 @@ void retrieve_data_client(client *c){
         int g_size = (nb_lignes * nb_colonnes + 1) * sizeof(int);
         char *grid_buff = calloc(nb_lignes * nb_colonnes + 1, sizeof(int));
         if(grid_buff != NULL){
-            rd_size = read(c->serveur_fd, grid_buff, g_size);
+            rd_size = uni_read(c->serveur_fd, grid_buff, g_size);
             while(rd_size < g_size){
-                rd_size += read(c->serveur_fd, grid_buff+rd_size, g_size-rd_size);
+                rd_size += uni_read(c->serveur_fd, grid_buff+rd_size, g_size-rd_size);
             }
 
             grid *g = buffer_to_grid(nb_lignes, nb_colonnes, grid_buff);
@@ -167,9 +171,9 @@ void retrieve_data_client(client *c){
             // INCORRECT ! // TODO : FIX
             char buffer[BLOC_BUFFER_SIZE];
             int size = BLOC_BUFFER_SIZE * sizeof(char);
-            rd_size = read(c->serveur_fd, buffer, size);
+            rd_size = uni_read(c->serveur_fd, buffer, size);
             while(rd_size < g_size){
-                rd_size += read(c->serveur_fd, buffer+rd_size, size);
+                rd_size += uni_read(c->serveur_fd, buffer+rd_size, size);
             }
         }
         }
@@ -177,16 +181,16 @@ void retrieve_data_client(client *c){
     case SCORES:
         {int size = sizeof(int);
         int nb_p = 0;
-        rd_size = read(c->serveur_fd, ((char *) &nb_p), size);
+        rd_size = uni_read(c->serveur_fd, ((char *) &nb_p), size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, ((char *) &nb_p)+rd_size, size-rd_size);
+            rd_size += uni_read(c->serveur_fd, ((char *) &nb_p)+rd_size, size-rd_size);
         }
 
         int scores_buff[MAX_CLIENT + 2] = {0};
         int s_size = (nb_p + 1) * sizeof(int);
-        rd_size = read(c->serveur_fd, ((char *) &scores_buff), s_size);
+        rd_size = uni_read(c->serveur_fd, ((char *) &scores_buff), s_size);
         while(rd_size < s_size){
-            rd_size += read(c->serveur_fd, ((char *) scores_buff)+rd_size, s_size-rd_size);
+            rd_size += uni_read(c->serveur_fd, ((char *) scores_buff)+rd_size, s_size-rd_size);
         }
 
         for(int i = 0; i < nb_p; i++){
@@ -197,9 +201,9 @@ void retrieve_data_client(client *c){
     case WINNER:
         {int size = 2 * sizeof(int);
         int buffer[2] = {0};
-        rd_size = read(c->serveur_fd, ((char *) buffer), size);
+        rd_size = uni_read(c->serveur_fd, ((char *) buffer), size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, ((char *) buffer)+rd_size, size-rd_size);
+            rd_size += uni_read(c->serveur_fd, ((char *) buffer)+rd_size, size-rd_size);
         }
         c->winner = buffer[0];
         c->data_available[c->size_available++] = WINNER;}
@@ -207,9 +211,9 @@ void retrieve_data_client(client *c){
     case ISOVER:
         {int size = 2 * sizeof(int);
         int buffer[2] = {0};
-        rd_size = read(c->serveur_fd, ((char *) buffer), size);
+        rd_size = uni_read(c->serveur_fd, ((char *) buffer), size);
         while(rd_size < size){
-            rd_size += read(c->serveur_fd, ((char *) buffer)+rd_size, size-rd_size);
+            rd_size += uni_read(c->serveur_fd, ((char *) buffer)+rd_size, size-rd_size);
         }
         c->is_over = buffer[0];
         c->data_available[c->size_available++] = ISOVER;}
@@ -312,11 +316,11 @@ int client_get_winner(client *c){
 void client_send_movement(client *c, direction d){
     int size = 4 * sizeof(char);
     char buffer[4] = {MOUVEMENT, c->id_on_serv, d, ENDPACKET};
-    write(c->serveur_fd, (char *) buffer, size);
+    uni_write(c->serveur_fd, (char *) buffer, size);
 }
 
 void client_ask_for_grid(client *c){
     int size = 3 * sizeof(char);
     char buffer[3] = {GRID, c->id_on_serv, ENDPACKET};
-    write(c->serveur_fd, (char *) buffer, size);
+    uni_write(c->serveur_fd, (char *) buffer, size);
 }

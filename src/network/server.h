@@ -18,26 +18,6 @@
 #include "../model/model.h"
 
 /**
- * @struct server
- * @brief Represents the game server managing connections and game state
- */
-typedef struct {
-    char *ip;                         /**< IP address of the server */
-    int port;                         /**< Port number for the server */
-
-    int serveur_fd;                   /**< File descriptor for the server socket */
-
-    int act_connect;                  /**< Number of active connections */
-    int nb_connect;                   /**< Maximum number of connections allowed */
-    int clients_fd[MAX_CLIENT + 1];   /**< Array of file descriptors for client sockets */
-    char *names[MAX_CLIENT + 1];      /**< Array of client names */
-    direction directions[MAX_CLIENT + 1]; /**< Array of directions for each client */
-    model *m;                         /**< Pointer to the game model */
-    int addrlen;                      /**< Length of the address structure */
-    struct sockaddr_in *address;      /**< Pointer to the server address structure */
-} server;
-
-/**
  * @brief Initializes the server with the specified port and number of connections
  * @param port The port number for the server
  * @param nb_connect The maximum number of connections allowed
