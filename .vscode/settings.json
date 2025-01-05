@@ -16,6 +16,7 @@
         "limits": "c",
         "kamikaze.h": "c",
         "cstdlib": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "network.h": "c"
     }
 }

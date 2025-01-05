@@ -87,11 +87,12 @@ void close_connections(server *s){
     for(int i = 0; i < s->act_connect; i++){
         uni_close(s->clients_fd[i]);
     }
-    uni_close(s->serveur_fd);
-    uni_stop_server();
+    s->act_connect = 0;
 }
 
 void destroy_server(server *s){
+    uni_close(s->serveur_fd);
+    uni_stop_server();
     free(s->ip);
     // free(s->clients_fd);
     for(int i = 0; i < s->act_connect; i++){

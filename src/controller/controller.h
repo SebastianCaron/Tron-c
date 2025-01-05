@@ -20,6 +20,7 @@
 #include "../model/model.h"
 #include "../views/view.h"
 #include "../utils/utils.h"
+#include "../network/network.h"
 
 #define SPEED_FRM 100000
 
@@ -35,6 +36,7 @@ typedef struct {
     char *ip;          /**< IP address for online play */
     int port;          /**< Port number for online play */
     char marker;       /**< Marker character for the controller */
+    server *s;         /**< A pointer to an initialized server */
 
     char *map;         /**< Path to the map that will be used as grid */
     int nb_bots;       /**< Number of bots against algorithms */
@@ -111,9 +113,8 @@ void controller_play_online_join(controller *c);
 /**
  * @brief Hosts an online game
  * @param c Pointer to the controller
- * @param nb_connect Number of connections allowed
  */
-void controller_play_online_host(controller *c, int nb_connect);
+void controller_play_online_host(controller *c);
 
 /**
  * @brief Sets the map for the controller

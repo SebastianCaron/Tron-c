@@ -30,6 +30,7 @@
 #include "controller/controller.h"
 // NETWORK
 #include "network/network.h"
+#include "network/server.h"
 
 #include "./agents/rectiligne.h"
 #include "./agents/kamikaze.h"
@@ -218,9 +219,17 @@ int main(int argc, char **argv){
     set_nb_bots(c, nb_bots);
     set_map(c, map);
 
-    go_to_menu(c);
-    destroy_controller(c);
+    if(marker == 1){
+        c->s = init_serveur(c->port, c->nb_bots + 1);
+    }
 
+    go_to_menu(c);
+
+
+    if(marker == 1){
+        destroy_server(c->s);
+    }
+    destroy_controller(c);
     if(with_sdl){
         TTF_Quit();
         SDL_Quit();
@@ -230,6 +239,7 @@ int main(int argc, char **argv){
         echo();
         endwin();
     }
+    
 
     return EXIT_SUCCESS;
 }

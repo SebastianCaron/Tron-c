@@ -273,7 +273,7 @@ void go_to_menu(controller *c){
                 break;
             case PLAY_ONLINE:
                 if(c->marker == 1){
-                    controller_play_online_host(c, c->nb_bots + 1);
+                    controller_play_online_host(c);
                 }else{
                     controller_play_online_join(c);
                 }
@@ -368,8 +368,9 @@ void set_port(controller *c, char *port){
 
 // TODO : CHECK ERRORS & READY
 
-void controller_play_online_host(controller *c, int nb_connect){
-    server *s = init_serveur(c->port, nb_connect);
+void controller_play_online_host(controller *c){
+    int nb_connect = c->nb_bots + 1;
+    server *s = c->s;
 
     int nb_player_connected = 1;
     actions act = NO_ACTION;
@@ -441,7 +442,6 @@ void controller_play_online_host(controller *c, int nb_connect){
     send_winner_all(s, get_winner(c->m));
     free(dirs);
     close_connections(s);
-    destroy_server(s);
 }
 
 void controller_play_online_join(controller *c){
