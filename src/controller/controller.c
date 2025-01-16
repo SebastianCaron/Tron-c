@@ -151,12 +151,13 @@ void controller_play_train_vs_bot(controller *c, direction (*get_dir_bot)(int, i
         return;
     }
     while(!est_fini(c->m)){
-        move_player(c->m, 0, get_dir_bot_q(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, c->m->directions, 0));
         
         for(int i = 0; i < nb_bots; i++){
-            dirs[i+1] = get_dir_bot(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, c->m->directions, i+1);
-            move_player(c->m, i+1, dirs[i+1]);
+            dirs[i] = get_dir_bot(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, c->m->directions, i);
+            move_player(c->m, i, dirs[i]);
         }
+        move_player(c->m, nb_bots, get_dir_bot_q(c->m->nb_lignes_grid, c->m->nb_colonnes_grid, c->m->grid, c->m->players, c->m->directions, nb_bots));
+
 
         collision_all(c->m);
     }

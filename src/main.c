@@ -56,6 +56,7 @@ int bot_training(int max_episodes, int nb_bots){
     load_Q_table("./q.bot");
 
     controller *c = init_controller(0);
+    // controller *c = init_controller(1, init_view_sdl());
 
     int nb_victoire = 0;
     int nb_played = 0;
@@ -67,7 +68,7 @@ int bot_training(int max_episodes, int nb_bots){
     
         // controller_play_train_vs_bot(c, rectiligne_get_direction, q_learning_bot, rand()%((5+1)-2) + 2);
         controller_play_train_vs_bot(c, rectiligne_get_direction, q_learning_bot, nb_bots);
-        if(get_winner(c->m) == 0) nb_victoire++;
+        if(get_winner(c->m) == nb_bots) nb_victoire++;
         destroy_model(c->m);
         c->m = NULL;
         nb_played++;
@@ -224,6 +225,10 @@ int main(int argc, char **argv){
     }
 
     go_to_menu(c);
+    // for(int i = 0; i < 50; i++){
+    //     controller_play_solo_j_vs_bot(c, immitateur_get_direction, c->nb_bots);
+
+    // }
 
 
     if(marker == 1){
